@@ -1,32 +1,24 @@
-import type { Metadata } from "next";
-import { Lustria, Plus_Jakarta_Sans } from "next/font/google";
-import "./globals.css";
-
-const lustria = Lustria({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-lustria",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-plus-jakarta-sans",
-});
-
-export const metadata: Metadata = {
-  title: "Sahil Salekar",
-  description: "Portfolio of Sahil Salekar",
-};
+import Link from "next/link";
+import React from "react";
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" className={`${lustria.variable} ${plusJakarta.variable}`}>
+    <html lang="en">
       <body
-        className="antialiased font-sans">{children}
+        style={{
+          margin: "3rem",
+        }}
+      >
+        <header>
+          <Link href="/">Home</Link>
+          {" | "}
+          <Link href="/posts">Posts</Link>
+        </header>
+        <main>{children}</main>
       </body>
     </html>
   );
