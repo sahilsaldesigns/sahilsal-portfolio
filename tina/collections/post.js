@@ -4,7 +4,7 @@
 export default {
   label: "Blog Posts",
   name: "post",
-  path: "content/post",
+  path: "content/case-study",
   fields: [
     {
       type: "string",
@@ -20,7 +20,7 @@ export default {
   ],
   ui: {
     router: ({ document }) => {
-      return `/posts/${document._sys.filename}`;
+      return `/case-study/${document._sys.filename}`;
     },
   },
 };

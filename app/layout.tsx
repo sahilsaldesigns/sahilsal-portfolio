@@ -13,8 +13,10 @@ export default function RootLayout({
           margin: "3rem",
         }}
       >
-        <header>
+        <header style={{display:"flex", gap: "18px"}}>
           <Link href="/">Home</Link>
+          <Link href="/about">About</Link>
+          <Link href="/photography">Photography</Link>
         </header>
         <main>{children}</main>
       </body>

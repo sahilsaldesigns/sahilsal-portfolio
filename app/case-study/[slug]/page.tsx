@@ -1,4 +1,4 @@
-import PostClient from "../../posts/[...filename]/client-page";
+import PostClient from "./client-page";
 import client from "../../../tina/__generated__/client";
 
 export async function generateStaticParams() {
