@@ -12,8 +12,8 @@ module.exports = {
         destination: "/admin/index.html",
       },
       {
-        source: "/case-study",
-        destination: "/case-study/project-1"
+        source: "/work",
+        destination: "/work/project-1"
       }
     ];
   },
