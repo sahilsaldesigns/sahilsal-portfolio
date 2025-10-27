@@ -1,5 +1,6 @@
-import Link from "next/link";
 import React from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 export default function RootLayout({
   children,
@@ -13,12 +14,9 @@ export default function RootLayout({
           margin: "3rem",
         }}
       >
-        <header style={{display:"flex", gap: "18px"}}>
-          <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
-          <Link href="/photography">Photography</Link>
-        </header>
+        <Header />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
