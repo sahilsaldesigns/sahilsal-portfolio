@@ -1,0 +1,45 @@
+:root {
+  font-family: var(--font-plus-jakarta), sans-serif;
+}
+
+
+@import "tailwindcss";
+
+/* Minimal global reset / utilities for the site */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply antialiased text-slate-900 bg-white;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-lustria), serif;
+}
+
+.home-hero-section h1 {
+  font-size: 44px;
+  line-height: 52px;
+  font-weight: 400;
+  max-width: 620px;
+  margin: 0 auto;
+  text-transform: capitalize;
+  margin-bottom: 24px;
+  color: #111011;
+}
+
+.home-hero-section p {
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #757575;
+}

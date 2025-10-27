@@ -2,7 +2,7 @@ import Link from "next/link";
 import fs from "fs";
 import path from "path";
 import React from "react";
-import { ExperimentalGetTinaClient } from "../../tina/__generated__/types";
+import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 
 type NavItem = { href: string; label?: string };
 
@@ -36,16 +36,20 @@ export default async function Header() {
   const logo = globalData?.header?.logo || "";
 
   return (
-    <header style={{ display: "flex", gap: "18px", alignItems: "center" }}>
+    <header className="flex justify-between py-8">
       {logo ? (
-        // logo may be a path under /uploads or a URL
-        <img src={logo} alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"} style={{ height: 36 }} />
-      ) : null}
-      {nav.map((item, i) => (
-        <Link key={i} href={item.href}>
-          {item?.label || item?.href}
+        <Link href={"/"}>
+          <img src={logo} alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"} style={{ height: 36 }} />
         </Link>
-      ))}
+      ) : null}
+      <nav className="flex gap-6">
+        {nav.map((item, i) => (
+          <Link key={i} href={item.href}>
+            {item?.label || item?.href}
+          </Link>
+        ))}
+      </nav>
+
     </header>
   );
 }

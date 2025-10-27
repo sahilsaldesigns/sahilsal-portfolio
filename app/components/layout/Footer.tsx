@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import React from "react";
-import { ExperimentalGetTinaClient } from "../../tina/__generated__/types";
+import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 
 function readGlobalFile() {
   try {
@@ -30,7 +30,7 @@ export default async function Footer() {
   const copyright = globalData?.footer?.copyright || "";
 
   return (
-    <footer style={{ marginTop: "2rem", borderTop: "1px solid #eee", paddingTop: "1rem" }}>
+    <footer className="text-center py-8">
       <div>{copyright}</div>
     </footer>
   );
