@@ -1,0 +1,23 @@
+{
+  "header": {
+    "logo": "/uploads/sahil-salekar-logo.svg",
+    "logo_alt": "Sahil Salekar Logoooooooooooooooooooooo",
+    "nav": [
+      {
+        "href": "/work",
+        "label": "Work"
+      },
+      {
+        "href": "/about",
+        "label": "About"
+      },
+      {
+        "href": "/photography",
+        "label": "Photography"
+      }
+    ]
+  },
+  "footer": {
+    "copyright": "© Sahil Salekar 2025"
+  }
+}
