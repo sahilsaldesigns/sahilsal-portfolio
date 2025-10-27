@@ -39,7 +39,7 @@ export default async function Header() {
     <header style={{ display: "flex", gap: "18px", alignItems: "center" }}>
       {logo ? (
         // logo may be a path under /uploads or a URL
-        <img src={logo} alt="logo" style={{ height: 36 }} />
+        <img src={logo} alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"} style={{ height: 36 }} />
       ) : null}
       {nav.map((item, i) => (
         <Link key={i} href={item.href}>

@@ -21,6 +21,11 @@ const Global: Collection = {
           name: "logo",
         },
         {
+          type: "string",
+          label: "Logo Alt Text",
+          name: "logo_alt",
+        },
+        {
           type: "object",
           label: "Nav Links",
           name: "nav",
