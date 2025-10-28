@@ -10,7 +10,28 @@ module.exports = {
     "./content/**/*.{md,mdx}",
   ],
   theme: {
-    extend: {},
+    eextend: {
+      keyframes: {
+        riseUp: {
+          "0%": { transform: "translateY(150px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        popIn: {
+          "0%": {
+            transform: "translateY(50px) scale(0.8)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0) scale(1)",
+            opacity: "1",
+          },
+        },
+      },
+      animation: {
+        riseUp: "riseUp 0.8s ease-out forwards",
+        popIn: "popIn 0.5s ease-out forwards",
+      },
+    },
   },
   plugins: [],
 };
