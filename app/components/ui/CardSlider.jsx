@@ -12,13 +12,10 @@ const cards = [
 export default function CardSlider() {
   const [bloom, setBloom] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
-  const [current, setCurrent] = useState(1); // middle card active
+  const [current, setCurrent] = useState(1);
 
-  // Called when container rise animation completes
   const handleContainerComplete = () => {
-    // start spreading cards
     setBloom(true);
-    // show arrows slightly after bloom begins
     setTimeout(() => setShowArrows(true), 600);
   };
 
@@ -27,47 +24,38 @@ export default function CardSlider() {
 
   return (
     <section className="relative flex h-[480px] w-full items-center justify-center overflow-hidden bg-slate-50">
-      {/* Animated container: moves up as a single deck */}
+      {/* Deck rises in */}
       <motion.div
         className="relative flex h-[320px] w-[760px] items-center justify-center"
         initial={{ y: 220, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
         onAnimationComplete={handleContainerComplete}
       >
         {cards.map((card, index) => {
-          const isActive = index === current;
+          const stackTop = 0
+          const stackRotate = (index - 1) * 4;
 
-          // stacking offsets for the deck look (applies while bloom === false)
-          const stackTop = -index * 10; // vertical offset so cards peek from behind
-          const stackRotate = (index - 1) * 2.5; // slight tilt differences
-
-          // target spread positions (when bloom === true)
-          const spreadX = bloom ? (index - 1) * 260 : 0; // left:-260, center:0, right:260
-          const spreadRotate = bloom ? (index === 0 ? -10 : index === 2 ? 10 : 0) : stackRotate;
+          const spreadX = bloom ? (index - 1) * 260 : 0;
+          const targetRotate = bloom ? 0 : stackRotate;
 
           return (
             <motion.div
               key={card.id}
-              // each card starts visually stacked (top + small rotate)
-              initial={{ x: 0, y: 0, rotate: stackRotate, opacity: 0, scale: 0.96 }}
-              // animate either to spread or remain stacked (toggled by `bloom`)
+              initial={{ x: 0, y: 0, rotate: stackRotate, opacity: 0 }}
               animate={{
                 x: spreadX,
-                rotate: spreadRotate,
+                rotate: targetRotate,
                 opacity: 1,
-                scale: isActive ? 1 : 0.96,
               }}
               transition={{
-                // when bloom, stagger each card slightly
-                duration: bloom ? 0.8 : 0.6,
-                delay: bloom ? index * 0.12 : 0.05 * index,
-                ease: [0.3, 0.7, 0.2, 1],
+                duration: bloom ? 0.55 : 0.6,
+                delay: bloom ? index * 0.08 : 0.05 * index,
+                ease: "easeOut",
               }}
-              className={`absolute flex h-[300px] w-[220px] items-center justify-center rounded-2xl bg-white shadow-2xl transition-all ${
-                isActive ? "z-30" : "z-20"
+              className={`absolute flex h-[300px] w-[220px] items-center justify-center rounded-2xl bg-white shadow-2xl ${
+                index === current ? "z-30" : "z-20"
               }`}
-              // keep the initial stacked vertical offset visually
               style={{ top: stackTop }}
             >
               <div className="w-full h-full p-4 flex flex-col">
@@ -84,7 +72,6 @@ export default function CardSlider() {
         })}
       </motion.div>
 
-      {/* arrows appear after bloom */}
       {showArrows && (
         <>
           <button
@@ -96,7 +83,6 @@ export default function CardSlider() {
           >
             <ChevronLeft />
           </button>
-
           <button
             onClick={handleNext}
             disabled={current === cards.length - 1}
