@@ -13,18 +13,41 @@ export default function CardSlider() {
   const [bloom, setBloom] = useState(false);
   const [showArrows, setShowArrows] = useState(false);
   const [current, setCurrent] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect screen size dynamically
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768); // below md breakpoint
+    };
+    handleResize(); // run initially
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleContainerComplete = () => {
     setBloom(true);
     setTimeout(() => setShowArrows(true), 600);
   };
 
-  const handleNext = () => current < cards.length - 1 && setCurrent(current + 1);
-  const handlePrev = () => current > 0 && setCurrent(current - 1);
+  const handleNext = () => current < cards.length - 1 && setCurrent((c) => c + 1);
+  const handlePrev = () => current > 0 && setCurrent((c) => c - 1);
+
+  // For swipe gestures
+  const handleDragEnd = (event, info) => {
+    const offset = info.offset.x;
+    const velocity = info.velocity.x;
+    const swipeThreshold = 80; // min distance to trigger swipe
+
+    if (offset < -swipeThreshold || velocity < -300) {
+      handleNext();
+    } else if (offset > swipeThreshold || velocity > 300) {
+      handlePrev();
+    }
+  };
 
   return (
     <section className="relative flex h-[480px] w-full items-center justify-center overflow-hidden bg-slate-50">
-      {/* Deck rises in */}
       <motion.div
         className="relative flex h-[320px] w-[760px] items-center justify-center"
         initial={{ y: 220, opacity: 0 }}
@@ -33,18 +56,24 @@ export default function CardSlider() {
         onAnimationComplete={handleContainerComplete}
       >
         {cards.map((card, index) => {
-          const stackTop = 0
+          const stackTop = 0;
           const stackRotate = (index - 1) * 4;
-
           const spreadX = bloom ? (index - 1) * 260 : 0;
           const targetRotate = bloom ? 0 : stackRotate;
+
+          // For mobile: slide horizontally instead of spread
+          const mobileOffset = (index - current) * 260;
 
           return (
             <motion.div
               key={card.id}
+              drag={isMobile ? "x" : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.3}
+              onDragEnd={isMobile ? handleDragEnd : undefined}
               initial={{ x: 0, y: 0, rotate: stackRotate, opacity: 0 }}
               animate={{
-                x: spreadX,
+                x: isMobile ? mobileOffset : spreadX,
                 rotate: targetRotate,
                 opacity: 1,
               }}
@@ -58,7 +87,7 @@ export default function CardSlider() {
               }`}
               style={{ top: stackTop }}
             >
-              <div className="w-full h-full p-4 flex flex-col">
+              <div className="w-full h-full p-4 flex flex-col select-none">
                 <div className="h-[120px] w-full bg-gray-200 mb-4 rounded-md flex items-center justify-center text-gray-500">
                   500 × 200
                 </div>
@@ -72,12 +101,13 @@ export default function CardSlider() {
         })}
       </motion.div>
 
-      {showArrows && (
+      {/* Show arrows only if slider is active (mobile) */}
+      {showArrows && isMobile && (
         <>
           <button
             onClick={handlePrev}
             disabled={current === 0}
-            className={`absolute left-8 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-opacity ${
+            className={`absolute left-4 z-30 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-opacity ${
               current === 0 ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-100"
             }`}
           >
@@ -86,8 +116,10 @@ export default function CardSlider() {
           <button
             onClick={handleNext}
             disabled={current === cards.length - 1}
-            className={`absolute right-8 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-opacity ${
-              current === cards.length - 1 ? "opacity-30 cursor-not-allowed" : "hover:bg-gray-100"
+            className={`absolute right-4 z-30 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-opacity ${
+              current === cards.length - 1
+                ? "opacity-30 cursor-not-allowed"
+                : "hover:bg-gray-100"
             }`}
           >
             <ChevronRight />
