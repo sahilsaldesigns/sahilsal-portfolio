@@ -35,22 +35,7 @@ export default function RootLayout({
           <Container>
             <Header />
           </Container>
-          <main className="mt-14">
-            <div className="hero-section-container relative pt-20">
-              <section className="home-hero-section text-center z-10 bg-[radial-gradient(circle,white_0%,rgba(255,255,255,0)_80%)]">{children}</section>
-              <div className="bg-container">
-                <div className="bg-reveal"></div>
-                <Image
-                  src="uploads/hero-line.svg"
-                  alt="background image"
-                  width={500}
-                  height={500}
-                  className="w-full"
-                />
-              </div>
-            </div>
-            <CardSlider />
-          </main>
+          <main className="mt-14">{children}</main>
         </div>
 
         <Container>
