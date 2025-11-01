@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import React from "react";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
-import ActiveNav from "./ActiveNav"; // 👈 small client component
+import ActiveNav from "./ActiveNav";
 
 type NavItem = { href: string; label?: string };
 
@@ -47,7 +47,6 @@ export default async function Header() {
         </Link>
       ) : null}
 
-      {/* ✅ Small client-only part */}
       <ActiveNav nav={nav} />
     </header>
   );
