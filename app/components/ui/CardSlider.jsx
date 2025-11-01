@@ -26,8 +26,10 @@ export default function CardSlider() {
   }, []);
 
   const handleContainerComplete = () => {
-    setBloom(true);
-    setTimeout(() => setShowArrows(true), 600);
+    setTimeout(()=> {
+        setBloom(true);
+        setTimeout(() => setShowArrows(true), 600);
+    },1500)
   };
 
   const handleNext = () => current < cards.length - 1 && setCurrent((c) => c + 1);
@@ -69,7 +71,7 @@ export default function CardSlider() {
               key={card.id}
               drag={isMobile ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.3}
+              dragElastic={0.01}
               onDragEnd={isMobile ? handleDragEnd : undefined}
               initial={{ x: 0, y: 0, rotate: stackRotate, opacity: 0 }}
               animate={{
@@ -78,8 +80,8 @@ export default function CardSlider() {
                 opacity: 1,
               }}
               transition={{
-                duration: bloom ? 0.55 : 0.6,
-                delay: bloom ? index * 0.08 : 0.05 * index,
+                duration: 0.8,
+                delay: 0,
                 ease: "easeOut",
               }}
               className={`absolute flex h-[300px] w-[220px] items-center justify-center rounded-2xl bg-white shadow-2xl ${
