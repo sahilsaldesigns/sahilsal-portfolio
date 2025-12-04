@@ -8,13 +8,13 @@ export default async function HomePage() {
 
   return (
     <>
-      <div className="hero-section-container relative pt-20">
+      <div className="hero-section-container relative py-20">
         <section className="home-hero-section text-center z-10 bg-[radial-gradient(circle,white_0%,rgba(255,255,255,0)_80%)]">
           <ClientPage {...data} />
         </section>
         <div className="bg-container">
-          <div className="bg-reveal"></div>
-          <Image src="uploads/hero-line.svg" alt="background image" width={500} height={500} className="w-full" />
+          <div className="bg-reveal-edge"></div>
+          <Image src="uploads/hero-line-3.svg" alt="background image" width={500} height={500} className="w-full" />
         </div>
       </div>
 

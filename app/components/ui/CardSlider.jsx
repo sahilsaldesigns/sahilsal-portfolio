@@ -46,7 +46,7 @@ export default function CardSlider() {
   };
 
   return (
-    <section className="relative flex h-[480px] w-full items-center justify-center overflow-hidden bg-slate-50">
+    <section className="relative flex h-[480px] w-full items-center justify-center overflow-hidden bg-white">
       <motion.div
         className="relative flex h-[320px] w-[760px] items-center justify-center"
         initial={{ y: 220, opacity: 0 }}
@@ -114,7 +114,7 @@ export default function CardSlider() {
       </motion.div>
 
       {/* ⬅️➡️ Arrows for mobile only */}
-      {showArrows && isMobile && (
+      {false && isMobile && (
         <>
           <button
             onClick={handlePrev}

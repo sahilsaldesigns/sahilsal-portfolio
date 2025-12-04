@@ -68,3 +68,26 @@ h6 {
     transform: scaleX(0);
   }
 }
+
+
+.bg-reveal-edge {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to right,
+      white 0 50%,
+      white 50% 100%
+    );
+  animation: reveal-edge 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: center;
+}
+
+@keyframes reveal-edge {
+  0% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
