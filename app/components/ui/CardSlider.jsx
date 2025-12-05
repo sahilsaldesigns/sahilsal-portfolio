@@ -48,9 +48,16 @@ export default function CardSlider() {
   };
 
   return (
-    <section className="relative w-full py-10 bg-white flex flex-col items-center">
+    <section className="relative w-full h-[480px] flex items-center justify-center overflow-hidden bg-white">
+      <img
+        src="/uploads/img/card-slider-bg.png"
+        alt="Card slider background"
+        className="absolute inset-0 w-full h-full z-1"
+      />
+
+      {/* Content Layer */}
       <motion.div
-        className="relative flex h-[330px] w-full max-w-[900px] items-center justify-center"
+        className="relative flex h-[330px] w-full max-w-[900px] items-center justify-center z-2"
         initial={{ y: 150, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
@@ -81,11 +88,9 @@ export default function CardSlider() {
               dragElastic={0}
               dragMomentum={false}
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
-              // 🔥 NEW: Hover activates card (desktop only)
-              onHoverStart={() => {
-                if (!isMobile) setCurrent(index);
-              }}
-              // Tap still works on mobile
+              // ⭐ Hover activates on desktop only
+              onHoverStart={() => !isMobile && setCurrent(index)}
+              // ⭐ Tap activates on mobile
               onTap={() => isMobile && setCurrent(index)}
               className="absolute flex flex-col items-center cursor-pointer"
               initial={{ x: 0, rotate: (index - 1) * 3, opacity: 0 }}
