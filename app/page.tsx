@@ -2,9 +2,13 @@ import ClientPage from "./[...filename]/client-page";
 import client from "../tina/__generated__/client";
 import CardSlider from "./components/ui/CardSlider";
 import Image from "next/image";
+import SocialLinks from "./components/ui/SocialLinks";
 
 export default async function HomePage() {
   const data = await client.queries.page({ relativePath: "home.mdx" });
+  const globalData = await client.queries.global({
+    relativePath: "global.json",
+  });
 
   return (
     <>
@@ -19,6 +23,7 @@ export default async function HomePage() {
       </div>
 
       <CardSlider />
+      <SocialLinks links={globalData.data.global.socialLinks ?? []} />
     </>
   );
 }

@@ -54,7 +54,39 @@ const Global: Collection = {
         },
       ],
     },
-
+    //Social Links
+    {
+      name: "socialLinks",
+      label: "Social Links",
+      type: "object",
+      list: true,
+      ui: {
+        itemProps: (item) => ({
+          label: item?.icon ? `${item.icon.toUpperCase()}` : "Social Link",
+        }),
+      },
+      fields: [
+        {
+          name: "icon",
+          label: "Icon",
+          type: "string",
+          ui: {
+            component: "select",
+          },
+          options: [
+            { label: "LinkedIn", value: "linkedin" },
+            { label: "Medium", value: "medium" },
+            { label: "Behance", value: "behance" },
+            { label: "Dribbble", value: "dribbble" },
+          ],
+        },
+        {
+          name: "url",
+          label: "URL",
+          type: "string",
+        },
+      ],
+    },
     // Footer
     {
       type: "object",
