@@ -13,16 +13,27 @@ export default function ScrollStackGallery(props) {
   const images = props.images;
   const n = images.length;
 
+  // Heading fade on scroll start (0 → 5%)
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
+  const headingY = useTransform(scrollYProgress, [0, 0.05], ["0%", "-40%"]);
+
   return (
     <section ref={ref} className="relative h-[500vh]">
-      {/* --- Heading --- */}
-      <h1 className="absolute left-1/2 top-8 -translate-x-1/2 z-30 text-center text-xl md:text-3xl lg:text-4xl font-semibold">
+
+      {/* --- Centered Heading (kept OUTSIDE sticky layer) --- */}
+      <motion.h1
+        style={{ opacity: headingOpacity, y: headingY }}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
+        z-[999] text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
+      >
         Photograph’s and Memories
-      </h1>
+      </motion.h1>
 
       {/* --- Scroll Indicator --- */}
       <motion.div
-        className="absolute left-1/2 top-20 -translate-x-1/2 z-30 flex flex-col items-center text-gray-500"
+        style={{ opacity: headingOpacity }}
+        className="fixed left-1/2 top-[60%] -translate-x-1/2 
+        z-[999] flex flex-col items-center text-gray-500 pointer-events-none"
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
       >
@@ -39,11 +50,12 @@ export default function ScrollStackGallery(props) {
         </svg>
       </motion.div>
 
+      {/* --- Sticky Image Container --- */}
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
         {images.map((src, i) => {
           const start = i / n;
           const end = (i + 1) / n;
-          const mid = start + 0.5 / n; 
+          const mid = start + 0.5 / n;
 
           const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
           const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
@@ -63,7 +75,7 @@ export default function ScrollStackGallery(props) {
             <motion.div
               key={i}
               style={{ y, opacity, scale }}
-              className="absolute inset-0 flex items-center justify-center will-change-transform"
+              className="absolute inset-0 flex items-center justify-center will-change-transform z-10"
             >
               <motion.img
                 src={src}
