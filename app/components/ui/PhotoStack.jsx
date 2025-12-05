@@ -3,32 +3,51 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-
 export default function ScrollStackGallery(props) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
+
   const images = props.images;
   const n = images.length;
 
   return (
     <section ref={ref} className="relative h-[500vh]">
+      {/* --- Heading --- */}
+      <h1 className="absolute left-1/2 top-8 -translate-x-1/2 z-30 text-center text-xl md:text-3xl lg:text-4xl font-semibold">
+        Photograph’s and Memories
+      </h1>
+
+      {/* --- Scroll Indicator --- */}
+      <motion.div
+        className="absolute left-1/2 top-20 -translate-x-1/2 z-30 flex flex-col items-center text-gray-500"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      >
+        <span className="text-sm md:text-base">Scroll Down</span>
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          className="mt-1"
+        >
+          <path d="M12 5v14m0 0l-6-6m6 6l6-6" />
+        </svg>
+      </motion.div>
+
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
         {images.map((src, i) => {
           const start = i / n;
           const end = (i + 1) / n;
-          const mid = start + 0.5 / n; // midpoint of this image's section
+          const mid = start + 0.5 / n; 
 
-          // --- Motion logic ---
-          // Each image slides upward from 100% -> 0% of its container
           const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
-
-          // Fade in from transparent -> visible as it enters
           const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
 
-          // Scale down slightly when the *next* image reaches halfway
           let scale = 1;
           if (i < n - 1) {
             const nextStart = (i + 1) / n;
@@ -50,7 +69,12 @@ export default function ScrollStackGallery(props) {
                 src={src}
                 alt={`Photo ${i + 1}`}
                 draggable={false}
-                className="w-[60vw] h-[80vh] object-cover rounded-3xl shadow-2xl"
+                className="
+                  w-[70vw] max-w-[500px]
+                  h-auto max-h-[80vh]
+                  object-cover rounded-3xl shadow-2xl
+                  md:w-[50vw] md:max-w-[600px]
+                "
               />
             </motion.div>
           );
