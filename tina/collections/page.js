@@ -58,6 +58,15 @@ export default {
             },
           ],
         },
+        {
+          name: "about_hero",
+          label: "About Hero",
+          fields: [
+            { type: "string", name: "name", label: "Name" },
+            { type: "rich-text", name: "description", label: "Description" },
+            { type: "image", name: "image", label: "Image" },
+          ],
+        },
       ],
     }
   ],

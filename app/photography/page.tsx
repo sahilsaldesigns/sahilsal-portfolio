@@ -1,6 +1,5 @@
 import ClientPage from "../[...filename]/client-page";
 import client from "../../tina/__generated__/client";
-import PhotoStack from "./../components/ui/PhotoStack"
 export default async function PhotographyPage() {
   // Expecting a Tina page at content/page/photography.mdx - create it if you
   // want editable content. For now, attempt to load it and fall back to an
@@ -8,6 +7,5 @@ export default async function PhotographyPage() {
   const data = await client.queries.page({ relativePath: "photography.mdx" });
   return <>
   <ClientPage {...data} />;
-  <PhotoStack />
   </>
 }

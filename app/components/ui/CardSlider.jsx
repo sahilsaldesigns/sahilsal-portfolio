@@ -83,7 +83,7 @@ export default function CardSlider(props) {
 
           return (
             <motion.div
-              key={card.id}
+              key={card.id || index}
               drag={isMobile && isActive ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0}

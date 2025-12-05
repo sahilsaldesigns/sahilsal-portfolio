@@ -3,6 +3,7 @@ import React from "react";
 import CardSlider from "../ui/CardSlider";
 import PhotoStack from "../ui/PhotoStack";
 import SocialLinks from "../ui/SocialLinks";
+import AboutHero from "../ui/AboutHero";
 
 interface BlockRendererProps {
   block: any;
@@ -32,6 +33,8 @@ export default function BlockRenderer({ block }: BlockRendererProps) {
     case "social_links":
       // block.links is expected to be an array of { icon, url }
       return <SocialLinks links={block.links || []} />;
+    case "about_hero":
+      return <AboutHero name={block.name} description={block.description} image={block.image} />;
     default:
       return null;
   }
