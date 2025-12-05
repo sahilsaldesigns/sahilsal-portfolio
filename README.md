@@ -42,6 +42,16 @@ To learn more about Tina, take a look at the following resources:
 - [Tina Docs](https://tina.io/docs)
 - [Getting started](https://tina.io/docs/setup-overview/)
 
+## Tina Blocks (Custom components)
+
+This project exposes UI components as Tina "blocks" so editors can add them from the Tina admin.
+
+- Available block templates: `Card Slider` (`card_slider`) and `Photo Stack` (`photo_stack`).
+- To add a block, edit a page in Tina Admin and add a block under the `Blocks` field. Each block has the appropriate fields (e.g. cards or images).
+- Example frontmatter for `content/page/home.mdx` is included showing how to add both block types.
+
+If you add new components, register a corresponding block template in `tina/collections/page.js` and map it in `app/components/layout/BlockRenderer.tsx`.
+
 You can check out [Tina Github repository](https://github.com/tinacms/tinacms) - your feedback and contributions are welcome!
 
 ## [Deploy on Vercel](https://tina.io/guides/tina-cloud/add-tinacms-to-existing-site/deployment/)

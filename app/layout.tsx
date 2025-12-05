@@ -4,8 +4,7 @@ import { Lustria, Plus_Jakarta_Sans } from "next/font/google";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container } from "./components/layout/Container";
-import CardSlider from "./components/ui/CardSlider";
-import Image from "next/image";
+// CardSlider and Image removed; layout does not use them directly
 
 const lustria = Lustria({
   subsets: ["latin"],

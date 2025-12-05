@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const cards = [
+const defaultCards = [
   {
     id: 1,
     title: "Dine-In Redefined: Streamlining Experiences For Brewpub Patrons",
@@ -20,10 +20,11 @@ const cards = [
   },
 ];
 
-export default function CardSlider() {
+export default function CardSlider(props) {
   const [bloom, setBloom] = useState(false);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const cards = props && props.cards ? props.cards : defaultCards;
 
   useEffect(() => {
     const detect = () => setIsMobile(window.innerWidth < 768);
@@ -63,7 +64,7 @@ export default function CardSlider() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         onAnimationComplete={handleContainerComplete}
       >
-        {cards.map((card, index) => {
+        {(props && props.cards ? props.cards : defaultCards).map((card, index) => {
           const isActive = index === current;
 
           const cardWidth = 310;

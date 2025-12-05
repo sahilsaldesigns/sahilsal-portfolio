@@ -2,6 +2,7 @@
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { tinaField, useTina } from "tinacms/dist/react";
 import type { PageQuery } from "../../tina/__generated__/types";
+import BlockRenderer from "../components/layout/BlockRenderer";
 
 interface ClientPageProps {
   query: string;
@@ -20,9 +21,15 @@ export default function ClientPage(props: ClientPageProps) {
   });
 
   const content = data.page.body;
+  console.log(data.page.blocks)
   return (
     <div data-tina-field={tinaField(data.page, "body")}>
       <TinaMarkdown content={content} />
+      <div data-tina-field={tinaField(data.page, "blocks")}>
+        {data.page.blocks?.map((b: any, i: number) => (
+          <BlockRenderer key={i} block={b} />
+        ))}
+      </div>
     </div>
   );
 }
