@@ -47,7 +47,10 @@ export default async function Header() {
         </Link>
       ) : null}
 
-      <ActiveNav nav={nav} />
+      <div className="hidden md:block">
+        <ActiveNav nav={nav} />
+      </div>
+
     </header>
   );
 }

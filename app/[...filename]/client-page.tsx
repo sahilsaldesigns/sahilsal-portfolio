@@ -21,7 +21,6 @@ export default function ClientPage(props: ClientPageProps) {
   });
 
   const content = data.page.body;
-  console.log(data.page.blocks)
   return (
     <div data-tina-field={tinaField(data.page, "body")}>
       <TinaMarkdown content={content} />
