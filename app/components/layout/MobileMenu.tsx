@@ -19,6 +19,16 @@ export default function MobileMenu({ nav }: { nav: {
       setOpen(false);
     }
     lastPathRef.current = pathname;
+
+    if(open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    }
   }, [pathname, open]);
 
   return (
@@ -55,7 +65,7 @@ export default function MobileMenu({ nav }: { nav: {
           WebkitTapHighlightColor: "transparent",
         }}
       >
-        <div className="flex flex-col items-center justify-center min-h-screen gap-8 px-6">
+        <div className="fixed top-0 left-0 right-0  bg-white flex flex-col items-center justify-center min-h-screen gap-8 px-6">
           {nav.map((item, i) => {
              const isActive =
           pathname === item.href ||

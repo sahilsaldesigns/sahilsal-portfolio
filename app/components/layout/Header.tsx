@@ -4,8 +4,10 @@ import path from "path";
 import React from "react";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 import ActiveNav from "./ActiveNav";
+import StickyHeaderWrapper from "../utils/StickyHeaderWrapper";
+import MobileMenu from "./MobileMenu";
 
-type NavItem = { href: string; label?: string };
+type NavItem = { href: string; label?: string; target: string };
 
 function readGlobalFile() {
   try {
@@ -36,21 +38,27 @@ export default async function Header() {
   const logo = globalData?.header?.logo || "";
 
   return (
-    <header className="flex justify-between py-8">
-      {logo ? (
-        <Link href={"/"}>
-          <img
-            src={logo}
-            alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"}
-            style={{ height: 36 }}
-          />
-        </Link>
-      ) : null}
+    <StickyHeaderWrapper>
+      <header className="flex justify-between py-8">
+        {logo ? (
+          <Link href={"/"}>
+            <img
+              src={logo}
+              alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"}
+              style={{ height: 36 }}
+            />
+          </Link>
+        ) : null}
 
-      <div className="hidden md:block">
-        <ActiveNav nav={nav} />
-      </div>
+        <div className="hidden md:block">
+          <ActiveNav nav={nav} />
+        </div>
 
-    </header>
+        <div className="md:hidden absolute right-6 top-8">
+          <MobileMenu nav={nav} />
+        </div>
+
+      </header>
+    </StickyHeaderWrapper>
   );
 }

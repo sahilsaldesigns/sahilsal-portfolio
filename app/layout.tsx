@@ -4,7 +4,6 @@ import { Lustria, Plus_Jakarta_Sans } from "next/font/google";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container } from "./components/layout/Container";
-import MobileMenu from "./components/layout/MobileMenu";
 import fs from "fs";
 import path from "path";
 import { ExperimentalGetTinaClient } from "../tina/__generated__/types";
@@ -85,12 +84,7 @@ export default function RootLayout({
         <div className="flex-1">
           <Container>
             <div className="relative">
-              <Header />
-              {/* Persistent mobile menu placed in layout so it isn't unmounted during navigation */}
-              <div className="md:hidden absolute right-6 top-8">
-                {/* @ts-ignore server -> client prop passing */}
-                <MobileMenu nav={nav} />
-              </div>
+              <Header />              
             </div>
           </Container>
           <main className="mt-14">{children}</main>
