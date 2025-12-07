@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export default function ResumePage() {
-  const filePath = "/uploads/files/sample-resume.pdf";
+  const filePath = "/uploads/files/Sahil_Sal_Resume_2024.pdf";
 
   return (
     <main className="max-w-3xl mx-auto py-12 px-4">

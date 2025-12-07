@@ -3,23 +3,23 @@
 import Link from "next/link";
 import {
   FaLinkedinIn,
-  FaMediumM,
   FaBehance,
-  FaDribbble,
 } from "react-icons/fa";
+import Dribble from "./../icons/Dribble"
+import Medium from "./../icons/Medium"
 
 const ICONS: any = {
-  linkedin: <FaLinkedinIn className="text-white text-sm" />,
-  medium: <FaMediumM className="text-white text-sm" />,
-  behance: <FaBehance className="text-white text-sm" />,
-  dribbble: <FaDribbble className="text-white text-sm" />,
+  linkedin: {component : <FaLinkedinIn className="text-white text-sm w-5 h-5" />, hoverBg : "hover:bg-[#0077b7]", bgColor: "bg-black" ,},
+  medium: {component: <Medium className="text-white text-sm w-7 h-7" />, hoverBg : "hover:bg-black", bgColor: "bg-black" ,className: "justify-end" },
+  behance: {component: <FaBehance className="text-white text-sm w-5 h-5 " />, hoverBg : "hover:bg-[#1769ff]", bgColor: "bg-black" },
+  dribbble: {component: <Dribble className="text-black fill-black text-sm w-8 h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white" },
 };
 
 export default function SocialLinks({ links = [] }: { links: any[] }) {    
   if (!links || links.length === 0) return null;
-
+console.log(links)
   return (
-    <div className="w-full flex justify-center py-16">
+    <div className="w-full flex justify-center relative top-[-110px] z-1">
       <div className="
         px-8 py-4 
         bg-white border border-[#e5e5e5]
@@ -35,15 +35,18 @@ export default function SocialLinks({ links = [] }: { links: any[] }) {
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="
-                h-10 w-10 
-                bg-black 
+              className={`
+                h-8 w-8 
+                ${ICONS[item.icon].hoverBg} ${ICONS[item.icon].bgColor}
                 rounded-lg 
                 flex items-center justify-center
-                hover:scale-105 transition-transform
-              "
+                hover:scale-105  transition-all duration-300
+                ${
+                 ICONS[item.icon].className || ""
+                }
+              `}
             >
-              {ICONS[item.icon]}
+              {ICONS[item.icon].component}
             </Link>
 
             {/* Vertical Divider (except last item) */}

@@ -34,7 +34,7 @@ export default function CardSlider(props) {
   }, []);
 
   const handleContainerComplete = () => {
-    setTimeout(() => setBloom(true), 800);
+    setTimeout(() => setBloom(true), 1200);
   };
 
   const handleDragEnd = (event, info) => {
@@ -49,7 +49,7 @@ export default function CardSlider(props) {
   };
 
   return (
-    <section className="relative w-full h-[480px] flex items-center justify-center overflow-hidden bg-white">
+    <section className="relative w-full h-[610px] flex items-center justify-center overflow-hidden bg-white">
       <img
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
@@ -104,7 +104,7 @@ export default function CardSlider(props) {
               }}
               transition={{
                 type: "spring",
-                stiffness: 120,
+                stiffness: 80,
                 damping: 20,
               }}
             >
@@ -119,16 +119,20 @@ export default function CardSlider(props) {
                 />
               </div>
 
-              {bloom && (
-                <motion.p
-                  className="mt-4 w-[260px] text-center font-medium leading-tight text-[15px]"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: isActive ? 1 : 0.4, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  {card.title}
-                </motion.p>
-              )}
+              <motion.p
+                className="mt-4 w-[260px] text-center font-medium leading-tight text-[15px]"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: bloom ? (isActive ? 1 : 0.4) : 0,
+                }}
+                transition={{
+                  duration: 0.6,
+                  delay: bloom ? 0.3 : 0 // fade in AFTER spread
+                }}
+                style={{ minHeight: "40px" }} // prevents layout jump
+              >
+                {card.title}
+              </motion.p>
             </motion.div>
           );
         })}

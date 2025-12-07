@@ -91,3 +91,11 @@ h6 {
     transform: scaleX(0);
   }
 }
+
+
+.dribble-path {
+  transition: fill 0.25s ease;
+}
+svg:hover .dribble-path {
+  fill: var(--hover-fill);
+}
