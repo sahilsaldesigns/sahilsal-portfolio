@@ -37,6 +37,7 @@ const Global: Collection = {
             defaultItem: {
               href: "home",
               label: "Home",
+              target: "_self",
             },
           },
           fields: [
@@ -49,6 +50,18 @@ const Global: Collection = {
               type: "string",
               label: "Label",
               name: "label",
+            },
+            {
+              type: "string",
+              label: "Target",
+              name: "target",
+              ui: {
+                component: "select",
+              },
+              options: [
+                { label: "Same window (_self)", value: "_self" },
+                { label: "New tab (_blank)", value: "_blank" },
+              ],
             },
           ],
         },

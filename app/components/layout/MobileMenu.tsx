@@ -4,7 +4,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 
-export default function MobileMenu({ nav }: { nav: { href: string; label?: string }[] }) {
+export default function MobileMenu({ nav }: { nav: {
+  target: string; href: string; label?: string 
+}[] }) {
   const [open, setOpen] = useState(false);
 
   const pathname = usePathname();
@@ -62,6 +64,7 @@ export default function MobileMenu({ nav }: { nav: { href: string; label?: strin
               <Link
                 key={i}
                 href={item.href}
+                target={item.target || "_self"}
                  className={`text-2xl font-medium  transition-colors ${
                     isActive ? "text-black" : "text-black/60"
             }`}              

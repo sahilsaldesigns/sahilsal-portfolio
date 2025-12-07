@@ -16,8 +16,9 @@
         "label": "Photography"
       },
       {
-        "href": "/resume",
-        "label": "Resume"
+        "href": "/uploads/files/Sahil_Sal_Resume.pdf",
+        "label": "Resume",
+        "target": "_blank"
       }
     ]
   },
