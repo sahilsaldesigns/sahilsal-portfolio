@@ -31,6 +31,12 @@ export default {
               fields: [
                 { type: "string", name: "title", label: "Title" },
                 { type: "image", name: "image", label: "Image" },
+                {
+                  type: "boolean",
+                  name: "comingSoon",
+                  label: "Coming Soon",
+                  description: "Mark this card as coming soon (applies blur overlay)",
+                },
               ],
             },
           ],

@@ -17,7 +17,7 @@ const ICONS: any = {
 
 export default function SocialLinks({ links = [] }: { links: any[] }) {    
   if (!links || links.length === 0) return null;
-console.log(links)
+  
   return (
     <div className="w-full flex justify-center relative top-[-110px] z-1">
       <div className="
