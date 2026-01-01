@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
 const defaultCards = [
@@ -27,6 +27,8 @@ export default function CardSlider(props) {
   const [bloom, setBloom] = useState(false);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
 
   useEffect(() => {
@@ -34,6 +36,24 @@ export default function CardSlider(props) {
     detect();
     window.addEventListener("resize", detect);
     return () => window.removeEventListener("resize", detect);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.8 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   const handleContainerComplete = () => {
@@ -52,7 +72,7 @@ export default function CardSlider(props) {
   };
 
   return (
-    <section className="relative w-full h-[750px] flex items-center justify-center overflow-hidden bg-white">
+    <section ref={sectionRef} className="relative w-full h-[750px] flex items-center justify-center overflow-hidden bg-white">
       <img
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
@@ -63,9 +83,9 @@ export default function CardSlider(props) {
       <motion.div
         className="relative flex h-[480px] w-full max-w-[1200px] items-center justify-center z-2"
         initial={{ y: 150, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
-        onAnimationComplete={handleContainerComplete}
+        onAnimationComplete={isInView ? handleContainerComplete : undefined}
       >
         {(props && props.cards ? props.cards : defaultCards).map((card, index) => {
           const isActive = index === current;
