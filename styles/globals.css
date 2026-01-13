@@ -99,3 +99,130 @@ h6 {
 svg:hover .dribble-path {
   fill: var(--hover-fill);
 }
+
+/* ---------------------------
+   FULL SCREEN INTRO
+---------------------------- */
+.page-intro {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  overflow: hidden;
+
+  animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) 4s forwards;
+}
+
+/* Logo starts at bottom */
+.logo-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(50vh) scale(0.9);
+  animation: logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
+}
+
+/* Logo itself */
+.intro-logo {
+  opacity: 1;
+  animation:
+    logoShine 1.6s ease-in-out 2.6s forwards;
+}
+
+/* ---------------------------
+   ANIMATIONS
+---------------------------- */
+
+/* Cinematic throw: slow rise + overshoot + settle */
+@keyframes logoThrow {
+  0% {
+    transform: translateX(-50%) translateY(50vh) scale(0.85);
+    filter: blur(2px);
+  }
+
+
+
+  100% {
+    transform: translateX(-50%) translateY(-50vh) scale(1);
+  }
+}
+
+/* Premium shine — soft halo pulse */
+@keyframes logoShine {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(255,255,255,0));
+  }
+  40% {
+    filter: drop-shadow(0 0 14px rgba(255,255,255,0.4));
+  }
+  60% {
+    filter: drop-shadow(0 0 28px rgba(255,255,255,0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(255,255,255,0));
+  }
+}
+
+/* Screen exit — heavy cinematic ease */
+@keyframes screenSlideUp {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+
+
+
+/* ---------------------------
+   SHINE MASK WRAPPER
+---------------------------- */
+.logo-shine-mask {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+/* The shine layer */
+.logo-shine-mask::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255,255,255,0.0) 30%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(255,255,255,0.0) 70%,
+    transparent 100%
+  );
+
+  transform: translateY(-120%);
+  opacity: 0;
+
+  animation: shineSweep 1.4s ease-in-out 2.6s forwards;
+  pointer-events: none;
+}
+
+
+
+@keyframes shineSweep {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
