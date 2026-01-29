@@ -1,4 +1,4 @@
-import ClientPage from "./[...filename]/client-page";
+import ClientPage from "./(main)/[...filename]/client-page";
 import client from "../tina/__generated__/client";
 import Image from "next/image";
 import PageIntro from "./components/ui/PageIntro";

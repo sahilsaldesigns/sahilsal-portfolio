@@ -1,5 +1,5 @@
 import ClientPage from "./client-page";
-import client from "../../tina/__generated__/client";
+import client from "../../../tina/__generated__/client";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
