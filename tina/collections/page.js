@@ -32,6 +32,12 @@ export default {
                 { type: "string", name: "title", label: "Title" },
                 { type: "image", name: "image", label: "Image" },
                 {
+                  type: "string",
+                  name: "caseStudySlug",
+                  label: "Case Study",
+                  description: "Link to a case study (e.g., banking-app-redesign, ecommerce-platform)",
+                },
+                {
                   type: "boolean",
                   name: "comingSoon",
                   label: "Coming Soon",

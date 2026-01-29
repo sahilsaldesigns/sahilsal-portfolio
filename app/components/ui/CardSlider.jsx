@@ -1,12 +1,14 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const defaultCards = [
   {
     id: 1,
     title: "Dine-In Redefined: Streamlining Experiences For Brewpub Patrons",
     image: "/uploads/img/1.png",
+    caseStudySlug: "banking-app-redesign",
     comingSoon: false,
   },
   {
@@ -22,6 +24,70 @@ const defaultCards = [
     comingSoon: true,
   },
 ];
+
+const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
+  <div
+    className="rounded-3xl bg-linear-to-br from-amber-100/30 to-amber-200/30 p-6 shadow-2xl overflow-hidden border-2 border-amber-200/50 relative"
+    style={{ width: cardWidth, height: cardHeight }}
+  >
+    <div 
+      className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative"
+      style={{
+        filter: card.comingSoon ? 'blur(8px)' : 'none',
+      }}
+    >
+      <div className="flex-1 overflow-hidden relative">
+        <img
+          src={card.image}
+          alt={card.title}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      <motion.div
+        className="bg-white px-4 py-4"
+        initial={{ opacity: 0 }}
+        animate={{
+          opacity: bloom ? (isActive ? 1 : 0.4) : 0,
+        }}
+        transition={{
+          duration: 0.6,
+          delay: bloom ? 0.3 : 0,
+        }}
+      >
+        <p className="text-center font-medium leading-tight text-[14px] text-gray-800">
+          {card.title}
+        </p>
+      </motion.div>
+    </div>
+    
+    {/* Coming Soon Overlay - Outside blurred content */}
+    {card.comingSoon && (
+      <div className="absolute inset-6 rounded-2xl bg-black/50 flex items-center justify-center overflow-hidden">
+        {/* Coming Soon Text with Glare */}
+        <div className="relative bg-black/80 px-8 py-3 rounded-lg overflow-hidden">
+          {/* Animated Glare Effect on band only */}
+          <motion.div
+            className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent"
+            animate={{
+              x: ['-100%', '200%'],
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: 3,
+              ease: "easeInOut",
+              repeatDelay: 1,
+            }}
+          />
+          
+          <span className="relative z-10 text-white text-2xl font-bold tracking-wider">
+            COMING SOON
+          </span>
+        </div>
+      </div>
+    )}
+  </div>
+);
 
 export default function CardSlider(props) {
   const [bloom, setBloom] = useState(false);
@@ -104,6 +170,16 @@ export default function CardSlider(props) {
             }
           }
 
+          const cardElement = (
+            <CardContent 
+              card={card} 
+              cardWidth={cardWidth} 
+              cardHeight={cardHeight}
+              isActive={isActive}
+              bloom={bloom}
+            />
+          );
+
           return (
             <motion.div
               key={card.id || index}
@@ -129,67 +205,13 @@ export default function CardSlider(props) {
                 damping: 20,
               }}
             >
-              <div
-                className="rounded-3xl bg-gradient-to-br from-amber-100/30 to-amber-200/30 p-6 shadow-2xl overflow-hidden border-2 border-amber-200/50 relative"
-                style={{ width: cardWidth, height: cardHeight }}
-              >
-                <div 
-                  className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative"
-                  style={{
-                    filter: card.comingSoon ? 'blur(8px)' : 'none',
-                  }}
-                >
-                  <div className="flex-1 overflow-hidden relative">
-                    <img
-                      src={card.image}
-                      alt={card.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  
-                  <motion.div
-                    className="bg-white px-4 py-4"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: bloom ? (isActive ? 1 : 0.4) : 0,
-                    }}
-                    transition={{
-                      duration: 0.6,
-                      delay: bloom ? 0.3 : 0,
-                    }}
-                  >
-                    <p className="text-center font-medium leading-tight text-[14px] text-gray-800">
-                      {card.title}
-                    </p>
-                  </motion.div>
-                </div>
-                
-                {/* Coming Soon Overlay - Outside blurred content */}
-                {card.comingSoon && (
-                  <div className="absolute inset-6 rounded-2xl bg-black/50 flex items-center justify-center overflow-hidden">
-                    {/* Coming Soon Text with Glare */}
-                    <div className="relative bg-black/80 px-8 py-3 rounded-lg overflow-hidden">
-                      {/* Animated Glare Effect on band only */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
-                        animate={{
-                          x: ['-100%', '200%'],
-                        }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 3,
-                          ease: "easeInOut",
-                          repeatDelay: 1,
-                        }}
-                      />
-                      
-                      <span className="relative z-10 text-white text-2xl font-bold tracking-wider">
-                        COMING SOON
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
+              {card.caseStudySlug && !card.comingSoon ? (
+                <Link href={`/case-studies/${card.caseStudySlug}`}>
+                  {cardElement}
+                </Link>
+              ) : (
+                cardElement
+              )}
             </motion.div>
           );
         })}
