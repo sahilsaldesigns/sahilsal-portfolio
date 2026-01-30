@@ -24,7 +24,7 @@ export default function ScrollStackGallery(props) {
       <motion.h1
         style={{ opacity: headingOpacity, y: headingY }}
         className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
-        z-[999] text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
+        z-999 text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
       >
         Photograph’s and Memories
       </motion.h1>
@@ -33,7 +33,7 @@ export default function ScrollStackGallery(props) {
       <motion.div
         style={{ opacity: headingOpacity }}
         className="fixed left-1/2 top-[60%] -translate-x-1/2 
-        z-[999] flex flex-col items-center text-gray-500 pointer-events-none"
+        z-999 flex flex-col items-center text-gray-500 pointer-events-none"
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
       >
