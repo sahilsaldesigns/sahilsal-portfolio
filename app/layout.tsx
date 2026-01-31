@@ -4,6 +4,7 @@ import { Lustria, Plus_Jakarta_Sans } from "next/font/google";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container } from "./components/layout/Container";
+import { IntroProvider } from "./providers/IntroProvider";
 import type { Metadata } from "next";
 
 const lustria = Lustria({
@@ -34,7 +35,11 @@ export default function RootLayout({
           <Container>
             <Header />
           </Container>
-          <main className="mt-14">{children}</main>
+          <main className="mt-14">
+            <IntroProvider>
+              {children}
+            </IntroProvider>
+          </main>
         </div>
 
         <Container>

@@ -1,7 +1,7 @@
 import ClientPage from "./(main)/[...filename]/client-page";
 import client from "../tina/__generated__/client";
 import Image from "next/image";
-import PageIntro from "./components/ui/PageIntro";
+import PageWithIntro from "./components/ui/PageWithIntro";
 
 export default async function HomePage() {
   const data = await client.queries.page({ relativePath: "home.mdx" });
@@ -10,11 +10,7 @@ export default async function HomePage() {
   });
 
   return (
-    <>
-      {/* Loader */}
-      <PageIntro />
-
-      {/* Actual page */}
+    <PageWithIntro>
       <div className="hero-section-container relative py-20">
         <section className="home-hero-section text-center z-10 bg-[radial-gradient(circle,white_0%,rgba(255,255,255,0)_80%)]">
           <ClientPage {...data} />
@@ -31,6 +27,6 @@ export default async function HomePage() {
           />
         </div>
       </div>
-    </>
+    </PageWithIntro>
   );
 }

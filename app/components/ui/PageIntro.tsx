@@ -1,9 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 
-export default function PageIntro() {
+export default function PageIntro({ onComplete }: { onComplete: () => void }) {
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onComplete();
+        }, 5000); // 5 seconds
+
+        return () => clearTimeout(timer);
+    }, [onComplete]);
 
     return (
         <div className="page-intro">
@@ -17,7 +25,6 @@ export default function PageIntro() {
                         className="intro-logo"
                     />
                 </div>
-
             </div>
         </div>
     );
