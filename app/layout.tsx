@@ -19,7 +19,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Sahil Salekar",
   description: "Sahil Portfolio",
 };
 
