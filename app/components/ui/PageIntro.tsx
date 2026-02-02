@@ -18,7 +18,7 @@ export default function PageIntro({ onComplete }: { onComplete: () => void }) {
             <div className="logo-wrapper">
                 <div className="logo-shine-mask">
                     <Image
-                        src="/uploads/base-logo.svg"  
+                        src="/uploads/img/base-logo.svg"  
                         alt="Logo"
                         width={80}
                         height={80}

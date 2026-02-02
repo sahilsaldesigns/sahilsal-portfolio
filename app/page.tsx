@@ -19,7 +19,7 @@ export default async function HomePage() {
         <div className="bg-container">
           <div className="bg-reveal-edge"></div>
           <Image
-            src="uploads/hero-line-3.svg"
+            src="uploads/img/hero-line.svg"
             alt="background image"
             width={500}
             height={500}

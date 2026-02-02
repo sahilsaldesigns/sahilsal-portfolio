@@ -1,7 +1,7 @@
 {
   "header": {
-    "logo": "/uploads/sahil-salekar-logo.svg",
-    "logo_alt": "Sahil Salekar Logoooooooooooooooooooooo",
+    "logo": "/uploads/img/header-logo.svg",
+    "logo_alt": "Sahil Salekar Logo",
     "nav": [
       {
         "href": "/",
@@ -22,7 +22,7 @@
       }
     ]
   },
-   "socialLinks": [
+  "socialLinks": [
     {
       "icon": "linkedin",
       "url": "https://linkedin.com/"

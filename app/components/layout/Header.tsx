@@ -39,13 +39,13 @@ export default async function Header() {
 
   return (
     <StickyHeaderWrapper>
-      <header className="flex justify-between py-8">
+      <header className="flex justify-between items-center py-8">
         {logo ? (
           <Link href={"/"}>
             <img
               src={logo}
               alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"}
-              style={{ height: 36 }}
+              style={{ height: 48  ,width: 48}}
             />
           </Link>
         ) : null}

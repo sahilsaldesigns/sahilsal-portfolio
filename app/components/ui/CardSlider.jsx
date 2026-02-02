@@ -138,7 +138,7 @@ export default function CardSlider(props) {
   };
 
   return (
-    <section ref={sectionRef} className="relative w-full h-[750px] flex items-center justify-center overflow-hidden bg-white">
+    <section ref={sectionRef} className="relative w-full h-[750px] flex items-center justify-center overflow-hidden bg-white mt-10">
       <img
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
