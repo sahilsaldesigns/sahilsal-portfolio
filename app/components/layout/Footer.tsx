@@ -30,7 +30,7 @@ export default async function Footer() {
   const copyright = globalData?.footer?.copyright || "";
 
   return (
-    <footer className="text-center py-8">
+    <footer className="text-center pb-8">
       <div>{copyright}</div>
     </footer>
   );

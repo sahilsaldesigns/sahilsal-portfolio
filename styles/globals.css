@@ -101,6 +101,10 @@ svg:hover .dribble-path {
   fill: var(--hover-fill);
 }
 
+.hero-section-container .block-wrapper {
+ height: 608px;
+}
+
 /* ---------------------------
    FULL SCREEN INTRO
 ---------------------------- */

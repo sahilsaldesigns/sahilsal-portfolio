@@ -25,7 +25,7 @@ export default function ClientPage(props: ClientPageProps) {
   return (
     <div data-tina-field={tinaField(data.page, "body")} className={props.className}>
       <TinaMarkdown content={content} />
-      <div data-tina-field={tinaField(data.page, "blocks")}>
+      <div className="block-wrapper" data-tina-field={tinaField(data.page, "blocks")}>
         {data.page.blocks?.map((b: any, i: number) => (
           <BlockRenderer key={i} block={b} />
         ))}

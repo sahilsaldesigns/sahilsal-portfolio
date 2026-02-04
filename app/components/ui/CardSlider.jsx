@@ -136,7 +136,7 @@ export default function CardSlider(props) {
   };
 
   return (
-    <section ref={sectionRef} className="relative w-full h-[750px] flex items-center justify-center overflow-hidden bg-white">
+    <section ref={sectionRef} className="relative w-full h-[608px] flex  justify-center overflow-hidden bg-white">
       <img
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
@@ -145,7 +145,7 @@ export default function CardSlider(props) {
 
       {/* Content Layer */}
       <motion.div
-        className="relative flex h-[480px] w-full max-w-[1200px] items-center justify-center z-2"
+        className="relative flex h-[400px] w-full max-w-[1200px] items-center justify-center z-2 mt-15"
         initial={{ y: 150, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
@@ -154,9 +154,9 @@ export default function CardSlider(props) {
         {(props && props.cards ? props.cards : defaultCards).map((card, index) => {
           const isActive = index === current;
 
-          const cardWidth = 400;
-          const cardHeight = 400;
-          const slideWidth = 450;
+          const cardWidth = 300;
+          const cardHeight = 300;
+          const slideWidth = 350;
 
           let xOffset = 0;
           if (bloom) {
