@@ -20,34 +20,41 @@ export default function ScrollStackGallery(props) {
   return (
     <section ref={ref} className="relative h-[500vh]">
 
-      {/* --- Centered Heading (kept OUTSIDE sticky layer) --- */}
-      <motion.h1
-        style={{ opacity: headingOpacity, y: headingY }}
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
-        z-999 text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
-      >
-        Photograph’s and Memories
-      </motion.h1>
-
-      {/* --- Scroll Indicator --- */}
+      {/* --- Centered Heading and Scroll Indicator wrapped in animated div --- */}
       <motion.div
-        style={{ opacity: headingOpacity }}
-        className="fixed left-1/2 top-[60%] -translate-x-1/2 
-        z-999 flex flex-col items-center text-gray-500 pointer-events-none"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <span className="text-sm md:text-base">Scroll Down</span>
-        <svg
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          className="mt-1"
+        {/* --- Centered Heading (kept OUTSIDE sticky layer) --- */}
+        <motion.h1
+          style={{ opacity: headingOpacity, y: headingY }}
+          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
+    z-999 text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
         >
-          <path d="M12 5v14m0 0l-6-6m6 6l6-6" />
-        </svg>
+          Photograph's and Memories
+        </motion.h1>
+
+        {/* --- Scroll Indicator --- */}
+        <motion.div
+          style={{ opacity: headingOpacity }}
+          className="fixed left-1/2 top-[60%] -translate-x-1/2 
+    z-999 flex flex-col items-center text-gray-500 pointer-events-none"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          <span className="text-sm md:text-base">Scroll Down</span>
+          <svg
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="mt-1"
+          >
+            <path d="M12 5v14m0 0l-6-6m6 6l6-6" />
+          </svg>
+        </motion.div>
       </motion.div>
 
       {/* --- Sticky Image Container --- */}
@@ -84,7 +91,7 @@ export default function ScrollStackGallery(props) {
                 className="
                   w-[70vw] max-w-[500px]
                   h-auto max-h-[80vh]
-                  object-cover rounded-3xl shadow-2xl
+                  object-cover rounded-3xl 
                   md:w-[50vw] md:max-w-[600px]
                 "
               />
