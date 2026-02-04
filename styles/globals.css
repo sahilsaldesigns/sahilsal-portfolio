@@ -61,37 +61,24 @@ h6 {
   left: 0;
   width: 100%;
   z-index: -1;
-  animation: bg-fade 0.5s ease ;
-}
-.bg-reveal{
-  position: absolute;
-  inset: 0;
-  background: white;
-  animation:  reveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) 1.5s forwards;
-  transform-origin: right;
 }
 
-@keyframes reveal {
-  0% {
-    transform: scaleX(1);
-  }
-  100% {
-    transform: scaleX(0);
-  }
-}
-
-
+/* Base reveal layer */
 .bg-reveal-edge {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      to right,
-      white 0 50%,
-      white 50% 100%
-    );
+  background: white;
   animation: reveal-edge 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  transform-origin: center;
+}
+
+/* Left image: reveal from center → left */
+.bg-reveal-left {
+  transform-origin: right center;
+}
+
+/* Right image: reveal from center → right */
+.bg-reveal-right {
+  transform-origin: left center;
 }
 
 @keyframes reveal-edge {
@@ -103,6 +90,9 @@ h6 {
   }
 }
 
+.radial-fade {
+background: linear-gradient(to right, transparent 0%, white 50%, transparent 100%);
+}
 
 .dribble-path {
   transition: fill 0.25s ease;

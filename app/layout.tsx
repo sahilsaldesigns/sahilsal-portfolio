@@ -35,7 +35,7 @@ export default function RootLayout({
           <Container>
             <Header />
           </Container>
-          <main className="mt-14">
+          <main className="">
             <IntroProvider>
               {children}
             </IntroProvider>

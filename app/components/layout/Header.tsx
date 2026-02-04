@@ -39,7 +39,7 @@ export default async function Header() {
 
   return (
     <StickyHeaderWrapper>
-      <header className="flex justify-between items-center py-8">
+      <header className="flex justify-between items-center pt-8 z-50">
         {logo ? (
           <Link href={"/"}>
             <img

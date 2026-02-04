@@ -5,6 +5,7 @@ import type { PageQuery } from "../../../tina/__generated__/types";
 import BlockRenderer from "../../components/layout/BlockRenderer";
 
 interface ClientPageProps {
+  className?: string;
   query: string;
   variables: {
     relativePath: string;
@@ -22,7 +23,7 @@ export default function ClientPage(props: ClientPageProps) {
 
   const content = data.page.body;
   return (
-    <div data-tina-field={tinaField(data.page, "body")}>
+    <div data-tina-field={tinaField(data.page, "body")} className={props.className}>
       <TinaMarkdown content={content} />
       <div data-tina-field={tinaField(data.page, "blocks")}>
         {data.page.blocks?.map((b: any, i: number) => (
