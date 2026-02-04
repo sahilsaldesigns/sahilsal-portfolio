@@ -37,6 +37,7 @@ const Global: Collection = {
             defaultItem: {
               href: "home",
               label: "Home",
+              target: "_self",
             },
           },
           fields: [
@@ -50,11 +51,55 @@ const Global: Collection = {
               label: "Label",
               name: "label",
             },
+            {
+              type: "string",
+              label: "Target",
+              name: "target",
+              ui: {
+                component: "select",
+              },
+              options: [
+                { label: "Same window (_self)", value: "_self" },
+                { label: "New tab (_blank)", value: "_blank" },
+              ],
+            },
           ],
         },
       ],
     },
-
+    //Social Links
+    {
+      name: "socialLinks",
+      label: "Social Links",
+      type: "object",
+      list: true,
+      ui: {
+        itemProps: (item) => ({
+          label: item?.icon ? `${item.icon.toUpperCase()}` : "Social Link",
+        }),
+      },
+      fields: [
+        {
+          name: "icon",
+          label: "Icon",
+          type: "string",
+          ui: {
+            component: "select",
+          },
+          options: [
+            { label: "LinkedIn", value: "linkedin" },
+            { label: "Medium", value: "medium" },
+            { label: "Behance", value: "behance" },
+            { label: "Dribbble", value: "dribbble" },
+          ],
+        },
+        {
+          name: "url",
+          label: "URL",
+          type: "string",
+        },
+      ],
+    },
     // Footer
     {
       type: "object",

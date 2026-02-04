@@ -1,6 +1,27 @@
 import React from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import "../styles/globals.css";
+import { Lustria, Plus_Jakarta_Sans } from "next/font/google";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import { Container } from "./components/layout/Container";
+import { IntroProvider } from "./providers/IntroProvider";
+import type { Metadata } from "next";
+
+const lustria = Lustria({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-lustria",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
+});
+
+export const metadata: Metadata = {
+  title: "Sahil Salekar",
+  description: "Sahil Portfolio",
+};
 
 export default function RootLayout({
   children,
@@ -8,15 +29,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        style={{
-          margin: "3rem",
-        }}
-      >
-        <Header />
-        <main>{children}</main>
-        <Footer />
+    <html lang="en" className={`${lustria.variable} ${plusJakarta.variable}`}>
+      <body className="flex min-h-screen flex-col">
+        <div className="flex-1">
+          <Container>
+            <Header />
+          </Container>
+          <main className="">
+            <IntroProvider>
+              {children}
+            </IntroProvider>
+          </main>
+        </div>
+
+        <Container>
+          <Footer />
+        </Container>
       </body>
     </html>
   );

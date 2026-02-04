@@ -11,10 +11,6 @@ module.exports = {
         source: "/admin",
         destination: "/admin/index.html",
       },
-      {
-        source: "/work",
-        destination: "/work/project-1"
-      }
     ];
   },
 }

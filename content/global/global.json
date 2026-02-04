@@ -1,10 +1,10 @@
 {
   "header": {
-    "logo": "/uploads/sahil-salekar-logo.svg",
-    "logo_alt": "Sahil Salekar Logoooooooooooooooooooooo",
+    "logo": "/uploads/img/header-logo.svg",
+    "logo_alt": "Sahil Salekar Logo",
     "nav": [
       {
-        "href": "/work",
+        "href": "/",
         "label": "Work"
       },
       {
@@ -14,9 +14,32 @@
       {
         "href": "/photography",
         "label": "Photography"
+      },
+      {
+        "href": "/uploads/files/Sahil_Sal_Resume.pdf",
+        "label": "Resume",
+        "target": "_blank"
       }
     ]
   },
+  "socialLinks": [
+    {
+      "icon": "linkedin",
+      "url": "https://linkedin.com/"
+    },
+    {
+      "icon": "medium",
+      "url": "https://medium.com/"
+    },
+    {
+      "icon": "behance",
+      "url": "https://behance.net/"
+    },
+    {
+      "icon": "dribbble",
+      "url": "https://dribbble.com/"
+    }
+  ],
   "footer": {
     "copyright": "© Sahil Salekar 2025"
   }
