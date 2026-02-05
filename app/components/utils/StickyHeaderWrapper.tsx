@@ -12,11 +12,11 @@ export default function StickyHeaderWrapper({ children }) {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 200);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    // const handleScroll = () => {
+    //   setIsSticky(window.scrollY > 200);
+    // };
+    // window.addEventListener("scroll", handleScroll);
+    // return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (

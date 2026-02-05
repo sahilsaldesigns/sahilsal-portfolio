@@ -4,7 +4,6 @@ import path from "path";
 import React from "react";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 import ActiveNav from "./ActiveNav";
-import StickyHeaderWrapper from "../utils/StickyHeaderWrapper";
 import MobileMenu from "./MobileMenu";
 
 type NavItem = { href: string; label?: string; target: string };
@@ -38,7 +37,6 @@ export default async function Header() {
   const logo = globalData?.header?.logo || "";
 
   return (
-    <StickyHeaderWrapper>
       <header className="flex justify-between items-center pt-8 z-50">
         {logo ? (
           <Link href={"/"}>
@@ -59,6 +57,5 @@ export default async function Header() {
         </div>
 
       </header>
-    </StickyHeaderWrapper>
   );
 }

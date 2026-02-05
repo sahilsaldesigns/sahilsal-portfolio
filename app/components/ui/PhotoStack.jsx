@@ -34,9 +34,39 @@ export default function ScrollStackGallery(props) {
     ["20px", "0px"]
   );
 
+  // First image timing
+  const firstImageStart = 0 / n; // = 0
+  const firstImageMid = firstImageStart + 0.5 / n;
+
+  // Fixed heading fades in with first image, fades out with last image
+  const fixedHeadingOpacity = useTransform(
+    scrollYProgress,
+    [firstImageMid, firstImageMid + 0.05, lastImageStart, lastImageStart + 0.05],
+    [0, 1, 1, 0]
+  );
+
+  const fixedHeadingY = useTransform(
+    scrollYProgress,
+    [firstImageMid, firstImageMid + 0.05, lastImageStart, lastImageStart + 0.05],
+    ["-10px", "0px", "0px", "-20px"]
+  );
+
 
   return (
     <section ref={ref} className="relative h-[500vh]">
+      <motion.h1
+        style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
+        className="
+    fixed top-10 left-1/2 -translate-x-1/2
+    z-30
+    text-center text-lg md:text-2xl lg:text-3xl
+    font-semibold
+    pointer-events-none
+  "
+      >
+        Photograph's and Memories
+      </motion.h1>
+
 
       {/* --- Centered Heading and Scroll Indicator wrapped in animated div --- */}
       <motion.div
