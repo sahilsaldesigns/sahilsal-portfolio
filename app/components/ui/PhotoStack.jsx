@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import { useRef } from "react";
 
 export default function ScrollStackGallery(props) {
@@ -16,6 +17,23 @@ export default function ScrollStackGallery(props) {
   // Heading fade on scroll start (0 → 5%)
   const headingOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
   const headingY = useTransform(scrollYProgress, [0, 0.05], ["0%", "-40%"]);
+  // Last image completion point
+  const lastImageStart = (n - 1) / n;
+  const lastImageMid = lastImageStart + 0.5 / n;
+
+  // CTA opacity ONLY after last image is fully visible
+  const ctaOpacity = useTransform(
+    scrollYProgress,
+    [lastImageMid, lastImageMid + 0.05],
+    [0, 1]
+  );
+
+  const ctaY = useTransform(
+    scrollYProgress,
+    [lastImageMid, lastImageMid + 0.05],
+    ["20px", "0px"]
+  );
+
 
   return (
     <section ref={ref} className="relative h-[500vh]">
@@ -58,7 +76,7 @@ export default function ScrollStackGallery(props) {
       </motion.div>
 
       {/* --- Sticky Image Container --- */}
-      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center mb-15">
         {images.map((src, i) => {
           const start = i / n;
           const end = (i + 1) / n;
@@ -99,6 +117,30 @@ export default function ScrollStackGallery(props) {
           );
         })}
       </div>
+      <motion.div
+        style={{ opacity: ctaOpacity, y: ctaY }}
+        className="sticky top-[80vh] z-20 flex flex-col items-center justify-center text-center"
+      >
+        <p className="text-gray-500 mb-6 max-w-md">
+          Spotted something you liked? Let’s take it to the ’gram
+        </p>
+        <button
+          className=" group flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm hover:shadow-lg hover:bg-white hover:text-black hover:cursor-pointer transform hover:-translate-y-1 transition-all duration-300 ease-out">
+          <span
+            className=" w-6 h-6 flex items-center justify-center rounded-lg bg-transparent transition-colors duration-300 ease-out group-hover:bg-linear-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#515BD4] " >
+            <Image
+              src="/uploads/img/instagram-logo.svg"
+              width={24}
+              height={24}
+              alt="Instagram Logo"
+              className="transition-all duration-300 ease-out group-hover:invert-0"
+            />
+          </span>
+
+          Saahil.sal
+        </button>
+      </motion.div>
+
     </section>
   );
 }
