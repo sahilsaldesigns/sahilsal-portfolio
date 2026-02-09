@@ -6,20 +6,20 @@ import Link from "next/link";
 const defaultCards = [
   {
     id: 1,
-    title: "Dine-In Redefined: Streamlining Experiences For Brewpub Patrons",
+    title: "Designing wait-time visibility experience for busy brewpubs",
     image: "/uploads/img/1.png",
-    caseStudySlug: "banking-app-redesign",
+    caseStudySlug: "designing-wait-time-visibility-for-busy-brewpubs",
     comingSoon: false,
   },
   {
     id: 2,
-    title: "Dine-In Redefined: Streamlining Experiences For Brewpub Patrons",
+    title: "Workly – AI that runs your work in the background",
     image: "/uploads/img/2.png",
     comingSoon: true,
   },
   {
     id: 3,
-    title: "Dine-In Redefined: Streamlining Experiences For Brewpub Patrons",
+    title: "Management app for owners of homes & hostels",
     image: "/uploads/img/3.png",
     comingSoon: true,
   },

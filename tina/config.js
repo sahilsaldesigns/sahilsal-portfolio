@@ -1,8 +1,8 @@
 import { defineConfig } from "tinacms";
 import page from "./collections/page";
 import post from "./collections/post";
-import caseStudy from "./collections/caseStudy.ts";
-import Global from "./collections/global"
+import caseStudy from "./collections/caseStudy";
+import Global from "./collections/global";
 
 export const config = defineConfig({
   clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID,

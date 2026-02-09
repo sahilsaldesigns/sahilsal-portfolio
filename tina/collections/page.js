@@ -35,7 +35,7 @@ export default {
                   type: "string",
                   name: "caseStudySlug",
                   label: "Case Study",
-                  description: "Link to a case study (e.g., banking-app-redesign, ecommerce-platform)",
+                  description: "Link to a case study",
                 },
                 {
                   type: "boolean",
