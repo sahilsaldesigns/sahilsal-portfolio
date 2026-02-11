@@ -3,16 +3,6 @@
 import Image from "next/image";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import {
-  Target,
-  AlertCircle,
-  Lightbulb,
-  TrendingUp,
-  Code,
-  BookOpen,
-  Users,
-  Workflow,
-} from "lucide-react";
 
 interface CaseStudyData {
   query: string;
@@ -24,31 +14,12 @@ interface CaseStudyData {
   };
 }
 
-// Icon mapping
-const iconMap: Record<string, React.ElementType> = {
-  overview: Target,
-  challenge: AlertCircle,
-  solution: Lightbulb,
-  results: TrendingUp,
-  technology: Code,
-  learning: BookOpen,
-  users: Users,
-  process: Workflow,
-};
-
 export default function CaseStudyPage(props: CaseStudyData) {
   const { caseStudy } = props.data;
-
-  console.log(caseStudy);
 
   if (!caseStudy) {
     return <div className="py-20 text-center">Loading...</div>;
   }
-
-  const renderIcon = (iconName: string) => {
-    const IconComponent = iconMap[iconName] || Target;
-    return <IconComponent className="w-6 h-6" />;
-  };
 
   return (
     <div className="min-h-screen animate-fadeInUp">
@@ -85,29 +56,29 @@ export default function CaseStudyPage(props: CaseStudyData) {
             <div className="mb-16 md:mb-20">
               {caseStudy.heroMedia.mediaType === "image" &&
                 caseStudy.heroMedia.image && (
-                  <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
-                    <Image
-                      src={caseStudy.heroMedia.image}
-                      alt={caseStudy.title}
-                      fill
-                      priority
-                      className="object-cover"
-                    />
-                  </div>
-                )}
+                <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
+                  <Image
+                    src={caseStudy.heroMedia.image}
+                    alt={caseStudy.title}
+                    fill
+                    priority
+                    className="object-cover"
+                  />
+                </div>
+              )}
 
               {caseStudy.heroMedia.mediaType === "video" &&
                 caseStudy.heroMedia.videoUrl && (
-                  <div className="relative w-full aspect-video overflow-hidden rounded-2xl bg-gray-900">
-                    <video
-                      src={caseStudy.heroMedia.videoUrl}
-                      controls
-                      className="w-full h-full"
-                    >
-                      Your browser does not support the video tag.
-                    </video>
-                  </div>
-                )}
+                <div className="relative w-full aspect-video overflow-hidden rounded-2xl bg-gray-900">
+                  <video
+                    src={caseStudy.heroMedia.videoUrl}
+                    controls
+                    className="w-full h-full"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              )}
             </div>
           )}
 
@@ -119,8 +90,14 @@ export default function CaseStudyPage(props: CaseStudyData) {
                   {/* Block Header with Icon */}
                   <div className="flex items-center gap-4 mb-6">
                     {block.icon && (
-                      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full   text-gray-700 dark:text-gray-300">
-                        {renderIcon(block.icon)}
+                      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                        <Image
+                          src={block.icon}
+                          alt="Section icon"
+                          width={48}
+                          height={48}
+                          className="object-contain"
+                        />
                       </div>
                     )}
                     <h2 className="text-3xl md:text-4xl font-bold text-gray-900 ">
@@ -152,8 +129,8 @@ export default function CaseStudyPage(props: CaseStudyData) {
                           mediaItem.layout === "full"
                             ? "md:col-span-2 lg:col-span-3"
                             : mediaItem.layout === "half"
-                              ? "md:col-span-1 lg:col-span-2"
-                              : "md:col-span-1 lg:col-span-1";
+                            ? "md:col-span-1 lg:col-span-2"
+                            : "md:col-span-1 lg:col-span-1";
 
                         return (
                           <div key={mediaIndex} className={colSpan}>

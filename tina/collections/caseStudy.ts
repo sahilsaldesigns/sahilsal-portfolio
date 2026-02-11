@@ -34,9 +34,6 @@ const caseStudy: Collection = {
       type: "object",
       name: "heroMedia",
       label: "Hero Media",
-      ui: {
-        component: "group",
-      },
       fields: [
         {
           type: "string",
@@ -69,19 +66,10 @@ const caseStudy: Collection = {
       },
       fields: [
         {
-          type: "string",
+          type: "image",
           name: "icon",
-          label: "Icon",
-          options: [
-            { value: "overview", label: "Overview (Target)" },
-            { value: "challenge", label: "Challenge (Alert)" },
-            { value: "solution", label: "Solution (Lightbulb)" },
-            { value: "results", label: "Results (Chart)" },
-            { value: "technology", label: "Technology (Code)" },
-            { value: "learning", label: "Learning (Book)" },
-            { value: "users", label: "Users (People)" },
-            { value: "process", label: "Process (Workflow)" },
-          ],
+          label: "Icon Image",
+          description: "Upload a custom icon (recommended size: 48x48px or 64x64px)",
         },
         {
           type: "string",
