@@ -119,11 +119,11 @@ export default function CaseStudyPage(props: CaseStudyData) {
                   {/* Block Header with Icon */}
                   <div className="flex items-center gap-4 mb-6">
                     {block.icon && (
-                      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full   text-gray-700 dark:text-gray-300">
                         {renderIcon(block.icon)}
                       </div>
                     )}
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 ">
                       {block.title}
                     </h2>
                   </div>
@@ -158,18 +158,14 @@ export default function CaseStudyPage(props: CaseStudyData) {
                         return (
                           <div key={mediaIndex} className={colSpan}>
                             {mediaItem.type === "image" && mediaItem.image && (
-                              <div className="relative w-full h-[300px] md:h-[400px] overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+                              <div className="relative w-full h-auto overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
                                 <Image
                                   src={mediaItem.image}
                                   alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
                                   fill
-                                  className="object-cover"
+                                  className="static!"
                                 />
-                                {mediaItem.alt && (
-                                  <p className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-sm p-3">
-                                    {mediaItem.alt}
-                                  </p>
-                                )}
+                                
                               </div>
                             )}
                             {mediaItem.type === "video" && mediaItem.videoUrl && (
