@@ -2,12 +2,12 @@ import Link from "next/link";
 import fs from "fs";
 import path from "path";
 import React from "react";
+import Image from "next/image";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 import ActiveNav from "./ActiveNav";
 import MobileMenu from "./MobileMenu";
 
 type NavItem = { href: string; label?: string; target: string };
-
 function readGlobalFile() {
   try {
     const file = path.join(process.cwd(), "content", "global", "global.json");
@@ -40,10 +40,13 @@ export default async function Header() {
       <header className="flex justify-between items-center pt-8 z-50">
         {logo ? (
           <Link href={"/"}>
-            <img
+            <Image
               src={logo}
               alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"}
-              style={{ height: 48  ,width: 48}}
+              width={48}
+              height={48}
+              style={{ width: 48, height: 48 }}
+              priority
             />
           </Link>
         ) : null}

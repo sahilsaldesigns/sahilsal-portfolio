@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function StickyHeaderWrapper({ children }) {
-  const [isSticky, setIsSticky] = useState(false);
+  const [isSticky] = useState(false);
   const headerRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -35,9 +36,11 @@ const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
       
     >
       <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
-        <img
+        <Image
           src={card.image}
           alt={card.title}
+          width={400}
+          height={300}
           className="w-full h-full object-cover"
         />
       </div>
@@ -137,9 +140,11 @@ export default function CardSlider(props) {
 
   return (
     <section ref={sectionRef} className="relative w-full h-[608px] flex  justify-center overflow-hidden bg-white">
-      <img
+      <Image
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
+        width={1920}
+        height={608}
         className="absolute inset-0 w-full h-full z-1"
       />
 

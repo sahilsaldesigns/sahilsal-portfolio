@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { useEffect, useRef, useState } from "react";
 
@@ -23,13 +24,14 @@ export default function AboutHero({ name, description, image }: AboutHeroProps) 
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -62,10 +64,13 @@ export default function AboutHero({ name, description, image }: AboutHeroProps) 
                 : "opacity-0 translate-x-12"
             }`}
           >
-            <img
+            <Image
               src={image}
               alt={name || "About Hero"}
+              width={400}
+              height={400}
               className="w-full h-auto rounded-3xl shadow-lg object-cover max-w-sm"
+              priority
             />
           </div>
         )}

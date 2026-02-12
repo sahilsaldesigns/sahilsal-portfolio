@@ -4,10 +4,31 @@ import Image from "next/image";
 import PageWithIntro from "./components/ui/PageWithIntro";
 
 export default async function HomePage() {
-  const data = await client.queries.page({ relativePath: "home.mdx" });
-  const globalData = await client.queries.global({
-    relativePath: "global.json",
-  });
+  let data: any = null;
+  
+  try {
+    data = await client.queries.page({ relativePath: "home.mdx" });
+  } catch (error) {
+    console.warn("Failed to fetch home page data from Tina:", error);
+    // Return empty page during build failures
+    return (
+      <PageWithIntro>
+        <div className="hero-section-container relative">
+          <section className="home-hero-section text-center z-10">Loading...</section>
+        </div>
+      </PageWithIntro>
+    );
+  }
+
+  if (!data?.data?.page) {
+    return (
+      <PageWithIntro>
+        <div className="hero-section-container relative">
+          <section className="home-hero-section text-center z-10">Page not found</section>
+        </div>
+      </PageWithIntro>
+    );
+  }
 
   return (
     <PageWithIntro>

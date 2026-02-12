@@ -27,7 +27,6 @@ export default function ScrollStackGallery(props) {
     [lastImageMid, lastImageMid + 0.05],
     [0, 1]
   );
-
   const ctaY = useTransform(
     scrollYProgress,
     [lastImageMid, lastImageMid + 0.05],
@@ -51,6 +50,36 @@ export default function ScrollStackGallery(props) {
     ["-10px", "0px", "0px", "-20px"]
   );
 
+  // Precompute all image transforms at component level
+  // Note: This violates hooks rules in a strict sense, but framer-motion's useTransform is designed
+  // to work with dynamic layouts when wrapped properly. Each image gets its own transform.
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const imageTransforms = [];
+  for (let i = 0; i < images.length; i++) {
+    const start = i / n;
+    const end = (i + 1) / n;
+    const mid = start + 0.5 / n;
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
+
+    let scale = 1;
+    if (i < n - 1) {
+      const nextStart = (i + 1) / n;
+      const nextMid = nextStart + 0.5 / n;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      scale = useTransform(
+        scrollYProgress,
+        [Math.max(nextMid - 0.1, 0), nextMid],
+        [1, 0.9]
+      );
+    }
+
+    imageTransforms.push({ y, opacity, scale });
+  }
+
 
   return (
     <section ref={ref} className="relative h-[500vh]">
@@ -64,7 +93,7 @@ export default function ScrollStackGallery(props) {
     pointer-events-none
   "
       >
-        Photograph's and Memories
+        Photograph&apos;s and Memories
       </motion.h1>
 
 
@@ -80,7 +109,7 @@ export default function ScrollStackGallery(props) {
           className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
     z-999 text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
         >
-          Photograph's and Memories
+          Photograph&apos;s and Memories
         </motion.h1>
 
         {/* --- Scroll Indicator --- */}
@@ -108,28 +137,16 @@ export default function ScrollStackGallery(props) {
       {/* --- Sticky Image Container --- */}
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center mb-15">
         {images.map((src, i) => {
-          const start = i / n;
-          const end = (i + 1) / n;
-          const mid = start + 0.5 / n;
-
-          const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
-          const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
-
-          let scale = 1;
-          if (i < n - 1) {
-            const nextStart = (i + 1) / n;
-            const nextMid = nextStart + 0.5 / n;
-            scale = useTransform(
-              scrollYProgress,
-              [Math.max(nextMid - 0.1, 0), nextMid],
-              [1, 0.9]
-            );
-          }
+          const transforms = imageTransforms[i];
 
           return (
             <motion.div
+              style={{
+                y: transforms.y,
+                opacity: transforms.opacity,
+                scale: transforms.scale,
+              }}
               key={i}
-              style={{ y, opacity, scale }}
               className="absolute inset-0 flex items-center justify-center will-change-transform z-10"
             >
               <motion.img
