@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function StickyHeaderWrapper({ children }) {
-  const [isSticky, setIsSticky] = useState(false);
+  const [isSticky] = useState(false);
   const headerRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -12,11 +12,11 @@ export default function StickyHeaderWrapper({ children }) {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 200);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    // const handleScroll = () => {
+    //   setIsSticky(window.scrollY > 200);
+    // };
+    // window.addEventListener("scroll", handleScroll);
+    // return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (

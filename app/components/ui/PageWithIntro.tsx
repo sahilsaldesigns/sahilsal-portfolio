@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useIntro } from "../../providers/IntroProvider";
 import PageIntro from "./PageIntro";
 

@@ -231,3 +231,43 @@ svg:hover .dribble-path {
     opacity: 0;
   }
 }
+
+
+
+/* --- PHOTOGRAPHY CTA ---- */
+.cta-btn {
+  position: relative;
+  padding: 18px 44px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  background: #fff;
+  border-radius: 999px;
+  overflow: hidden;
+  transition: color 0.4s ease;
+}
+
+.cta-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #111;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0, 1);
+}
+
+.cta-btn:hover {
+  color: #fff;
+}
+
+.cta-btn:hover::before {
+  transform: scaleX(1);
+}
+
+/* --- PHOTOGRAPHY CTA ---- */

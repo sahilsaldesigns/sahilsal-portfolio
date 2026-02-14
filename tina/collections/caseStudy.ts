@@ -1,68 +1,131 @@
-/**
- * @type {import('tinacms').Collection}
- */
-export default {
-  label: "Case Studies",
+import type { Collection } from "tinacms";
+
+const caseStudy: Collection = {
   name: "caseStudy",
+  label: "Case Studies",
   path: "content/case-studies",
   format: "mdx",
   fields: [
     {
       type: "string",
-      label: "Title",
       name: "title",
+      label: "Title",
       required: true,
     },
     {
       type: "string",
-      label: "Description",
       name: "description",
+      label: "Description",
+      required: true,
       ui: {
         component: "textarea",
       },
     },
     {
-      type: "image",
-      label: "Thumbnail Image",
-      name: "thumbnail",
-    },
-    {
-      type: "image",
-      label: "Hero Image",
-      name: "heroImage",
-    },
-    {
       type: "string",
-      label: "Client Name",
-      name: "clientName",
-    },
-    {
-      type: "string",
-      label: "Role",
-      name: "role",
-    },
-    {
-      type: "string",
-      label: "Project Date",
-      name: "projectDate",
-      description: "e.g., 2024 or January 2024",
-    },
-    {
-      type: "string",
-      label: "Tags",
       name: "tags",
+      label: "Tags",
       list: true,
+      ui: {
+        component: "tags",
+      },
     },
     {
-      name: "body",
-      label: "Content",
-      type: "rich-text",
-      isBody: true,
+      type: "object",
+      name: "heroMedia",
+      label: "Hero Media",
+      fields: [
+        {
+          type: "string",
+          name: "mediaType",
+          label: "Media Type",
+          options: ["image", "video"],
+          required: true,
+        },
+        {
+          type: "image",
+          name: "image",
+          label: "Image",
+        },
+        {
+          type: "string",
+          name: "videoUrl",
+          label: "Video URL",
+        },
+      ],
+    },
+    {
+      type: "object",
+      name: "contentBlocks",
+      label: "Content Blocks",
+      list: true,
+      ui: {
+        itemProps: (item) => {
+          return { label: item?.title || "Content Block" };
+        },
+      },
+      fields: [
+        {
+          type: "image",
+          name: "icon",
+          label: "Icon Image",
+          description: "Upload a custom icon (recommended size: 48x48px or 64x64px)",
+        },
+        {
+          type: "string",
+          name: "title",
+          label: "Block Title",
+          required: false,
+        },
+        {
+          type: "rich-text",
+          name: "content",
+          label: "Content",
+          required: true,
+        },
+        {
+          type: "object",
+          name: "media",
+          label: "Media (Images/Videos)",
+          list: true,
+          fields: [
+            {
+              type: "string",
+              name: "type",
+              label: "Type",
+              options: ["image", "video"],
+              required: true,
+            },
+            {
+              type: "image",
+              name: "image",
+              label: "Image",
+            },
+            {
+              type: "string",
+              name: "videoUrl",
+              label: "Video URL",
+            },
+            {
+              type: "string",
+              name: "alt",
+              label: "Alt Text / Caption",
+            },
+            {
+              type: "string",
+              name: "layout",
+              label: "Layout",
+              options: [
+                { value: "full", label: "Full Width" },
+                { value: "half", label: "Half Width" },
+                { value: "third", label: "Third Width" },
+              ],
+            },
+          ],
+        },
+      ],
     },
   ],
-  ui: {
-    router: ({ document }) => {
-      return `/case-studies/${document._sys.filename}`;
-    },
-  },
 };
+
+export default caseStudy;
