@@ -106,12 +106,13 @@ export default function CardSlider(props) {
   const animationTimeoutRef = useRef(null);
   const bloomTimeoutRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
+  const mobileThreshold = 1020;
 
   useEffect(() => {
     const detect = () => {
       const width = window.innerWidth;
       setWindowWidth(width);
-      setIsMobile(width < 960);
+      setIsMobile(width < mobileThreshold);
     };
     detect();
     window.addEventListener("resize", detect);
@@ -255,15 +256,22 @@ export default function CardSlider(props) {
         cardHeight: 365,
         slideWidth: 380,
       };
-    } else if (windowWidth >= 960) {
+    } else if (windowWidth >= mobileThreshold) {
       // Tablet - Medium dimensions
       return {
-        cardWidth: 300,
-        cardHeight: 295,
-        slideWidth: 320,
+        cardWidth: 333,
+        cardHeight: 325,
+        slideWidth: 345,
+      };
+    } else if (windowWidth >= 365) {
+      // Mobile - Standard dimensions
+      return {
+        cardWidth: 343,
+        cardHeight: 327,
+        slideWidth: 360,
       };
     } else {
-      // Mobile - Smaller dimensions
+      // Small Mobile (<365px) - Compact dimensions
       return {
         cardWidth: 280,
         cardHeight: 275,
@@ -277,7 +285,7 @@ export default function CardSlider(props) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[608px] md:h-[608px] sm:h-[500px] flex justify-center overflow-hidden bg-white"
+      className="relative w-full h-[608px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white"
     >
       <Image
         src="/uploads/img/card-slider-bg.png"
