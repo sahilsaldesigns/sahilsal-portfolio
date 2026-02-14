@@ -34,7 +34,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
   >
     <div
       className={`w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative ${
-        card.comingSoon ? "blur-sm" : "p-6"
+        card.comingSoon ? "blur-sm" : "p-6 sm:p-4"
       }`}
     >
       <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
@@ -48,7 +48,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
       </div>
 
       <motion.div
-        className={`bg-white ${card.comingSoon ? "" : "px-4 py-4"} `}
+        className={`bg-white ${card.comingSoon ? "" : "px-4 py-4 sm:px-3 sm:py-3"} `}
         initial={{ opacity: 0 }}
         animate={{
           opacity: bloom ? (isActive ? 1 : 0.4) : 0,
@@ -58,7 +58,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
           delay: bloom ? 0.3 : 0,
         }}
       >
-        <p className="text-center font-medium leading-tight text-[14px] text-gray-800">
+        <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
           {card.title}
         </p>
       </motion.div>
@@ -100,11 +100,16 @@ export default function CardSlider(props) {
   const [isInView, setIsInView] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(0);
   const sectionRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
 
   useEffect(() => {
-    const detect = () => setIsMobile(window.innerWidth < 768);
+    const detect = () => {
+      const width = window.innerWidth;
+      setWindowWidth(width);
+      setIsMobile(width < 960);
+    };
     detect();
     window.addEventListener("resize", detect);
     return () => window.removeEventListener("resize", detect);
@@ -183,22 +188,50 @@ export default function CardSlider(props) {
     }
   };
 
+  // Get responsive card dimensions
+  const getCardDimensions = () => {
+    if (windowWidth >= 1170) {
+      // Desktop - Original dimensions
+      return {
+        cardWidth: 370,
+        cardHeight: 365,
+        slideWidth: 380,
+      };
+    } else if (windowWidth >= 960) {
+      // Tablet - Medium dimensions
+      return {
+        cardWidth: 300,
+        cardHeight: 295,
+        slideWidth: 320,
+      };
+    } else {
+      // Mobile - Smaller dimensions
+      return {
+        cardWidth: 280,
+        cardHeight: 275,
+        slideWidth: 300,
+      };
+    }
+  };
+
+  const { cardWidth, cardHeight, slideWidth } = getCardDimensions();
+
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[608px] flex justify-center overflow-hidden bg-white"
+      className="relative w-full h-[608px] md:h-[608px] sm:h-[500px] flex justify-center overflow-hidden bg-white"
     >
       <Image
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
         width={1920}
         height={608}
-        className="absolute inset-0 w-full h-full z-1"
+        className="absolute inset-0 w-full h-full z-1 object-cover"
       />
 
       {/* Content Layer */}
       <motion.div
-        className="relative flex h-[400px] w-full max-w-[1200px] items-center justify-center z-2 mt-15"
+        className="relative flex h-[400px] md:h-[400px] sm:h-[320px] w-full max-w-[1200px] items-center justify-center z-2 mt-15 px-4"
         initial={{ y: 150, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
@@ -206,10 +239,6 @@ export default function CardSlider(props) {
       >
         {cards.map((card, index) => {
           const isActive = index === current;
-
-          const cardWidth = 300;
-          const cardHeight = 295;
-          const slideWidth = 320;
 
           let xOffset = 0;
           if (bloom) {
@@ -259,6 +288,24 @@ export default function CardSlider(props) {
           );
         })}
       </motion.div>
+
+      {/* Mobile Pagination Dots */}
+      {isMobile && bloom && (
+        <div className="absolute bottom-42 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+          {cards.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrent(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === current
+                  ? "bg-[#FBE2AC] w-6"
+                  : "bg-gray-400/50 w-2 hover:bg-gray-400"
+              }`}
+              aria-label={`Go to card ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
