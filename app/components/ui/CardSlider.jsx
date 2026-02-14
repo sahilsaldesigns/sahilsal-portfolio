@@ -1,8 +1,7 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const defaultCards = [
@@ -58,7 +57,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
           delay: bloom ? 0.3 : 0,
         }}
       >
-        <p className="text-center font-medium leading-tight text  -[14px] sm:text-[12px] text-gray-800">
+        <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
           {card.title}
         </p>
       </motion.div>
@@ -71,7 +70,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
         <div className="relative w-full bg-black/80 px-8 py-3 overflow-hidden">
           {/* Animated Glare Effect on band only */}
           <motion.div
-            className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent"
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
             animate={{
               x: ["-100%", "200%"],
             }}
@@ -83,7 +82,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
             }}
           />
 
-          <span className="relative z-10 text-white --font-lustria tracking-wider">
+          <span className="relative z-10 text-white font-lustria tracking-wider">
             COMING SOON
           </span>
         </div>
@@ -104,6 +103,8 @@ export default function CardSlider(props) {
   const [isAnimating, setIsAnimating] = useState(false);
   const lastClickTime = useRef(0);
   const sectionRef = useRef(null);
+  const animationTimeoutRef = useRef(null);
+  const bloomTimeoutRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
 
   useEffect(() => {
@@ -114,7 +115,9 @@ export default function CardSlider(props) {
     };
     detect();
     window.addEventListener("resize", detect);
-    return () => window.removeEventListener("resize", detect);
+    return () => {
+      window.removeEventListener("resize", detect);
+    };
   }, []);
 
   useEffect(() => {
@@ -132,19 +135,33 @@ export default function CardSlider(props) {
       observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
-  const handleContainerComplete = () => {
-    setTimeout(() => setBloom(true), 1200);
-  };
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      if (bloomTimeoutRef.current) {
+        clearTimeout(bloomTimeoutRef.current);
+      }
+    };
+  }, []);
 
-  const handleDragStart = (event, info) => {
+  const handleContainerComplete = useCallback(() => {
+    bloomTimeoutRef.current = setTimeout(() => setBloom(true), 1200);
+  }, []);
+
+  const handleDragStart = useCallback((event, info) => {
     setIsDragging(true);
     setDragStartX(info.point.x);
-  };
+  }, []);
 
-  const handleDragEnd = (event, info) => {
+  const handleDragEnd = useCallback((event, info) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
     const threshold = 80;
@@ -164,14 +181,19 @@ export default function CardSlider(props) {
       setCurrent((c) => Math.max(c - 1, 0));
     }
 
+    // Clear any existing timeout before setting new one
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+
     // Small delay to prevent click event from firing and release animation lock
-    setTimeout(() => {
+    animationTimeoutRef.current = setTimeout(() => {
       setIsDragging(false);
       setIsAnimating(false);
     }, 400);
-  };
+  }, [dragStartX, cards.length]);
 
-  const handleCardClick = (card, index) => {
+  const handleCardClick = useCallback((card, index) => {
     // Prevent navigation if we were dragging
     if (isDragging) {
       return;
@@ -206,10 +228,26 @@ export default function CardSlider(props) {
         router.push(`/case-studies/${card.caseStudySlug}`);
       }
     }
-  };
+  }, [isDragging, isMobile, current, router]);
+
+  const handleDotClick = useCallback((index) => {
+    if (!isAnimating && index !== current) {
+      setIsAnimating(true);
+      setCurrent(index);
+      
+      // Clear any existing timeout before setting new one
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      
+      animationTimeoutRef.current = setTimeout(() => {
+        setIsAnimating(false);
+      }, 400);
+    }
+  }, [isAnimating, current]);
 
   // Get responsive card dimensions
-  const getCardDimensions = () => {
+  const getCardDimensions = useCallback(() => {
     if (windowWidth >= 1170) {
       // Desktop - Original dimensions
       return {
@@ -232,7 +270,7 @@ export default function CardSlider(props) {
         slideWidth: 300,
       };
     }
-  };
+  }, [windowWidth]);
 
   const { cardWidth, cardHeight, slideWidth } = getCardDimensions();
 
@@ -311,17 +349,11 @@ export default function CardSlider(props) {
 
       {/* Mobile Pagination Dots */}
       {isMobile && bloom && (
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-42 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
           {cards.map((_, index) => (
             <button
               key={index}
-              onClick={() => {
-                if (!isAnimating && index !== current) {
-                  setIsAnimating(true);
-                  setCurrent(index);
-                  setTimeout(() => setIsAnimating(false), 400);
-                }
-              }}
+              onClick={() => handleDotClick(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === current
                   ? "bg-[#FBE2AC] w-6"
