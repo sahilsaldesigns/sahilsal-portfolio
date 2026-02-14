@@ -40,8 +40,8 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
         <Image
           src={card.image}
           alt={card.title}
-          width={400}
-          height={300}
+          width={322}
+          height={230}
           className="w-full h-full object-cover"
         />
       </div>
