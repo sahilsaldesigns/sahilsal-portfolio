@@ -58,7 +58,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
           delay: bloom ? 0.3 : 0,
         }}
       >
-        <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
+        <p className="text-center font-medium leading-tight text  -[14px] sm:text-[12px] text-gray-800">
           {card.title}
         </p>
       </motion.div>
@@ -101,6 +101,8 @@ export default function CardSlider(props) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const lastClickTime = useRef(0);
   const sectionRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
 
@@ -154,14 +156,19 @@ export default function CardSlider(props) {
       return;
     }
 
+    setIsAnimating(true);
+
     if (offset < -threshold || velocity < -300) {
       setCurrent((c) => Math.min(c + 1, cards.length - 1));
     } else if (offset > threshold || velocity > 300) {
       setCurrent((c) => Math.max(c - 1, 0));
     }
 
-    // Small delay to prevent click event from firing
-    setTimeout(() => setIsDragging(false), 100);
+    // Small delay to prevent click event from firing and release animation lock
+    setTimeout(() => {
+      setIsDragging(false);
+      setIsAnimating(false);
+    }, 400);
   };
 
   const handleCardClick = (card, index) => {
@@ -170,16 +177,29 @@ export default function CardSlider(props) {
       return;
     }
 
+    // Prevent rapid clicks / double clicks (debounce)
+    const now = Date.now();
+    const timeSinceLastClick = now - lastClickTime.current;
+    
+    // If clicked too fast (within 300ms), ignore
+    if (timeSinceLastClick < 300) {
+      return;
+    }
+    
+    lastClickTime.current = now;
+
     if (isMobile) {
-      // On mobile, clicking a non-active card activates it
+      // On mobile, only allow clicks on the active card
       if (index !== current) {
-        setCurrent(index);
+        // Clicking non-active cards does nothing
         return;
       }
-      // If already active and has link, navigate
+      
+      // If already active and has link (not coming soon), navigate
       if (card.caseStudySlug && !card.comingSoon) {
         router.push(`/case-studies/${card.caseStudySlug}`);
       }
+      // If coming soon, do nothing (no navigation attempt)
     } else {
       // Desktop behavior - navigate immediately if has link
       if (card.caseStudySlug && !card.comingSoon) {
@@ -291,11 +311,17 @@ export default function CardSlider(props) {
 
       {/* Mobile Pagination Dots */}
       {isMobile && bloom && (
-        <div className="absolute bottom-42 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
           {cards.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrent(index)}
+              onClick={() => {
+                if (!isAnimating && index !== current) {
+                  setIsAnimating(true);
+                  setCurrent(index);
+                  setTimeout(() => setIsAnimating(false), 400);
+                }
+              }}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === current
                   ? "bg-[#FBE2AC] w-6"
