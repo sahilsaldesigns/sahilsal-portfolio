@@ -26,70 +26,111 @@ const defaultCards = [
   },
 ];
 
-const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
-  <div
-    className="rounded-3xl overflow-hidden relative border border-transparent hover:border-[#FBE2AC] hover:shadow-[0px_10px_60px_0px_#FAE1AB4F] transition-[border-color,box-shadow] duration-300 ease-in-out"
-    style={{ width: cardWidth, height: cardHeight }}
-  >
+const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!card.comingSoon || !cardRef.current) return;
+    
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Calculate position relative to card center
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Parallax offset - INVERTED (button moves away from cursor)
+    const offsetX = -((x - centerX) / centerX) * 20;
+    const offsetY = -((y - centerY) / centerY) * 20;
+    
+    setMousePosition({ x: offsetX, y: offsetY });
+  };
+
+  const handleMouseEnter = () => {
+    if (card.comingSoon) {
+      setIsHovered(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setMousePosition({ x: 0, y: 0 });
+  };
+
+  return (
     <div
-      className={`w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative ${
-        card.comingSoon ? "blur-sm" : "p-6 sm:p-4"
-      }`}
+      ref={cardRef}
+      className="rounded-3xl overflow-hidden relative border border-transparent hover:border-[#FBE2AC] hover:shadow-[0px_10px_60px_0px_#FAE1AB4F] transition-[border-color,box-shadow] duration-300 ease-in-out"
+      style={{ width: cardWidth, height: cardHeight }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
-      <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
-        <Image
-          src={card.image}
-          alt={card.title}
-          width={322}
-          height={230}
-          className="w-full h-full object-cover"
-        />
+      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4">
+        <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
+          <Image
+            src={card.image}
+            alt={card.title}
+            width={322}
+            height={230}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <motion.div
+          className="bg-white px-4 py-4 sm:px-3 sm:py-3"
+          initial={{ opacity: 0 }}
+          animate={{
+            opacity: bloom ? (isActive ? 1 : 0.4) : 0,
+          }}
+          transition={{
+            duration: 0.6,
+            delay: bloom ? 0.3 : 0,
+          }}
+        >
+          <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
+            {card.title}
+          </p>
+        </motion.div>
       </div>
 
-      <motion.div
-        className={`bg-white ${card.comingSoon ? "" : "px-4 py-4 sm:px-3 sm:py-3"} `}
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: bloom ? (isActive ? 1 : 0.4) : 0,
-        }}
-        transition={{
-          duration: 0.6,
-          delay: bloom ? 0.3 : 0,
-        }}
-      >
-        <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
-          {card.title}
-        </p>
-      </motion.div>
-    </div>
-
-    {/* Coming Soon Overlay - Outside blurred content */}
-    {card.comingSoon && (
-      <div className="w-full h-full absolute top-0 left-0 inset-6 rounded-2xl bg-black/50 flex items-center justify-center overflow-hidden">
-        {/* Coming Soon Text with Glare */}
-        <div className="relative w-full bg-black/80 px-8 py-3 overflow-hidden">
-          {/* Animated Glare Effect on band only */}
+      {/* Coming Soon Hover Overlay with Parallax Button */}
+      {card.comingSoon && (
+        <motion.div
+          className="absolute inset-0 rounded-3xl flex items-center justify-center pointer-events-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Backdrop Blur */}
+          <div className="absolute inset-0 backdrop-blur-md bg-black/30 rounded-3xl transition-all" />
+          
+          {/* Parallax Button */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+            className="relative z-10 bg-black px-8 py-3 rounded-full shadow-lg"
             animate={{
-              x: ["-100%", "200%"],
+              x: mousePosition.x,
+              y: mousePosition.y,
             }}
             transition={{
-              repeat: Infinity,
-              duration: 3,
-              ease: "easeInOut",
-              repeatDelay: 1,
+              type: "spring",
+              stiffness: 150,
+              damping: 15,
+              mass: 0.1,
             }}
-          />
-
-          <span className="relative z-10 text-white font-lustria tracking-wider">
-            COMING SOON
-          </span>
-        </div>
-      </div>
-    )}
-  </div>
-);
+          >
+            <span className="text-white font-medium tracking-wider text-sm">
+              COMING SOON
+            </span>
+          </motion.div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
 
 export default function CardSlider(props) {
   const router = useRouter();
