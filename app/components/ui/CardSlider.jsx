@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const defaultCards = [
   {
@@ -26,14 +27,15 @@ const defaultCards = [
   },
 ];
 
-const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
+const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => (
   <div
-    className="rounded-3xl overflow-hidden relative border border-transparent hover:border-[#FBE2AC] hover:shadow-[0px_10px_60px_0px_#FAE1AB4F]  transition-[border-color,box-shadow] duration-300 ease-in-out"
+    className="rounded-3xl overflow-hidden relative border border-transparent hover:border-[#FBE2AC] hover:shadow-[0px_10px_60px_0px_#FAE1AB4F] transition-[border-color,box-shadow] duration-300 ease-in-out"
     style={{ width: cardWidth, height: cardHeight }}
   >
-    <div 
-      className={`w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative ${card.comingSoon ? 'blur-sm' : 'p-6'}`}
-      
+    <div
+      className={`w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative ${
+        card.comingSoon ? "blur-sm" : "p-6"
+      }`}
     >
       <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
         <Image
@@ -44,9 +46,9 @@ const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
           className="w-full h-full object-cover"
         />
       </div>
-      
+
       <motion.div
-        className={`bg-white ${card.comingSoon ? '' : 'px-4 py-4'} `}
+        className={`bg-white ${card.comingSoon ? "" : "px-4 py-4"} `}
         initial={{ opacity: 0 }}
         animate={{
           opacity: bloom ? (isActive ? 1 : 0.4) : 0,
@@ -61,7 +63,7 @@ const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
         </p>
       </motion.div>
     </div>
-    
+
     {/* Coming Soon Overlay - Outside blurred content */}
     {card.comingSoon && (
       <div className="w-full h-full absolute top-0 left-0 inset-6 rounded-2xl bg-black/50 flex items-center justify-center overflow-hidden">
@@ -71,7 +73,7 @@ const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
           <motion.div
             className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent"
             animate={{
-              x: ['-100%', '200%'],
+              x: ["-100%", "200%"],
             }}
             transition={{
               repeat: Infinity,
@@ -80,7 +82,7 @@ const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
               repeatDelay: 1,
             }}
           />
-          
+
           <span className="relative z-10 text-white --font-lustria tracking-wider">
             COMING SOON
           </span>
@@ -91,10 +93,13 @@ const CardContent = ({ card , cardWidth, cardHeight, isActive, bloom }) => (
 );
 
 export default function CardSlider(props) {
+  const router = useRouter();
   const [bloom, setBloom] = useState(false);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
   const sectionRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
 
@@ -127,19 +132,62 @@ export default function CardSlider(props) {
     setTimeout(() => setBloom(true), 1200);
   };
 
+  const handleDragStart = (event, info) => {
+    setIsDragging(true);
+    setDragStartX(info.point.x);
+  };
+
   const handleDragEnd = (event, info) => {
     const offset = info.offset.x;
     const velocity = info.velocity.x;
     const threshold = 80;
+    const dragDistance = Math.abs(info.point.x - dragStartX);
 
-    if (offset < -threshold || velocity < -300)
+    // If drag distance is very small (< 10px), treat as tap/click
+    if (dragDistance < 10) {
+      setIsDragging(false);
+      return;
+    }
+
+    if (offset < -threshold || velocity < -300) {
       setCurrent((c) => Math.min(c + 1, cards.length - 1));
-    else if (offset > threshold || velocity > 300)
+    } else if (offset > threshold || velocity > 300) {
       setCurrent((c) => Math.max(c - 1, 0));
+    }
+
+    // Small delay to prevent click event from firing
+    setTimeout(() => setIsDragging(false), 100);
+  };
+
+  const handleCardClick = (card, index) => {
+    // Prevent navigation if we were dragging
+    if (isDragging) {
+      return;
+    }
+
+    if (isMobile) {
+      // On mobile, clicking a non-active card activates it
+      if (index !== current) {
+        setCurrent(index);
+        return;
+      }
+      // If already active and has link, navigate
+      if (card.caseStudySlug && !card.comingSoon) {
+        router.push(`/case-studies/${card.caseStudySlug}`);
+      }
+    } else {
+      // Desktop behavior - navigate immediately if has link
+      if (card.caseStudySlug && !card.comingSoon) {
+        router.push(`/case-studies/${card.caseStudySlug}`);
+      }
+    }
   };
 
   return (
-    <section ref={sectionRef} className="relative w-full h-[608px] flex  justify-center overflow-hidden bg-white">
+    <section
+      ref={sectionRef}
+      className="relative w-full h-[608px] flex justify-center overflow-hidden bg-white"
+    >
       <Image
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
@@ -156,12 +204,12 @@ export default function CardSlider(props) {
         transition={{ duration: 0.7, ease: "easeOut" }}
         onAnimationComplete={isInView ? handleContainerComplete : undefined}
       >
-        {(props && props.cards ? props.cards : defaultCards).map((card, index) => {
+        {cards.map((card, index) => {
           const isActive = index === current;
 
           const cardWidth = 300;
-          const cardHeight = 300;
-          const slideWidth = 350;
+          const cardHeight = 295;
+          const slideWidth = 320;
 
           let xOffset = 0;
           if (bloom) {
@@ -173,27 +221,19 @@ export default function CardSlider(props) {
             }
           }
 
-          const cardElement = (
-            <CardContent 
-              card={card} 
-              cardWidth={cardWidth} 
-              cardHeight={cardHeight}
-              isActive={isActive}
-              bloom={bloom}
-            />
-          );
-
           return (
             <motion.div
               key={card.id || index}
               drag={isMobile && isActive ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0}
+              dragElastic={0.1}
               dragMomentum={false}
+              onDragStart={isMobile && isActive ? handleDragStart : undefined}
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
               onHoverStart={() => !isMobile && setCurrent(index)}
-              onTap={() => isMobile && setCurrent(index)}
+              onClick={() => handleCardClick(card, index)}
               className="absolute flex flex-col items-center cursor-pointer"
+              style={{ touchAction: isMobile && isActive ? "pan-y" : "auto" }}
               initial={{ x: 0, rotate: (index - 1) * 3, opacity: 0 }}
               animate={{
                 x: xOffset,
@@ -208,13 +248,13 @@ export default function CardSlider(props) {
                 damping: 20,
               }}
             >
-              {card.caseStudySlug && !card.comingSoon ? (
-                <Link href={`/case-studies/${card.caseStudySlug}`}>
-                  {cardElement}
-                </Link>
-              ) : (
-                cardElement
-              )}
+              <CardContent
+                card={card}
+                cardWidth={cardWidth}
+                cardHeight={cardHeight}
+                isActive={isActive}
+                bloom={bloom}
+              />
             </motion.div>
           );
         })}
