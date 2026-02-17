@@ -333,7 +333,7 @@ export default function CardSlider(props) {
         alt="Card slider background"
         width={1920}
         height={608}
-        className="absolute inset-0 w-full h-full z-1 object-cover"
+        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:1330px)]:object-fill"
       />
 
       {/* Content Layer */}
