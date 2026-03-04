@@ -1,8 +1,11 @@
 "use client";
+
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { tinaField, useTina } from "tinacms/dist/react";
 import type { PageQuery } from "../../../tina/__generated__/types";
 import BlockRenderer from "../../components/layout/BlockRenderer";
+import { ReactLenis } from 'lenis/react'
+
 
 interface ClientPageProps {
   className?: string;
@@ -23,6 +26,8 @@ export default function ClientPage(props: ClientPageProps) {
 
   const content = data.page.body;
   return (
+    <>
+     <ReactLenis root />
     <div data-tina-field={tinaField(data.page, "body")} className={props.className}>
       <TinaMarkdown content={content} />
       <div className="block-wrapper" data-tina-field={tinaField(data.page, "blocks")}>
@@ -31,5 +36,6 @@ export default function ClientPage(props: ClientPageProps) {
         ))}
       </div>
     </div>
+    </>
   );
 }

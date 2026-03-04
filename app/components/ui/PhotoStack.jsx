@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
+import { ReactLenis } from 'lenis/react'
 
 export default function ScrollStackGallery(props) {
   const ref = useRef(null);
@@ -82,7 +83,9 @@ export default function ScrollStackGallery(props) {
 
 
   return (
-    <section ref={ref} className="relative h-[500vh]">
+    <>
+     <ReactLenis root />
+      <section ref={ref} className="relative h-[500vh]">
       <motion.h1
         style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
         className="
@@ -189,5 +192,7 @@ export default function ScrollStackGallery(props) {
       </motion.div>
 
     </section>
+    </>
+   
   );
 }

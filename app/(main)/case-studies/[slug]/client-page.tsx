@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
+import {ReactLenis} from 'lenis/react';
 
 interface CaseStudyData {
   query: string;
@@ -22,6 +23,8 @@ export default function CaseStudyPage(props: CaseStudyData) {
   }
 
   return (
+    <>
+    <ReactLenis root />
     <div className="min-h-screen animate-fadeInUp">
       <Container>
         <div className="py-16 md:py-20">
@@ -178,5 +181,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
         </div>
       </Container>
     </div>
+    </>
+    
   );
 }
