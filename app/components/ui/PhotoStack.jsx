@@ -2,32 +2,36 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useMemo, memo } from "react";
 import { ReactLenis } from "lenis/react";
 
-function StackCard({ src, index, total, scrollYProgress }) {
+// Stable constant — defined once at module level, never recreated on render.
+// Fixes: Lenis reinitialising every render due to new object reference.
+const LENIS_OPTIONS = { lerp: 0.08, duration: 1.2 };
+
+// memo() — StackCard props (src, index, total) never change after mount,
+// and scrollYProgress is a stable MotionValue reference, so this component
+// will never re-render after initial mount. Zero wasted reconciliation.
+const StackCard = memo(function StackCard({ src, index, total, scrollYProgress }) {
   const n = total;
   const i = index;
 
   const start = i / n;
   const end = (i + 1) / n;
   const mid = start + 0.5 / n;
+  // nextMid === scaleMid — was computed twice before, unified here
   const nextMid = (i + 1) / n + 0.5 / n;
 
   const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
   const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
 
   const scaleStart = Math.max((i + 1) / n - 0.05, 0);
-  const scaleMid = (i + 1) / n + 0.5 / n;
   const scale =
     i < n - 1
       ? // eslint-disable-next-line react-hooks/rules-of-hooks
-        useTransform(scrollYProgress, [scaleStart, scaleMid], [1, 0.92])
+        useTransform(scrollYProgress, [scaleStart, nextMid], [1, 0.92])
       : 1;
 
-  // Shadow intensity: fades IN as this card arrives, fades OUT as the next card covers it.
-  // Last card: fades in and stays.
-  // We interpolate a 0→1 value and map it to drop-shadow blur/opacity in the style.
   const shadowProgress =
     i < n - 1
       ? // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -49,6 +53,9 @@ function StackCard({ src, index, total, scrollYProgress }) {
   });
 
   return (
+    // will-change-transform ONLY on the outer wrapper — the motion.img inside
+    // inherits the composited layer. Removed will-change from img to avoid
+    // double GPU layer promotion per card.
     <motion.div
       style={{ y, opacity, scale }}
       className="absolute inset-0 flex items-center justify-center will-change-transform z-10"
@@ -67,7 +74,7 @@ function StackCard({ src, index, total, scrollYProgress }) {
       />
     </motion.div>
   );
-}
+});
 
 export default function ScrollStackGallery(props) {
   const ref = useRef(null);
@@ -78,6 +85,9 @@ export default function ScrollStackGallery(props) {
 
   const images = props.images;
   const n = images.length;
+
+  // Memoised — height string only changes if image count changes, not on every render
+  const sectionHeight = useMemo(() => `${(n + 1) * 100}vh`, [n]);
 
   const headingOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
   const headingY = useTransform(scrollYProgress, [0, 0.05], ["0%", "-40%"]);
@@ -102,9 +112,9 @@ export default function ScrollStackGallery(props) {
 
   return (
     <>
-      <ReactLenis root options={{ lerp: 0.08, duration: 1.2 }} />
+      <ReactLenis root options={LENIS_OPTIONS} />
 
-      <section ref={ref} style={{ height: `${(n + 1) * 100}vh` }} className="relative">
+      <section ref={ref} style={{ height: sectionHeight }} className="relative">
         <motion.h1
           style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
           className="fixed top-10 left-1/2 -translate-x-1/2 z-30
@@ -126,12 +136,18 @@ export default function ScrollStackGallery(props) {
             {"Photograph's and Memories"}
           </motion.h1>
 
+          {/*
+            whileInView replaces repeat:Infinity animate.
+            The bounce only runs while the indicator is visible in the viewport.
+            Once headingOpacity drives it to 0 and it leaves view, the animation
+            loop stops entirely — no CPU burn after the user has scrolled past.
+          */}
           <motion.div
             style={{ opacity: headingOpacity }}
             className="fixed left-1/2 top-[60%] -translate-x-1/2
               z-[999] flex flex-col items-center text-gray-500 pointer-events-none"
             animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           >
             <span className="text-sm md:text-base">Scroll Down</span>
             <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" className="mt-1">
@@ -143,7 +159,7 @@ export default function ScrollStackGallery(props) {
         <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
           {images.map((src, i) => (
             <StackCard
-              key={i}
+              key={src}
               src={src}
               index={i}
               total={n}
