@@ -272,6 +272,27 @@ svg:hover .dribble-path {
 
 /* --- PHOTOGRAPHY CTA ---- */
 
+/* ---------------------------
+   CASE STUDY CONTENT
+---------------------------- */
+.cs-prose p {
+  margin-bottom: 24px;
+}
+
+/* ---------------------------
+   CASE STUDY SCROLL ANIMATIONS
+---------------------------- */
+.cs-animate {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.cs-animate.cs-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* --- LINK PREVIEW BOUNCE --- */
 @keyframes linkPreviewBounce {
   0%, 100% { transform: translateY(0); }

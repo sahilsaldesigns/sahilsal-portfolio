@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect } from "react";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ReactLenis } from 'lenis/react';
@@ -18,6 +19,25 @@ interface CaseStudyData {
 export default function CaseStudyPage(props: CaseStudyData) {
   const { caseStudy } = props.data;
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("cs-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const elements = document.querySelectorAll("[data-cs-animate]");
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   if (!caseStudy) {
     return <div className="py-20 text-center">Loading...</div>;
   }
@@ -25,24 +45,35 @@ export default function CaseStudyPage(props: CaseStudyData) {
   return (
     <>
       <ReactLenis root />
-      <div className="min-h-screen animate-fadeInUp">
+      <div className="min-h-screen">
         <Container>
           <div className="py-12 md:py-16">
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1
+              data-cs-animate
+              className="cs-animate text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+            >
               {caseStudy.title}
             </h1>
 
             {/* Description */}
             {caseStudy.description && (
-              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed max-w-4xl">
+              <p
+                data-cs-animate
+                style={{ transitionDelay: "80ms" }}
+                className="cs-animate text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl"
+              >
                 {caseStudy.description}
               </p>
             )}
 
             {/* Tags */}
             {caseStudy.tags && caseStudy.tags.length > 0 && (
-              <div className="flex flex-wrap">
+              <div
+                data-cs-animate
+                style={{ transitionDelay: "160ms" }}
+                className="cs-animate flex flex-wrap"
+              >
                 {caseStudy.tags.map((tag: string, index: number) => (
                   <span
                     key={index}
@@ -55,12 +86,17 @@ export default function CaseStudyPage(props: CaseStudyData) {
             )}
           </div>
         </Container>
+
         {/* Hero Media */}
         {caseStudy.heroMedia && (
-          <div className="px-5">
+          <div
+            data-cs-animate
+            style={{ transitionDelay: "240ms" }}
+            className="cs-animate px-5"
+          >
             {caseStudy.heroMedia.mediaType === "image" &&
               caseStudy.heroMedia.image && (
-                <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
+                <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100">
                   <Image
                     src={caseStudy.heroMedia.image}
                     alt={caseStudy.title}
@@ -73,7 +109,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
 
             {caseStudy.heroMedia.mediaType === "video" &&
               caseStudy.heroMedia.videoUrl && (
-                <div className="relative  w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white">
+                <div className="relative w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white">
                   <video
                     src={caseStudy.heroMedia.videoUrl}
                     autoPlay
@@ -90,14 +126,24 @@ export default function CaseStudyPage(props: CaseStudyData) {
 
         <Container>
           <div className="py-16 md:py-20">
-
             {/* Content Blocks */}
             {caseStudy.contentBlocks && caseStudy.contentBlocks.length > 0 && (
-              <div className="space-y-16 md:space-y-20">
+              <div>
                 {caseStudy.contentBlocks.map((block: any, index: number) => (
                   <div key={index}>
+                    {/* Divider above each block except the first */}
+                    {index > 0 && (
+                      <hr
+                        data-cs-animate
+                        className="cs-animate border-gray-200 mb-10"
+                      />
+                    )}
+
                     {/* Block Header with Icon */}
-                    <div className="flex items-center gap-4 mb-6">
+                    <div
+                      data-cs-animate
+                      className="cs-animate flex items-center gap-4 mb-6"
+                    >
                       {block.icon && (
                         <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
                           <Image
@@ -109,76 +155,67 @@ export default function CaseStudyPage(props: CaseStudyData) {
                           />
                         </div>
                       )}
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 ">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         {block.title}
                       </h2>
                     </div>
 
                     {/* Block Content */}
                     {block.content && (
-                      <div className="prose prose-lg dark:prose-invert max-w-none mb-8
-                      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
-                      prose-h3:text-2xl prose-h4:text-xl
-                      prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
-                      prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-semibold
-                      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
-                      dark:prose-a:text-blue-400 dark:hover:prose-a:text-blue-300
-                      prose-ul:list-disc prose-ol:list-decimal
-                      prose-li:text-gray-700 dark:prose-li:text-gray-300
-                      prose-hr:border-gray-300 dark:prose-hr:border-gray-700 prose-hr:my-8">
+                      <div
+                        data-cs-animate
+                        style={{ transitionDelay: "80ms" }}
+                        className="cs-animate cs-prose prose prose-lg max-w-none mb-10
+                        prose-headings:font-bold prose-headings:text-gray-900
+                        prose-h3:text-2xl prose-h4:text-xl
+                        prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
+                        prose-strong:text-gray-900 prose-strong:font-semibold
+                        prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
+                        prose-ul:list-disc prose-ol:list-decimal
+                        prose-li:text-gray-700"
+                      >
                         <TinaMarkdown content={block.content} />
                       </div>
                     )}
 
                     {/* Block Media */}
                     {block.media && block.media.length > 0 && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                        {block.media.map((mediaItem: any, mediaIndex: number) => {
-                          const colSpan =
-                            mediaItem.layout === "full"
-                              ? "md:col-span-2 lg:col-span-3"
-                              : mediaItem.layout === "half"
-                                ? "md:col-span-1 lg:col-span-2"
-                                : "md:col-span-1 lg:col-span-1";
-
-                          return (
-                            <div key={mediaIndex} className={colSpan}>
-                              {mediaItem.type === "image" && mediaItem.image && (
-                                <div className="relative w-full h-auto overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
-                                  <Image
-                                    src={mediaItem.image}
-                                    alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
-                                    fill
-                                    className="static!"
-                                  />
-
-                                </div>
-                              )}
-                              {mediaItem.type === "video" && mediaItem.videoUrl && (
-                                <div className="relative w-full overflow-hidden rounded-xl bg-gray-900">
-                                  <video
-                                    src={mediaItem.videoUrl}
-
-                                    className="w-full h-full"
-                                  >
-                                    Your browser does not support the video tag.
-                                  </video>
-                                  {mediaItem.alt && (
-                                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                      {mediaItem.alt}
-                                    </p>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
+                      <div className="flex flex-col gap-6 mb-10">
+                        {block.media.map((mediaItem: any, mediaIndex: number) => (
+                          <div
+                            key={mediaIndex}
+                            data-cs-animate
+                            style={{ transitionDelay: `${mediaIndex * 80}ms` }}
+                            className="cs-animate w-full"
+                          >
+                            {mediaItem.type === "image" && mediaItem.image && (
+                              <div className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+                                <Image
+                                  src={mediaItem.image}
+                                  alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
+                                  fill
+                                  className="static!"
+                                />
+                              </div>
+                            )}
+                            {mediaItem.type === "video" && mediaItem.videoUrl && (
+                              <div className="relative w-full overflow-hidden rounded-xl bg-gray-900">
+                                <video
+                                  src={mediaItem.videoUrl}
+                                  className="w-full h-full"
+                                >
+                                  Your browser does not support the video tag.
+                                </video>
+                                {mediaItem.alt && (
+                                  <p className="text-sm text-gray-600 mt-2">
+                                    {mediaItem.alt}
+                                  </p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    )}
-
-                    {/* Optional Divider */}
-                    {block.showDivider && (
-                      <hr className="border-gray-200 dark:border-gray-800 my-12" />
                     )}
                   </div>
                 ))}
@@ -188,6 +225,5 @@ export default function CaseStudyPage(props: CaseStudyData) {
         </Container>
       </div>
     </>
-
   );
 }
