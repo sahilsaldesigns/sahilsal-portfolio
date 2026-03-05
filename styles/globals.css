@@ -271,3 +271,12 @@ svg:hover .dribble-path {
 }
 
 /* --- PHOTOGRAPHY CTA ---- */
+
+/* --- LINK PREVIEW BOUNCE --- */
+@keyframes linkPreviewBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+.link-preview-bounce {
+  animation: linkPreviewBounce 2.8s ease-in-out infinite;
+}
