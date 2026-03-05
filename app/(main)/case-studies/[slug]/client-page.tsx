@@ -6,6 +6,35 @@ import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ReactLenis, useLenis } from 'lenis/react';
 
+function ParallaxImage({ src, alt }: { src: string; alt: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+
+  useLenis(() => {
+    if (!containerRef.current || !innerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    // Much subtler than hero: 5% drift, max ±20px — content stays readable
+    // Cap offset at 6% of container height so scale(1.12) always covers it
+    const maxOffset = rect.height * 0.06;
+    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.1, maxOffset));
+    innerRef.current.style.transform = `translateY(${offset}px) scale(1.12)`;
+  });
+
+  return (
+    <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+      <div ref={innerRef} style={{ willChange: "transform" }}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="static!"
+        />
+      </div>
+    </div>
+  );
+}
+
 interface CaseStudyData {
   query: string;
   variables: {
@@ -27,7 +56,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
     const rect = heroContainerRef.current.getBoundingClientRect();
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
     // Video drifts slower than the page — classic depth parallax
-    const offset = Math.max(-55, Math.min(-rect.top * 0.12, 55));
+    const offset = Math.max(-30, Math.min(-rect.top * 0.06, 30));
     heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.15)`;
   });
 
@@ -206,14 +235,10 @@ export default function CaseStudyPage(props: CaseStudyData) {
                             className="cs-animate w-full"
                           >
                             {mediaItem.type === "image" && mediaItem.image && (
-                              <div className="relative w-full overflow-hidden rounded-xl bg-gray-100">
-                                <Image
-                                  src={mediaItem.image}
-                                  alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
-                                  fill
-                                  className="static!"
-                                />
-                              </div>
+                              <ParallaxImage
+                                src={mediaItem.image}
+                                alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
+                              />
                             )}
                             {mediaItem.type === "video" && mediaItem.videoUrl && (
                               <div className="relative w-full overflow-hidden rounded-xl bg-gray-900">
