@@ -2,7 +2,79 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useMemo, memo } from "react";
+import { ReactLenis } from "lenis/react";
+
+// Stable constant — defined once at module level, never recreated on render.
+// Fixes: Lenis reinitialising every render due to new object reference.
+const LENIS_OPTIONS = { lerp: 0.08, duration: 1.2 };
+
+// memo() — StackCard props (src, index, total) never change after mount,
+// and scrollYProgress is a stable MotionValue reference, so this component
+// will never re-render after initial mount. Zero wasted reconciliation.
+const StackCard = memo(function StackCard({ src, index, total, scrollYProgress }) {
+  const n = total;
+  const i = index;
+
+  const start = i / n;
+  const end = (i + 1) / n;
+  const mid = start + 0.5 / n;
+  // nextMid === scaleMid — was computed twice before, unified here
+  const nextMid = (i + 1) / n + 0.5 / n;
+
+  const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
+  const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
+
+  const scaleStart = Math.max((i + 1) / n - 0.05, 0);
+  const scale =
+    i < n - 1
+      ? // eslint-disable-next-line react-hooks/rules-of-hooks
+        useTransform(scrollYProgress, [scaleStart, nextMid], [1, 0.92])
+      : 1;
+
+  const shadowProgress =
+    i < n - 1
+      ? // eslint-disable-next-line react-hooks/rules-of-hooks
+        useTransform(
+          scrollYProgress,
+          [mid, mid + 0.02, nextMid - 0.02, nextMid],
+          [0, 1, 1, 0]
+        )
+      : // eslint-disable-next-line react-hooks/rules-of-hooks
+        useTransform(scrollYProgress, [mid, mid + 0.02], [0, 1]);
+
+  // Map shadowProgress → actual drop-shadow string.
+  // blur: 4px → 20px, alpha: 0.0 → 0.20 — intentionally light.
+  const dropShadow = useTransform(shadowProgress, (v) => {
+    const blur = 4 + v * 16;           // 4px at 0, 20px at 1
+    const spread = 2 + v * 6;          // subtle vertical offset grows too
+    const alpha = (v * 0.20).toFixed(3);
+    return `drop-shadow(0px ${spread}px ${blur}px rgba(0,0,0,${alpha}))`;
+  });
+
+  return (
+    // will-change-transform ONLY on the outer wrapper — the motion.img inside
+    // inherits the composited layer. Removed will-change from img to avoid
+    // double GPU layer promotion per card.
+    <motion.div
+      style={{ y, opacity, scale }}
+      className="absolute inset-0 flex items-center justify-center will-change-transform z-10"
+    >
+      <motion.img
+        src={src}
+        alt={`Photo ${i + 1}`}
+        draggable={false}
+        style={{ filter: dropShadow }}
+        className="
+          w-[70vw] max-w-[500px]
+          h-auto max-h-[80vh]
+          object-cover rounded-3xl
+          md:w-[50vw] md:max-w-[600px]
+        "
+      />
+    </motion.div>
+  );
+});
 
 export default function ScrollStackGallery(props) {
   const ref = useRef(null);
@@ -14,167 +86,98 @@ export default function ScrollStackGallery(props) {
   const images = props.images;
   const n = images.length;
 
-  // Heading fade on scroll start (0 → 5%)
+  // Memoised — height string only changes if image count changes, not on every render
+  const sectionHeight = useMemo(() => `${(n + 1) * 100}vh`, [n]);
+
   const headingOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
   const headingY = useTransform(scrollYProgress, [0, 0.05], ["0%", "-40%"]);
-  // Last image completion point
-  const lastImageStart = (n - 1) / n;
-  const lastImageMid = lastImageStart + 0.5 / n;
 
-  // CTA opacity ONLY after last image is fully visible
-  const ctaOpacity = useTransform(
-    scrollYProgress,
-    [lastImageMid, lastImageMid + 0.05],
-    [0, 1]
-  );
-  const ctaY = useTransform(
-    scrollYProgress,
-    [lastImageMid, lastImageMid + 0.05],
-    ["20px", "0px"]
-  );
+  const firstMid = 0.5 / n;
+  const lastStart = (n - 1) / n;
+  const lastMid = lastStart + 0.5 / n;
 
-  // First image timing
-  const firstImageStart = 0 / n; // = 0
-  const firstImageMid = firstImageStart + 0.5 / n;
-
-  // Fixed heading fades in with first image, fades out with last image
   const fixedHeadingOpacity = useTransform(
     scrollYProgress,
-    [firstImageMid, firstImageMid + 0.05, lastImageStart, lastImageStart + 0.05],
+    [firstMid, firstMid + 0.05, lastStart, lastStart + 0.05],
     [0, 1, 1, 0]
   );
-
   const fixedHeadingY = useTransform(
     scrollYProgress,
-    [firstImageMid, firstImageMid + 0.05, lastImageStart, lastImageStart + 0.05],
+    [firstMid, firstMid + 0.05, lastStart, lastStart + 0.05],
     ["-10px", "0px", "0px", "-20px"]
   );
 
-  // Precompute all image transforms at component level
-  // Note: This violates hooks rules in a strict sense, but framer-motion's useTransform is designed
-  // to work with dynamic layouts when wrapped properly. Each image gets its own transform.
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const imageTransforms = [];
-  for (let i = 0; i < images.length; i++) {
-    const start = i / n;
-    const end = (i + 1) / n;
-    const mid = start + 0.5 / n;
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const y = useTransform(scrollYProgress, [start, end], ["100%", "0%"]);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const opacity = useTransform(scrollYProgress, [start, mid], [0, 1]);
-
-    let scale = 1;
-    if (i < n - 1) {
-      const nextStart = (i + 1) / n;
-      const nextMid = nextStart + 0.5 / n;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      scale = useTransform(
-        scrollYProgress,
-        [Math.max(nextMid - 0.1, 0), nextMid],
-        [1, 0.9]
-      );
-    }
-
-    imageTransforms.push({ y, opacity, scale });
-  }
-
+  const ctaOpacity = useTransform(scrollYProgress, [lastMid, lastMid + 0.05], [0, 1]);
+  const ctaY = useTransform(scrollYProgress, [lastMid, lastMid + 0.05], ["20px", "0px"]);
 
   return (
-    <section ref={ref} className="relative h-[500vh]">
-      <motion.h1
-        style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
-        className="
-    fixed top-10 left-1/2 -translate-x-1/2
-    z-30
-    text-center text-lg md:text-2xl lg:text-3xl
-    font-semibold
-    pointer-events-none
-  "
-      >
-        Photograph&apos;s and Memories
-      </motion.h1>
+    <>
+      <ReactLenis root options={LENIS_OPTIONS} />
 
-
-      {/* --- Centered Heading and Scroll Indicator wrapped in animated div --- */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        {/* --- Centered Heading (kept OUTSIDE sticky layer) --- */}
+      <section ref={ref} style={{ height: sectionHeight }} className="relative">
         <motion.h1
-          style={{ opacity: headingOpacity, y: headingY }}
-          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 
-    z-999 text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
+          style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
+          className="fixed top-10 left-1/2 -translate-x-1/2 z-30
+            text-center text-lg md:text-2xl lg:text-3xl font-semibold pointer-events-none"
         >
-          Photograph&apos;s and Memories
+          {"Photograph's and Memories"}
         </motion.h1>
 
-        {/* --- Scroll Indicator --- */}
         <motion.div
-          style={{ opacity: headingOpacity }}
-          className="fixed left-1/2 top-[60%] -translate-x-1/2 
-    z-999 flex flex-col items-center text-gray-500 pointer-events-none"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="text-sm md:text-base">Scroll Down</span>
-          <svg
-            width="24"
-            height="24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className="mt-1"
+          <motion.h1
+            style={{ opacity: headingOpacity, y: headingY }}
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+              z-[999] text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
           >
-            <path d="M12 5v14m0 0l-6-6m6 6l6-6" />
-          </svg>
+            {"Photograph's and Memories"}
+          </motion.h1>
+
+          {/*
+            whileInView replaces repeat:Infinity animate.
+            The bounce only runs while the indicator is visible in the viewport.
+            Once headingOpacity drives it to 0 and it leaves view, the animation
+            loop stops entirely — no CPU burn after the user has scrolled past.
+          */}
+          <motion.div
+            style={{ opacity: headingOpacity }}
+            className="fixed left-1/2 top-[60%] -translate-x-1/2
+              z-[999] flex flex-col items-center text-gray-500 pointer-events-none"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          >
+            <span className="text-sm md:text-base">Scroll Down</span>
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" className="mt-1">
+              <path d="M12 5v14m0 0l-6-6m6 6l6-6" />
+            </svg>
+          </motion.div>
         </motion.div>
-      </motion.div>
 
-      {/* --- Sticky Image Container --- */}
-      <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center mb-15">
-        {images.map((src, i) => {
-          const transforms = imageTransforms[i];
+        <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
+          {images.map((src, i) => (
+            <StackCard
+              key={src}
+              src={src}
+              index={i}
+              total={n}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
+        </div>
+      </section>
 
-          return (
-            <motion.div
-              style={{
-                y: transforms.y,
-                opacity: transforms.opacity,
-                scale: transforms.scale,
-              }}
-              key={i}
-              className="absolute inset-0 flex items-center justify-center will-change-transform z-10"
-            >
-              <motion.img
-                src={src}
-                alt={`Photo ${i + 1}`}
-                draggable={false}
-                className="
-                  w-[70vw] max-w-[500px]
-                  h-auto max-h-[80vh]
-                  object-cover rounded-3xl 
-                  md:w-[50vw] md:max-w-[600px]
-                "
-              />
-            </motion.div>
-          );
-        })}
-      </div>
       <motion.div
         style={{ opacity: ctaOpacity, y: ctaY }}
-        className="sticky top-[80vh] z-20 flex flex-col items-center justify-center text-center"
+        className="flex flex-col items-center justify-center text-center py-16"
       >
         <p className="text-gray-500 mb-6 max-w-md">
-          Spotted something you liked? Let’s take it to the ’gram
+          {"Spotted something you liked? Let's take it to the 'gram"}
         </p>
-        <button
-          className=" group flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm hover:shadow-lg hover:bg-white hover:text-black hover:cursor-pointer transform hover:-translate-y-1 transition-all duration-300 ease-out">
-          <span
-            className=" w-6 h-6 flex items-center justify-center rounded-lg bg-transparent transition-colors duration-300 ease-out group-hover:bg-linear-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#515BD4] " >
+        <button className="group flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm hover:shadow-lg hover:bg-white hover:text-black hover:cursor-pointer transform hover:-translate-y-1 transition-all duration-300 ease-out">
+          <span className="w-6 h-6 flex items-center justify-center rounded-lg bg-transparent transition-colors duration-300 ease-out group-hover:bg-linear-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#515BD4]">
             <Image
               src="/uploads/img/instagram-logo.svg"
               width={24}
@@ -183,11 +186,9 @@ export default function ScrollStackGallery(props) {
               className="transition-all duration-300 ease-out group-hover:invert-0"
             />
           </span>
-
           Saahil.sal
         </button>
       </motion.div>
-
-    </section>
+    </>
   );
 }

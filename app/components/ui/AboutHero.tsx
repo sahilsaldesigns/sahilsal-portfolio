@@ -3,12 +3,20 @@
 import Image from "next/image";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { useEffect, useRef, useState } from "react";
+import LinkPreview from "../utils/LinkPreview";
 
 interface AboutHeroProps {
   name?: string;
   description?: any;
   image?: string;
 }
+
+// TinaMarkdown component overrides — swap plain <a> tags for LinkPreview
+const tinaComponents = {
+  a: ({ url, children }: { url: string; children: React.ReactNode }) => (
+    <LinkPreview href={url}>{children}</LinkPreview>
+  ),
+};
 
 export default function AboutHero({ name, description, image }: AboutHeroProps) {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,23 +25,14 @@ export default function AboutHero({ name, description, image }: AboutHeroProps) 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
       { threshold: 0.1 }
     );
 
     const currentRef = sectionRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
+    if (currentRef) observer.observe(currentRef);
+    return () => { if (currentRef) observer.unobserve(currentRef); };
   }, []);
 
   return (
@@ -42,15 +41,14 @@ export default function AboutHero({ name, description, image }: AboutHeroProps) 
         {/* Left: Text Content */}
         <div
           className={`space-y-6 transition-all duration-1000 ease-out ${
-            isVisible
-              ? "opacity-100 translate-x-0"
-              : "opacity-0 -translate-x-12"
+            isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
           }`}
         >
           {name && <h2 className="text-4xl md:text-5xl font-lustria">{name}</h2>}
           {description && (
             <div className="text-base leading-relaxed text-gray-700">
-              <TinaMarkdown content={description} />
+              {/* Pass tinaComponents to override how links are rendered */}
+              <TinaMarkdown content={description} components={tinaComponents} />
             </div>
           )}
         </div>
@@ -59,9 +57,7 @@ export default function AboutHero({ name, description, image }: AboutHeroProps) 
         {image && (
           <div
             className={`flex items-center justify-center transition-all duration-1000 ease-out ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 translate-x-12"
+              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
             }`}
           >
             <Image

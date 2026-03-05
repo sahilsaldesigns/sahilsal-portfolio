@@ -31,7 +31,7 @@ export default async function Footer() {
 
   return (
     <footer className="text-center pb-8">
-      <div>{copyright}</div>
+      <div>{copyright} {new Date().getFullYear()}</div>
     </footer>
   );
 }

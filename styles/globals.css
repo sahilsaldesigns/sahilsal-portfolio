@@ -48,8 +48,8 @@ h6 {
 }
 
 .home-hero-section p {
-  font-size: 18px;
-  line-height: 30px;
+  font-size: 20px;
+  line-height: 32px;
   text-align: center;
   text-transform: capitalize;
   color: #757575;
@@ -271,3 +271,12 @@ svg:hover .dribble-path {
 }
 
 /* --- PHOTOGRAPHY CTA ---- */
+
+/* --- LINK PREVIEW BOUNCE --- */
+@keyframes linkPreviewBounce {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+.link-preview-bounce {
+  animation: linkPreviewBounce 2.8s ease-in-out infinite;
+}
