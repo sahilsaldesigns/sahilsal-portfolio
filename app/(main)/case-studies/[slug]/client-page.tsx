@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { ReactLenis } from 'lenis/react';
+import { ReactLenis, useLenis } from 'lenis/react';
 
 interface CaseStudyData {
   query: string;
@@ -18,6 +18,18 @@ interface CaseStudyData {
 
 export default function CaseStudyPage(props: CaseStudyData) {
   const { caseStudy } = props.data;
+
+  const heroContainerRef = useRef<HTMLDivElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+
+  useLenis(() => {
+    if (!heroContainerRef.current || !heroVideoRef.current) return;
+    const rect = heroContainerRef.current.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    // Video drifts slower than the page — classic depth parallax
+    const offset = Math.max(-55, Math.min(-rect.top * 0.12, 55));
+    heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.15)`;
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -109,13 +121,18 @@ export default function CaseStudyPage(props: CaseStudyData) {
 
             {caseStudy.heroMedia.mediaType === "video" &&
               caseStudy.heroMedia.videoUrl && (
-                <div className="relative w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white">
+                <div
+                  ref={heroContainerRef}
+                  className="relative w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white"
+                >
                   <video
+                    ref={heroVideoRef}
                     src={caseStudy.heroMedia.videoUrl}
                     autoPlay
                     muted
                     loop
-                    className="w-full h-full bg-white border-2 border-white scale-[1.05]"
+                    style={{ willChange: "transform" }}
+                    className="w-full h-full bg-white border-2 border-white scale-[1.15]"
                   >
                     Your browser does not support the video tag.
                   </video>
