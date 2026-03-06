@@ -1,11 +1,20 @@
+/* =============================================
+   IMPORTS
+   ============================================= */
+@import "tailwindcss";
+
+
+/* =============================================
+   ROOT / CSS VARIABLES
+   ============================================= */
 :root {
   font-family: var(--font-plus-jakarta), sans-serif;
 }
 
 
-@import "tailwindcss";
-
-/* Minimal global reset / utilities for the site */
+/* =============================================
+   BASE RESET
+   ============================================= */
 html,
 body {
   height: 100%;
@@ -14,7 +23,6 @@ body {
 body {
   @apply antialiased text-slate-900 bg-white;
 }
-
 
 h1,
 h2,
@@ -25,37 +33,11 @@ h6 {
   font-family: var(--font-lustria), serif;
 }
 
-.hero-section-container{animation: fadeIn 2s ease forwards;}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.home-hero-section h1 {
-  font-size: 44px;
-  line-height: 52px;
-  font-weight: 400;
-  max-width: 620px;
-  margin: 0 auto;
-  text-transform: capitalize;
-  margin-bottom: 24px;
-  color: #111011;
-}
-
-.home-hero-section p {
-  font-size: 20px;
-  line-height: 32px;
-  text-align: center;
-  text-transform: capitalize;
-  color: #757575;
-}
-
-.bg-container{
+/* =============================================
+   LAYOUT & BACKGROUND
+   ============================================= */
+.bg-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -91,30 +73,19 @@ h6 {
 }
 
 .radial-fade {
-background: linear-gradient(to right, transparent 0%, white 50%, transparent 100%);
+  background: linear-gradient(to right, transparent 0%, white 50%, transparent 100%);
 }
 
-.dribble-path {
-  transition: fill 0.25s ease;
-}
-svg:hover .dribble-path {
-  fill: var(--hover-fill);
-}
 
-.hero-section-container .block-wrapper {
- height: 608px;
-}
-
-/* ---------------------------
-   FULL SCREEN INTRO
----------------------------- */
+/* =============================================
+   PAGE INTRO / LOADER
+   ============================================= */
 .page-intro {
   position: fixed;
   inset: 0;
   background: #000;
   z-index: 9999;
   overflow: hidden;
-
   animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) 4s forwards;
 }
 
@@ -127,60 +98,12 @@ svg:hover .dribble-path {
   animation: logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
 }
 
-/* Logo itself */
 .intro-logo {
   opacity: 1;
-  animation:
-    logoShine 1.6s ease-in-out 2.6s forwards;
+  animation: logoShine 1.6s ease-in-out 2.6s forwards;
 }
 
-/* ---------------------------
-   ANIMATIONS
----------------------------- */
-
-/* Cinematic throw: slow rise + overshoot + settle */
-@keyframes logoThrow {
-  0% {
-    transform: translateX(-50%) translateY(50vh) scale(0.85);
-    filter: blur(2px);
-  }
-
-
-
-  100% {
-    transform: translateX(-50%) translateY(-50vh) scale(1);
-  }
-}
-
-/* Premium shine — soft halo pulse */
-@keyframes logoShine {
-  0% {
-    filter: drop-shadow(0 0 0 rgba(255,255,255,0));
-  }
-  40% {
-    filter: drop-shadow(0 0 14px rgba(255,255,255,0.4));
-  }
-  60% {
-    filter: drop-shadow(0 0 28px rgba(255,255,255,0.9));
-  }
-  100% {
-    filter: drop-shadow(0 0 0 rgba(255,255,255,0));
-  }
-}
-
-/* Screen exit — heavy cinematic ease */
-@keyframes screenSlideUp {
-  to {
-    transform: translateY(-100%);
-  }
-}
-
-
-
-
-/* ---------------------------
-   SHINE MASK WRAPPER
----------------------------- */
+/* Shine mask wrapper */
 .logo-shine-mask {
   position: relative;
   display: inline-block;
@@ -193,48 +116,112 @@ svg:hover .dribble-path {
   content: "";
   position: absolute;
   inset: 0;
-
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255,255,255,0.0) 30%,
-    rgba(255,255,255,0.6) 50%,
-    rgba(255,255,255,0.0) 70%,
+    rgba(255, 255, 255, 0.0) 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.0) 70%,
     transparent 100%
   );
-
   transform: translateY(-120%);
   opacity: 0;
-
   animation: shineSweep 1.4s ease-in-out 2.6s forwards;
   pointer-events: none;
 }
 
+@keyframes logoThrow {
+  0% {
+    transform: translateX(-50%) translateY(50vh) scale(0.85);
+    filter: blur(2px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50vh) scale(1);
+  }
+}
 
+@keyframes logoShine {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  40% {
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.4));
+  }
+  60% {
+    filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+}
 
 @keyframes shineSweep {
   0% {
     transform: translateY(-120%);
     opacity: 0;
   }
-
   10% {
     opacity: 1;
   }
-
   50% {
     opacity: 1;
   }
-
   100% {
     transform: translateY(120%);
     opacity: 0;
   }
 }
 
+@keyframes screenSlideUp {
+  to {
+    transform: translateY(-100%);
+  }
+}
 
 
-/* --- PHOTOGRAPHY CTA ---- */
+/* =============================================
+   HERO SECTION
+   ============================================= */
+.hero-section-container {
+  animation: fadeIn 2s ease forwards;
+}
+
+.hero-section-container .block-wrapper {
+  height: 608px;
+}
+
+.home-hero-section h1 {
+  font-size: 44px;
+  line-height: 52px;
+  font-weight: 400;
+  max-width: 620px;
+  margin: 0 auto;
+  text-transform: capitalize;
+  margin-bottom: 24px;
+  color: #111011;
+}
+
+.home-hero-section p {
+  font-size: 20px;
+  line-height: 32px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #757575;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =============================================
+   CTA BUTTON
+   ============================================= */
 .cta-btn {
   position: relative;
   padding: 18px 44px;
@@ -270,18 +257,14 @@ svg:hover .dribble-path {
   transform: scaleX(1);
 }
 
-/* --- PHOTOGRAPHY CTA ---- */
 
-/* ---------------------------
-   CASE STUDY CONTENT
----------------------------- */
+/* =============================================
+   CASE STUDY
+   ============================================= */
 .cs-prose p {
   margin-bottom: 24px;
 }
 
-/* ---------------------------
-   CASE STUDY SCROLL ANIMATIONS
----------------------------- */
 .cs-animate {
   opacity: 0;
   transform: translateY(18px);
@@ -293,11 +276,23 @@ svg:hover .dribble-path {
   transform: translateY(0);
 }
 
-/* --- LINK PREVIEW BOUNCE --- */
+
+/* =============================================
+   UTILITIES
+   ============================================= */
+.dribble-path {
+  transition: fill 0.25s ease;
+}
+
+svg:hover .dribble-path {
+  fill: var(--hover-fill);
+}
+
 @keyframes linkPreviewBounce {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-5px); }
 }
+
 .link-preview-bounce {
   animation: linkPreviewBounce 2.8s ease-in-out infinite;
 }
