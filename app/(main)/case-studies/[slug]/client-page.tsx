@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ReactLenis, useLenis } from 'lenis/react';
-import SocialLinks from "../../../components/ui/SocialLinks";
 
 function ParallaxImage({ src, alt }: { src: string; alt: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -266,13 +265,6 @@ export default function CaseStudyPage(props: CaseStudyData) {
             )}
           </div>
         </Container>
-
-        <SocialLinks links={[
-          { icon: "linkedin", url: "https://www.linkedin.com/in/sahilsal/" },
-          { icon: "medium", url: "https://medium.com/@sahil.saldesigns" },
-          { icon: "behance", url: "https://www.behance.net/sahilsal" },
-          { icon: "dribbble", url: "https://dribbble.com/sahilsal" },
-        ]} />
       </div>
     </>
   );
