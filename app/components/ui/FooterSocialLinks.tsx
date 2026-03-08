@@ -12,7 +12,7 @@ const LINKS = [
 
 export default function FooterSocialLinks() {
   const pathname = usePathname();
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/photography") return null;
 
   return (
     <SocialLinks
