@@ -45,23 +45,23 @@ export default function MobileMenu({ nav }: { nav: {
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((s) => !s)}
-        className="relative flex items-center justify-center w-10 h-10 focus:outline-none"
+        className="relative flex items-center justify-center w-12 h-12 focus:outline-none"
       >
-        <div className="flex flex-col items-end gap-[5px]">
+        <div className="flex flex-col items-end gap-[6px]">
           {/* Top bar — longest */}
           <span
-            className="h-px rounded-2xl bg-current transition-all duration-300 ease-in-out"
+            className="h-[2px] rounded-2xl bg-current transition-all duration-300 ease-in-out"
             style={{
-              width: "20px",
+              width: "26px",
               transformOrigin: "center",
-              transform: open ? "translateY(6.5px) rotate(45deg)" : "none",
+              transform: open ? "translateY(7.5px) rotate(45deg)" : "none",
             }}
           />
           {/* Middle bar — medium, dissolves on open */}
           <span
-            className="h-px rounded-2xl bg-current transition-all duration-200 ease-in-out"
+            className="h-[2px] rounded-2xl bg-current transition-all duration-200 ease-in-out"
             style={{
-              width: "14px",
+              width: "18px",
               opacity: open ? 0 : 1,
               transform: open ? "scaleX(0)" : "scaleX(1)",
               transformOrigin: "center",
@@ -69,11 +69,11 @@ export default function MobileMenu({ nav }: { nav: {
           />
           {/* Bottom bar — shortest, grows + rotates to form X */}
           <span
-            className="h-px rounded-2xl bg-current transition-all duration-300 ease-in-out"
+            className="h-[2px] rounded-2xl bg-current transition-all duration-300 ease-in-out"
             style={{
-              width: open ? "20px" : "10px",
+              width: open ? "26px" : "13px",
               transformOrigin: "center",
-              transform: open ? "translateY(-5.5px) rotate(-45deg)" : "none",
+              transform: open ? "translateY(-8.5px) rotate(-45deg)" : "none",
             }}
           />
         </div>
