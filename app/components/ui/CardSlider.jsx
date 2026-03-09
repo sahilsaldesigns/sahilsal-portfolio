@@ -14,8 +14,8 @@ const defaultCards = [
   },
   {
     id: 2,
-    title: "Workly – AI that runs your work in the background",
-    image: "/uploads/img/2.png",
+    title: "AI that runs your work in the background",
+    image: "/uploads/img/2.jpg",
     comingSoon: true,
   },
   {
