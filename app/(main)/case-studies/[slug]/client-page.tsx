@@ -6,6 +6,35 @@ import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ReactLenis, useLenis } from 'lenis/react';
 
+function ParallaxVideo({ src }: { src: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useLenis(() => {
+    if (!containerRef.current || !videoRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    const maxOffset = rect.height * 0.05;
+    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
+    videoRef.current.style.transform = `translateY(${offset}px) scale(1.10)`;
+  });
+
+  return (
+    <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+      <video
+        ref={videoRef}
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{ willChange: "transform" }}
+        className="w-full h-full"
+      />
+    </div>
+  );
+}
+
 function ParallaxImage({ src, alt }: { src: string; alt: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -14,11 +43,10 @@ function ParallaxImage({ src, alt }: { src: string; alt: string }) {
     if (!containerRef.current || !innerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-    // Much subtler than hero: 5% drift, max ±20px — content stays readable
-    // Cap offset at 6% of container height so scale(1.12) always covers it
-    const maxOffset = rect.height * 0.06;
-    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.1, maxOffset));
-    innerRef.current.style.transform = `translateY(${offset}px) scale(1.12)`;
+    // Subtle parallax: cap offset at 2.5% of height so scale(1.05) always covers it
+    const maxOffset = rect.height * 0.05;
+    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
+    innerRef.current.style.transform = `translateY(${offset}px) scale(1.10)`;
   });
 
   return (
@@ -57,7 +85,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
     // Video drifts slower than the page — classic depth parallax
     const offset = Math.max(-30, Math.min(-rect.top * 0.06, 30));
-    heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.15)`;
+    heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.08)`;
   });
 
   useEffect(() => {
@@ -241,19 +269,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                               />
                             )}
                             {mediaItem.type === "video" && mediaItem.videoUrl && (
-                              <div className="relative w-full overflow-hidden rounded-xl bg-gray-900">
-                                <video
-                                  src={mediaItem.videoUrl}
-                                  className="w-full h-full"
-                                >
-                                  Your browser does not support the video tag.
-                                </video>
-                                {mediaItem.alt && (
-                                  <p className="text-sm text-gray-600 mt-2">
-                                    {mediaItem.alt}
-                                  </p>
-                                )}
-                              </div>
+                              <ParallaxVideo src={mediaItem.videoUrl} />
                             )}
                           </div>
                         ))}
