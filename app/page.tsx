@@ -33,8 +33,8 @@ export default async function HomePage() {
   return (
     <PageWithIntro>
       <div className="hero-section-container relative">
-        <section className="home-hero-section text-center z-10 bg-[radial-gradient(circle,white_0%,rgba(255,255,255,0)_80%)]">
-          <ClientPage {...data} className={"radial-fade pt-21"} />
+        <section className="home-hero-section  text-center z-10 bg-[radial-gradient(circle,white_0%,rgba(255,255,255,0)_80%)]">
+          <ClientPage {...data} className={"radial-fade pt-21 px-4 "} />
         </section>
 
         <div className="bg-container pointer-events-none">
