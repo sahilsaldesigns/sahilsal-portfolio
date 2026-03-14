@@ -182,8 +182,22 @@ h6 {
 /* =============================================
    HERO SECTION
    ============================================= */
-.hero-section-container {
-  animation: fadeIn 2s ease forwards;
+
+/* waiting: hide content silently behind loader */
+[data-phase="waiting"] .hero-section-container {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* content phase: fade up from bottom — matches loader slide duration (1.2s) */
+[data-phase="content"] .hero-section-container {
+  animation: fadeInUp 1.2s ease forwards;
+}
+
+/* lines phase: hold fully visible */
+[data-phase="lines"] .hero-section-container {
+  opacity: 1;
+  transform: none;
 }
 
 .hero-section-container .block-wrapper {
@@ -209,12 +223,14 @@ h6 {
   color: #757575;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInUp {
   from {
     opacity: 0;
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 

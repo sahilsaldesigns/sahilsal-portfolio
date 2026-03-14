@@ -8,7 +8,7 @@ export default function PageIntro({ onComplete }: { onComplete: () => void }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             onComplete();
-        }, 5000); // 5 seconds
+        }, 3100); // fire when loader slide begins at 4s
 
         return () => clearTimeout(timer);
     }, [onComplete]);
