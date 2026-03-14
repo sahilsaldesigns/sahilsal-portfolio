@@ -92,6 +92,13 @@ h6 {
   animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
 }
 
+/* Stop looping animations once the loader starts sliding away */
+.page-intro.is-exiting .logo-wrapper,
+.page-intro.is-exiting .intro-logo,
+.page-intro.is-exiting .logo-shine-mask::after {
+  animation-play-state: paused;
+}
+
 /* Logo starts at bottom */
 .logo-wrapper {
   position: absolute;

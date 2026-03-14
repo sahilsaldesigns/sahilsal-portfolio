@@ -148,6 +148,7 @@ export default function CardSlider(props) {
   const sectionRef = useRef(null);
   const animationTimeoutRef = useRef(null);
   const bloomTimeoutRef = useRef(null);
+  const inViewTimeoutRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
   const mobileThreshold = 1020;
 
@@ -175,7 +176,7 @@ export default function CardSlider(props) {
       ([entry]) => {
         if (entry.isIntersecting) {
           // Small delay so HomeBgLines animation starts first
-          setTimeout(() => setIsInView(true), 400);
+          inViewTimeoutRef.current = setTimeout(() => setIsInView(true), 400);
           observer.unobserve(entry.target);
         }
       },
@@ -192,12 +193,9 @@ export default function CardSlider(props) {
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
-      }
-      if (bloomTimeoutRef.current) {
-        clearTimeout(bloomTimeoutRef.current);
-      }
+      clearTimeout(animationTimeoutRef.current);
+      clearTimeout(bloomTimeoutRef.current);
+      clearTimeout(inViewTimeoutRef.current);
     };
   }, []);
 

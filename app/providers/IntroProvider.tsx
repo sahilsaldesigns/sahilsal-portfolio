@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 export type Phase = 'waiting' | 'content' | 'lines';
 
@@ -17,10 +17,17 @@ const IntroContext = createContext<IntroContextType | undefined>(undefined);
 export function IntroProvider({ children }: { children: React.ReactNode }) {
   const [hasNavigated, setHasNavigated] = useState(false);
   const [phase, setPhase] = useState<Phase>('waiting');
+  const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current);
+    };
+  }, []);
 
   const startIntroExit = () => {
     setPhase('content');
-    setTimeout(() => setPhase('lines'), 1200);
+    phaseTimerRef.current = setTimeout(() => setPhase('lines'), 1200);
   };
 
   const markAsNavigated = () => {
