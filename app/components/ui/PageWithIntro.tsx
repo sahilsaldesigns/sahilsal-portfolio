@@ -5,11 +5,13 @@ import { useIntro } from "../../providers/IntroProvider";
 import PageIntro from "./PageIntro";
 
 export default function PageWithIntro({ children }: { children: React.ReactNode }) {
-  const { hasNavigated, markAsNavigated } = useIntro();
+  const { hasNavigated, startIntroExit, markAsNavigated } = useIntro();
 
   return (
     <>
-      {!hasNavigated && <PageIntro onComplete={markAsNavigated} />}
+      {!hasNavigated && (
+        <PageIntro onExitStart={startIntroExit} onExitEnd={markAsNavigated} />
+      )}
       {children}
     </>
   );

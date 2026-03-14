@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls C:\\\\dev-vn\\\\projects\\\\sahilsal-portfolio\\\\app\\\\\\(main\\):*)"
+    ]
+  }
+}

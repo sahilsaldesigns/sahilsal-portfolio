@@ -1,31 +1,52 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
-export default function PageIntro({ onComplete }: { onComplete: () => void }) {
+export default function PageIntro({
+  onExitStart,
+  onExitEnd,
+}: {
+  onExitStart: () => void;
+  onExitEnd: () => void;
+}) {
+  const [isExiting, setIsExiting] = useState(false);
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            onComplete();
-        }, 3100); // fire when loader slide begins at 4s
+  useEffect(() => {
+    const minTimer = new Promise<void>(resolve => setTimeout(resolve, 3100));
+    const fontReady = Promise.race([
+      document.fonts.ready,
+      new Promise<void>(resolve => setTimeout(resolve, 5000)),
+    ]);
 
-        return () => clearTimeout(timer);
-    }, [onComplete]);
+    Promise.all([minTimer, fontReady]).then(() => {
+      setIsExiting(true);
+      onExitStart();
+    });
+  }, [onExitStart]);
 
-    return (
-        <div className="page-intro">
-            <div className="logo-wrapper">
-                <div className="logo-shine-mask">
-                    <Image
-                        src="/uploads/img/base-logo.svg"  
-                        alt="Logo"
-                        width={80}
-                        height={80}
-                        className="intro-logo"
-                    />
-                </div>
-            </div>
+  const handleAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
+    if (e.animationName === 'screenSlideUp') {
+      onExitEnd();
+    }
+  };
+
+  return (
+    <div
+      className={`page-intro${isExiting ? " is-exiting" : ""}`}
+      onAnimationEnd={handleAnimationEnd}
+    >
+      <div className="logo-wrapper">
+        <div className="logo-shine-mask">
+          <Image
+            src="/uploads/img/base-logo.svg"
+            alt="Logo"
+            width={80}
+            height={80}
+            className="intro-logo"
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 }

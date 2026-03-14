@@ -86,7 +86,10 @@ h6 {
   background: #000;
   z-index: 9999;
   overflow: hidden;
-  animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) 4s forwards;
+}
+
+.page-intro.is-exiting {
+  animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
 }
 
 /* Logo starts at bottom */
@@ -183,21 +186,22 @@ h6 {
    HERO SECTION
    ============================================= */
 
-/* waiting: hide content silently behind loader */
+/* Transition always present — fires when phase changes away from 'waiting' */
+.hero-section-container {
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+/* waiting: hide silently behind loader */
 [data-phase="waiting"] .hero-section-container {
   opacity: 0;
   transform: translateY(20px);
 }
 
-/* content phase: fade up from bottom — matches loader slide duration (1.2s) */
-[data-phase="content"] .hero-section-container {
-  animation: fadeInUp 1.2s ease forwards;
-}
-
-/* lines phase: hold fully visible */
+/* content + lines: same values so the phase switch causes no visual change */
+[data-phase="content"] .hero-section-container,
 [data-phase="lines"] .hero-section-container {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
 }
 
 .hero-section-container .block-wrapper {
@@ -221,17 +225,6 @@ h6 {
   text-align: center;
   text-transform: capitalize;
   color: #757575;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 

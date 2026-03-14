@@ -8,6 +8,7 @@ export type Phase = 'waiting' | 'content' | 'lines';
 type IntroContextType = {
   hasNavigated: boolean;
   phase: Phase;
+  startIntroExit: () => void;
   markAsNavigated: () => void;
 };
 
@@ -17,14 +18,17 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
   const [hasNavigated, setHasNavigated] = useState(false);
   const [phase, setPhase] = useState<Phase>('waiting');
 
+  const startIntroExit = () => {
+    setPhase('content');
+    setTimeout(() => setPhase('lines'), 1200);
+  };
+
   const markAsNavigated = () => {
     setHasNavigated(true);
-    setPhase('content');
-    setTimeout(() => setPhase('lines'), 1200); // after hero fade-up (matches 1.2s animation)
   };
 
   return (
-    <IntroContext.Provider value={{ hasNavigated, phase, markAsNavigated }}>
+    <IntroContext.Provider value={{ hasNavigated, phase, startIntroExit, markAsNavigated }}>
       {children}
     </IntroContext.Provider>
   );

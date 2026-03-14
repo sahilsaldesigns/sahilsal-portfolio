@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useIntro } from "../../providers/IntroProvider";
 
 const defaultCards = [
   {
@@ -134,6 +135,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
 
 export default function CardSlider(props) {
   const router = useRouter();
+  const { phase } = useIntro();
   const [bloom, setBloom] = useState(false);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -163,24 +165,29 @@ export default function CardSlider(props) {
   }, []);
 
   useEffect(() => {
+    // Don't observe until content phase is ready
+    if (phase !== 'lines') return;
+
+    const el = sectionRef.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsInView(true);
+          // Small delay so HomeBgLines animation starts first
+          setTimeout(() => setIsInView(true), 400);
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.8 }
+      { threshold: 0.5 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(el);
 
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [phase]);
 
   // Cleanup timeouts on unmount
   useEffect(() => {
