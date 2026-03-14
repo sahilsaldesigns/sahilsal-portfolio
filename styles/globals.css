@@ -98,12 +98,14 @@ h6 {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%) translateY(50vh) scale(0.9);
-  animation: logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
+  animation:
+    logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s,
+    logoBreathe 2s ease-in-out infinite 2.9s;
 }
 
 .intro-logo {
   opacity: 1;
-  animation: logoShine 1.6s ease-in-out 2.6s forwards;
+  animation: logoShine 2s ease-in-out infinite 2.9s;
 }
 
 /* Shine mask wrapper */
@@ -129,7 +131,7 @@ h6 {
   );
   transform: translateY(-120%);
   opacity: 0;
-  animation: shineSweep 1.4s ease-in-out 2.6s forwards;
+  animation: shineSweep 2s ease-in-out infinite 2.9s;
   pointer-events: none;
 }
 
@@ -153,7 +155,7 @@ h6 {
   60% {
     filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.9));
   }
-  100% {
+  85%, 100% {
     filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
   }
 }
@@ -163,16 +165,22 @@ h6 {
     transform: translateY(-120%);
     opacity: 0;
   }
-  10% {
+  5% {
     opacity: 1;
   }
-  50% {
+  65% {
     opacity: 1;
-  }
-  100% {
     transform: translateY(120%);
+  }
+  66%, 100% {
+    transform: translateY(-120%);
     opacity: 0;
   }
+}
+
+@keyframes logoBreathe {
+  0%, 100% { transform: translateX(-50%) translateY(-50vh) scale(1); }
+  50%       { transform: translateX(-50%) translateY(-50vh) scale(1.08); }
 }
 
 @keyframes screenSlideUp {
