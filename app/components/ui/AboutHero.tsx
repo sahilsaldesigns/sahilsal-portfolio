@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LinkPreview from "../utils/LinkPreview";
 
 interface AboutHeroProps {
