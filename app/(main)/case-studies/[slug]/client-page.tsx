@@ -50,13 +50,14 @@ function ParallaxImage({ src, alt }: { src: string; alt: string }) {
   });
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+    <div ref={containerRef} className="w-full rounded-xl bg-gray-100 overflow-hidden">
       <div ref={innerRef} style={{ willChange: "transform" }}>
         <Image
           src={src}
           alt={alt}
-          fill
-          className="static!"
+          width={1920}
+          height={1080}
+          className="w-full h-auto block"
         />
       </div>
     </div>
@@ -87,6 +88,22 @@ export default function CaseStudyPage(props: CaseStudyData) {
     const offset = Math.max(-30, Math.min(-rect.top * 0.06, 30));
     heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.08)`;
   });
+
+  const lenis = useLenis();
+
+  // Lenis's built-in ResizeObserver only tracks the element's rendered size, not scrollHeight.
+  // With html { height: auto }, the html element now grows with content, so Lenis's observer
+  // fires correctly. We also force a resize after images load via the window load event.
+  useEffect(() => {
+    if (!lenis) return;
+    const handleLoad = () => lenis.resize();
+    if (document.readyState === 'complete') {
+      lenis.resize();
+    } else {
+      window.addEventListener('load', handleLoad, { once: true });
+    }
+    return () => window.removeEventListener('load', handleLoad);
+  }, [lenis]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -157,7 +174,9 @@ export default function CaseStudyPage(props: CaseStudyData) {
         </Container>
 
         {/* Hero Media */}
-        {caseStudy.heroMedia && (
+        {caseStudy.heroMedia &&
+          ((caseStudy.heroMedia.mediaType === "image" && caseStudy.heroMedia.image) ||
+           (caseStudy.heroMedia.mediaType === "video" && caseStudy.heroMedia.videoUrl)) && (
           <div
             data-cs-animate
             style={{ transitionDelay: "240ms" }}
@@ -214,25 +233,29 @@ export default function CaseStudyPage(props: CaseStudyData) {
                     )}
 
                     {/* Block Header with Icon */}
-                    <div
-                      data-cs-animate
-                      className="cs-animate flex items-center gap-4 mb-6"
-                    >
-                      {block.icon && (
-                        <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
-                          <Image
-                            src={block.icon}
-                            alt="Section icon"
-                            width={48}
-                            height={48}
-                            className="object-contain"
-                          />
-                        </div>
-                      )}
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        {block.title}
-                      </h2>
-                    </div>
+                    {(block.icon || block.title) && (
+                      <div
+                        data-cs-animate
+                        className="cs-animate flex items-center gap-4 mb-6"
+                      >
+                        {block.icon && (
+                          <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                            <Image
+                              src={block.icon}
+                              alt="Section icon"
+                              width={48}
+                              height={48}
+                              className="object-contain"
+                            />
+                          </div>
+                        )}
+                        {block.title && (
+                          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                            {block.title}
+                          </h2>
+                        )}
+                      </div>
+                    )}
 
                     {/* Block Content */}
                     {block.content && (
@@ -255,24 +278,29 @@ export default function CaseStudyPage(props: CaseStudyData) {
                     {/* Block Media */}
                     {block.media && block.media.length > 0 && (
                       <div className="flex flex-col gap-6 mb-10">
-                        {block.media.map((mediaItem: any, mediaIndex: number) => (
-                          <div
-                            key={mediaIndex}
-                            data-cs-animate
-                            style={{ transitionDelay: `${mediaIndex * 80}ms` }}
-                            className="cs-animate w-full"
-                          >
-                            {mediaItem.type === "image" && mediaItem.image && (
-                              <ParallaxImage
-                                src={mediaItem.image}
-                                alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
-                              />
-                            )}
-                            {mediaItem.type === "video" && mediaItem.videoUrl && (
-                              <ParallaxVideo src={mediaItem.videoUrl} />
-                            )}
-                          </div>
-                        ))}
+                        {block.media.map((mediaItem: any, mediaIndex: number) => {
+                          const isImage = mediaItem.type === "image" && mediaItem.image;
+                          const isVideo = mediaItem.type === "video" && mediaItem.videoUrl;
+                          if (!isImage && !isVideo) return null;
+                          return (
+                            <div
+                              key={mediaIndex}
+                              data-cs-animate
+                              style={{ transitionDelay: `${mediaIndex * 80}ms` }}
+                              className="cs-animate w-full"
+                            >
+                              {isImage && (
+                                <ParallaxImage
+                                  src={mediaItem.image}
+                                  alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
+                                />
+                              )}
+                              {isVideo && (
+                                <ParallaxVideo src={mediaItem.videoUrl} />
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
