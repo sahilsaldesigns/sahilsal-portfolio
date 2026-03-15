@@ -1,11 +1,20 @@
+/* =============================================
+   IMPORTS
+   ============================================= */
+@import "tailwindcss";
+
+
+/* =============================================
+   ROOT / CSS VARIABLES
+   ============================================= */
 :root {
   font-family: var(--font-plus-jakarta), sans-serif;
 }
 
 
-@import "tailwindcss";
-
-/* Minimal global reset / utilities for the site */
+/* =============================================
+   BASE RESET
+   ============================================= */
 html,
 body {
   height: 100%;
@@ -14,7 +23,6 @@ body {
 body {
   @apply antialiased text-slate-900 bg-white;
 }
-
 
 h1,
 h2,
@@ -25,42 +33,16 @@ h6 {
   font-family: var(--font-lustria), serif;
 }
 
-.hero-section-container{animation: fadeIn 2s ease forwards;}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.home-hero-section h1 {
-  font-size: 44px;
-  line-height: 52px;
-  font-weight: 400;
-  max-width: 620px;
-  margin: 0 auto;
-  text-transform: capitalize;
-  margin-bottom: 24px;
-  color: #111011;
-}
-
-.home-hero-section p {
-  font-size: 20px;
-  line-height: 32px;
-  text-align: center;
-  text-transform: capitalize;
-  color: #757575;
-}
-
-.bg-container{
+/* =============================================
+   LAYOUT & BACKGROUND
+   ============================================= */
+.bg-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: -1;
+  /* z-index: -1; */
 }
 
 /* Base reveal layer */
@@ -91,31 +73,30 @@ h6 {
 }
 
 .radial-fade {
-background: linear-gradient(to right, transparent 0%, white 50%, transparent 100%);
+  background: linear-gradient(to right, transparent 0%, white 50%, transparent 100%);
 }
 
-.dribble-path {
-  transition: fill 0.25s ease;
-}
-svg:hover .dribble-path {
-  fill: var(--hover-fill);
-}
 
-.hero-section-container .block-wrapper {
- height: 608px;
-}
-
-/* ---------------------------
-   FULL SCREEN INTRO
----------------------------- */
+/* =============================================
+   PAGE INTRO / LOADER
+   ============================================= */
 .page-intro {
   position: fixed;
   inset: 0;
   background: #000;
   z-index: 9999;
   overflow: hidden;
+}
 
-  animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) 4s forwards;
+.page-intro.is-exiting {
+  animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+/* Stop looping animations once the loader starts sliding away */
+.page-intro.is-exiting .logo-wrapper,
+.page-intro.is-exiting .intro-logo,
+.page-intro.is-exiting .logo-shine-mask::after {
+  animation-play-state: paused;
 }
 
 /* Logo starts at bottom */
@@ -124,63 +105,17 @@ svg:hover .dribble-path {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%) translateY(50vh) scale(0.9);
-  animation: logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s;
+  animation:
+    logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s,
+    logoBreathe 2s ease-in-out infinite 2.9s;
 }
 
-/* Logo itself */
 .intro-logo {
   opacity: 1;
-  animation:
-    logoShine 1.6s ease-in-out 2.6s forwards;
+  animation: logoShine 2s ease-in-out infinite 2.9s;
 }
 
-/* ---------------------------
-   ANIMATIONS
----------------------------- */
-
-/* Cinematic throw: slow rise + overshoot + settle */
-@keyframes logoThrow {
-  0% {
-    transform: translateX(-50%) translateY(50vh) scale(0.85);
-    filter: blur(2px);
-  }
-
-
-
-  100% {
-    transform: translateX(-50%) translateY(-50vh) scale(1);
-  }
-}
-
-/* Premium shine — soft halo pulse */
-@keyframes logoShine {
-  0% {
-    filter: drop-shadow(0 0 0 rgba(255,255,255,0));
-  }
-  40% {
-    filter: drop-shadow(0 0 14px rgba(255,255,255,0.4));
-  }
-  60% {
-    filter: drop-shadow(0 0 28px rgba(255,255,255,0.9));
-  }
-  100% {
-    filter: drop-shadow(0 0 0 rgba(255,255,255,0));
-  }
-}
-
-/* Screen exit — heavy cinematic ease */
-@keyframes screenSlideUp {
-  to {
-    transform: translateY(-100%);
-  }
-}
-
-
-
-
-/* ---------------------------
-   SHINE MASK WRAPPER
----------------------------- */
+/* Shine mask wrapper */
 .logo-shine-mask {
   position: relative;
   display: inline-block;
@@ -193,48 +128,125 @@ svg:hover .dribble-path {
   content: "";
   position: absolute;
   inset: 0;
-
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(255,255,255,0.0) 30%,
-    rgba(255,255,255,0.6) 50%,
-    rgba(255,255,255,0.0) 70%,
+    rgba(255, 255, 255, 0.0) 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.0) 70%,
     transparent 100%
   );
-
   transform: translateY(-120%);
   opacity: 0;
-
-  animation: shineSweep 1.4s ease-in-out 2.6s forwards;
+  animation: shineSweep 2s ease-in-out infinite 2.9s;
   pointer-events: none;
 }
 
+@keyframes logoThrow {
+  0% {
+    transform: translateX(-50%) translateY(50vh) scale(0.85);
+    filter: blur(2px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(-50vh) scale(1);
+  }
+}
 
+@keyframes logoShine {
+  0% {
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  40% {
+    filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.4));
+  }
+  60% {
+    filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.9));
+  }
+  85%, 100% {
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+}
 
 @keyframes shineSweep {
   0% {
     transform: translateY(-120%);
     opacity: 0;
   }
-
-  10% {
+  5% {
     opacity: 1;
   }
-
-  50% {
+  65% {
     opacity: 1;
-  }
-
-  100% {
     transform: translateY(120%);
+  }
+  66%, 100% {
+    transform: translateY(-120%);
     opacity: 0;
   }
 }
 
+@keyframes logoBreathe {
+  0%, 100% { transform: translateX(-50%) translateY(-50vh) scale(1); }
+  50%       { transform: translateX(-50%) translateY(-50vh) scale(1.08); }
+}
+
+@keyframes screenSlideUp {
+  to {
+    transform: translateY(-100%);
+  }
+}
 
 
-/* --- PHOTOGRAPHY CTA ---- */
+/* =============================================
+   HERO SECTION
+   ============================================= */
+
+/* Transition always present — fires when phase changes away from 'waiting' */
+.hero-section-container {
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+/* waiting: hide silently behind loader */
+[data-phase="waiting"] .hero-section-container {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* content + lines: same values so the phase switch causes no visual change */
+[data-phase="content"] .hero-section-container,
+[data-phase="lines"] .hero-section-container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hero-section-container .block-wrapper {
+  height: 608px;
+}
+
+.home-hero-section h1 {
+  font-size: 44px;
+  line-height: 52px;
+  font-weight: 400;
+  max-width: 605px;
+  letter-spacing: -2%;
+  margin: 0 auto;
+  text-transform: capitalize;
+  margin-bottom: 24px;
+  color: #111011;
+}
+
+.home-hero-section p {
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #757575;
+}
+
+
+/* =============================================
+   CTA BUTTON
+   ============================================= */
 .cta-btn {
   position: relative;
   padding: 18px 44px;
@@ -270,13 +282,42 @@ svg:hover .dribble-path {
   transform: scaleX(1);
 }
 
-/* --- PHOTOGRAPHY CTA ---- */
 
-/* --- LINK PREVIEW BOUNCE --- */
+/* =============================================
+   CASE STUDY
+   ============================================= */
+.cs-prose p {
+  margin-bottom: 24px;
+}
+
+.cs-animate {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.cs-animate.cs-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =============================================
+   UTILITIES
+   ============================================= */
+.dribble-path {
+  transition: fill 0.25s ease;
+}
+
+svg:hover .dribble-path {
+  fill: var(--hover-fill);
+}
+
 @keyframes linkPreviewBounce {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-5px); }
 }
+
 .link-preview-bounce {
   animation: linkPreviewBounce 2.8s ease-in-out infinite;
 }

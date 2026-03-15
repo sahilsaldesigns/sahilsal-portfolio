@@ -15,11 +15,11 @@ const ICONS: any = {
   dribbble: {component: <Dribble className="text-black fill-black text-sm w-8 h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white" },
 };
 
-export default function SocialLinks({ links = [] }: { links: any[] }) {    
+export default function SocialLinks({ links = [], className }: { links: any[]; className?: string }) {
   if (!links || links.length === 0) return null;
-  
+
   return (
-    <div className="w-full flex justify-center relative top-[-110px] z-1">
+    <div className={className ?? "w-full flex justify-center relative top-[-110px] z-1"}>
       <div className="
         px-8 py-4 
         bg-white border border-[#e5e5e5]

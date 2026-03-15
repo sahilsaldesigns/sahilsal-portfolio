@@ -32,9 +32,11 @@ export default function RootLayout({
     <html lang="en" className={`${lustria.variable} ${plusJakarta.variable}`}>
       <body className="flex min-h-screen flex-col">
         <div className="flex-1">
-          <Container>
-            <Header />
-          </Container>
+          <div id="mobile-header-wrapper">
+            <Container>
+              <Header />
+            </Container>
+          </div>
           <main className="">
             <IntroProvider>
               {children}

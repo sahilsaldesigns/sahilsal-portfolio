@@ -1,9 +1,67 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
-import {ReactLenis} from 'lenis/react';
+import { ReactLenis, useLenis } from 'lenis/react';
+
+function ParallaxVideo({ src }: { src: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useLenis(() => {
+    if (!containerRef.current || !videoRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    const maxOffset = rect.height * 0.05;
+    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
+    videoRef.current.style.transform = `translateY(${offset}px) scale(1.10)`;
+  });
+
+  return (
+    <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+      <video
+        ref={videoRef}
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{ willChange: "transform" }}
+        className="w-full h-full"
+      />
+    </div>
+  );
+}
+
+function ParallaxImage({ src, alt }: { src: string; alt: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+
+  useLenis(() => {
+    if (!containerRef.current || !innerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    // Subtle parallax: cap offset at 2.5% of height so scale(1.05) always covers it
+    const maxOffset = rect.height * 0.05;
+    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
+    innerRef.current.style.transform = `translateY(${offset}px) scale(1.10)`;
+  });
+
+  return (
+    <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+      <div ref={innerRef} style={{ willChange: "transform" }}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="static!"
+        />
+      </div>
+    </div>
+  );
+}
 
 interface CaseStudyData {
   query: string;
@@ -18,48 +76,96 @@ interface CaseStudyData {
 export default function CaseStudyPage(props: CaseStudyData) {
   const { caseStudy } = props.data;
 
+  const heroContainerRef = useRef<HTMLDivElement>(null);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+
+  useLenis(() => {
+    if (!heroContainerRef.current || !heroVideoRef.current) return;
+    const rect = heroContainerRef.current.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    // Video drifts slower than the page — classic depth parallax
+    const offset = Math.max(-30, Math.min(-rect.top * 0.06, 30));
+    heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.08)`;
+  });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("cs-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    const elements = document.querySelectorAll("[data-cs-animate]");
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   if (!caseStudy) {
     return <div className="py-20 text-center">Loading...</div>;
   }
 
   return (
     <>
-    <ReactLenis root />
-    <div className="min-h-screen animate-fadeInUp">
-      <Container>
-        <div className="py-16 md:py-20">
-          {/* Title */}
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            {caseStudy.title}
-          </h1>
+      <ReactLenis root />
+      <div className="min-h-screen">
+        <Container>
+          <div className="py-12 md:py-16">
+            {/* Title */}
+            <h1
+              data-cs-animate
+              className="cs-animate text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+            >
+              {caseStudy.title}
+            </h1>
 
-          {/* Description */}
-          {caseStudy.description && (
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed max-w-4xl">
-              {caseStudy.description}
-            </p>
-          )}
+            {/* Description */}
+            {caseStudy.description && (
+              <p
+                data-cs-animate
+                style={{ transitionDelay: "80ms" }}
+                className="cs-animate text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl"
+              >
+                {caseStudy.description}
+              </p>
+            )}
 
-          {/* Tags */}
-          {caseStudy.tags && caseStudy.tags.length > 0 && (
-            <div className="flex flex-wrap gap-3 mb-12">
-              {caseStudy.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+            {/* Tags */}
+            {caseStudy.tags && caseStudy.tags.length > 0 && (
+              <div
+                data-cs-animate
+                style={{ transitionDelay: "160ms" }}
+                className="cs-animate flex flex-wrap"
+              >
+                {caseStudy.tags.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className="py-2 text-gray-700 text-sm font-medium"
+                  >
+                    {index > 0 && <span className="mx-2 text-gray-400">|</span>}{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </Container>
 
-          {/* Hero Media */}
-          {caseStudy.heroMedia && (
-            <div className="mb-16 md:mb-20">
-              {caseStudy.heroMedia.mediaType === "image" &&
-                caseStudy.heroMedia.image && (
-                <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100 dark:bg-gray-800">
+        {/* Hero Media */}
+        {caseStudy.heroMedia && (
+          <div
+            data-cs-animate
+            style={{ transitionDelay: "240ms" }}
+            className="cs-animate px-5"
+          >
+            {caseStudy.heroMedia.mediaType === "image" &&
+              caseStudy.heroMedia.image && (
+                <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100">
                   <Image
                     src={caseStudy.heroMedia.image}
                     alt={caseStudy.title}
@@ -70,118 +176,112 @@ export default function CaseStudyPage(props: CaseStudyData) {
                 </div>
               )}
 
-              {caseStudy.heroMedia.mediaType === "video" &&
-                caseStudy.heroMedia.videoUrl && (
-                <div className="relative w-full aspect-video overflow-hidden rounded-2xl bg-gray-900">
+            {caseStudy.heroMedia.mediaType === "video" &&
+              caseStudy.heroMedia.videoUrl && (
+                <div
+                  ref={heroContainerRef}
+                  className="relative w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white"
+                >
                   <video
+                    ref={heroVideoRef}
                     src={caseStudy.heroMedia.videoUrl}
-                    controls
-                    className="w-full h-full"
+                    autoPlay
+                    muted
+                    loop
+                    style={{ willChange: "transform" }}
+                    className="w-full h-full bg-white border-2 border-white scale-[1.15]"
                   >
                     Your browser does not support the video tag.
                   </video>
                 </div>
               )}
-            </div>
-          )}
+          </div>
+        )}
 
-          {/* Content Blocks */}
-          {caseStudy.contentBlocks && caseStudy.contentBlocks.length > 0 && (
-            <div className="space-y-16 md:space-y-20">
-              {caseStudy.contentBlocks.map((block: any, index: number) => (
-                <div key={index}>
-                  {/* Block Header with Icon */}
-                  <div className="flex items-center gap-4 mb-6">
-                    {block.icon && (
-                      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
-                        <Image
-                          src={block.icon}
-                          alt="Section icon"
-                          width={48}
-                          height={48}
-                          className="object-contain"
-                        />
+        <Container>
+          <div className="py-16 md:py-20">
+            {/* Content Blocks */}
+            {caseStudy.contentBlocks && caseStudy.contentBlocks.length > 0 && (
+              <div>
+                {caseStudy.contentBlocks.map((block: any, index: number) => (
+                  <div key={index}>
+                    {/* Divider above each block except the first */}
+                    {index > 0 && (
+                      <hr
+                        data-cs-animate
+                        className="cs-animate border-gray-200 mb-10"
+                      />
+                    )}
+
+                    {/* Block Header with Icon */}
+                    <div
+                      data-cs-animate
+                      className="cs-animate flex items-center gap-4 mb-6"
+                    >
+                      {block.icon && (
+                        <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                          <Image
+                            src={block.icon}
+                            alt="Section icon"
+                            width={48}
+                            height={48}
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        {block.title}
+                      </h2>
+                    </div>
+
+                    {/* Block Content */}
+                    {block.content && (
+                      <div
+                        data-cs-animate
+                        style={{ transitionDelay: "80ms" }}
+                        className="cs-animate cs-prose prose prose-lg max-w-none mb-10
+                        prose-headings:font-bold prose-headings:text-gray-900
+                        prose-h3:text-2xl prose-h4:text-xl
+                        prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
+                        prose-strong:text-gray-900 prose-strong:font-semibold
+                        prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
+                        prose-ul:list-disc prose-ol:list-decimal
+                        prose-li:text-gray-700"
+                      >
+                        <TinaMarkdown content={block.content} />
                       </div>
                     )}
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 ">
-                      {block.title}
-                    </h2>
-                  </div>
 
-                  {/* Block Content */}
-                  {block.content && (
-                    <div className="prose prose-lg dark:prose-invert max-w-none mb-8
-                      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
-                      prose-h3:text-2xl prose-h4:text-xl
-                      prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
-                      prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-semibold
-                      prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
-                      dark:prose-a:text-blue-400 dark:hover:prose-a:text-blue-300
-                      prose-ul:list-disc prose-ol:list-decimal
-                      prose-li:text-gray-700 dark:prose-li:text-gray-300
-                      prose-hr:border-gray-300 dark:prose-hr:border-gray-700 prose-hr:my-8">
-                      <TinaMarkdown content={block.content} />
-                    </div>
-                  )}
-
-                  {/* Block Media */}
-                  {block.media && block.media.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                      {block.media.map((mediaItem: any, mediaIndex: number) => {
-                        const colSpan =
-                          mediaItem.layout === "full"
-                            ? "md:col-span-2 lg:col-span-3"
-                            : mediaItem.layout === "half"
-                            ? "md:col-span-1 lg:col-span-2"
-                            : "md:col-span-1 lg:col-span-1";
-
-                        return (
-                          <div key={mediaIndex} className={colSpan}>
+                    {/* Block Media */}
+                    {block.media && block.media.length > 0 && (
+                      <div className="flex flex-col gap-6 mb-10">
+                        {block.media.map((mediaItem: any, mediaIndex: number) => (
+                          <div
+                            key={mediaIndex}
+                            data-cs-animate
+                            style={{ transitionDelay: `${mediaIndex * 80}ms` }}
+                            className="cs-animate w-full"
+                          >
                             {mediaItem.type === "image" && mediaItem.image && (
-                              <div className="relative w-full h-auto overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
-                                <Image
-                                  src={mediaItem.image}
-                                  alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
-                                  fill
-                                  className="static!"
-                                />
-                                
-                              </div>
+                              <ParallaxImage
+                                src={mediaItem.image}
+                                alt={mediaItem.alt || `Media ${mediaIndex + 1}`}
+                              />
                             )}
                             {mediaItem.type === "video" && mediaItem.videoUrl && (
-                              <div className="relative w-full aspect-video overflow-hidden rounded-xl bg-gray-900">
-                                <video
-                                  src={mediaItem.videoUrl}
-                                  controls
-                                  className="w-full h-full"
-                                >
-                                  Your browser does not support the video tag.
-                                </video>
-                                {mediaItem.alt && (
-                                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                    {mediaItem.alt}
-                                  </p>
-                                )}
-                              </div>
+                              <ParallaxVideo src={mediaItem.videoUrl} />
                             )}
                           </div>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {/* Optional Divider */}
-                  {block.showDivider && (
-                    <hr className="border-gray-200 dark:border-gray-800 my-12" />
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </Container>
-    </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </Container>
+      </div>
     </>
-    
   );
 }

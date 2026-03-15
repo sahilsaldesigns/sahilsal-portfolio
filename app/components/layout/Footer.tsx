@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import React from "react";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
+import FooterSocialLinks from "../ui/FooterSocialLinks";
 
 function readGlobalFile() {
   try {
@@ -31,7 +32,8 @@ export default async function Footer() {
 
   return (
     <footer className="text-center pb-8">
-      <div>{copyright} {new Date().getFullYear()}</div>
+      <FooterSocialLinks />
+      <div>{copyright} {new Date().getFullYear()} - Designed without AI</div>
     </footer>
   );
 }

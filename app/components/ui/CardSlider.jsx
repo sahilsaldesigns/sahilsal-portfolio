@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useIntro } from "../../providers/IntroProvider";
 
 const defaultCards = [
   {
@@ -14,8 +15,8 @@ const defaultCards = [
   },
   {
     id: 2,
-    title: "Workly – AI that runs your work in the background",
-    image: "/uploads/img/2.png",
+    title: "AI that runs your work in the background",
+    image: "/uploads/img/2.jpg",
     comingSoon: true,
   },
   {
@@ -91,7 +92,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
             delay: bloom ? 0.3 : 0,
           }}
         >
-          <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
+          <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-black!">
             {card.title}
           </p>
         </motion.div>
@@ -134,6 +135,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
 
 export default function CardSlider(props) {
   const router = useRouter();
+  const { phase } = useIntro();
   const [bloom, setBloom] = useState(false);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -146,6 +148,7 @@ export default function CardSlider(props) {
   const sectionRef = useRef(null);
   const animationTimeoutRef = useRef(null);
   const bloomTimeoutRef = useRef(null);
+  const inViewTimeoutRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
   const mobileThreshold = 1020;
 
@@ -163,34 +166,36 @@ export default function CardSlider(props) {
   }, []);
 
   useEffect(() => {
+    // Don't observe until content phase is ready
+    if (phase !== 'lines') return;
+
+    const el = sectionRef.current;
+    if (!el) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsInView(true);
+          // Small delay so HomeBgLines animation starts first
+          inViewTimeoutRef.current = setTimeout(() => setIsInView(true), 400);
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.8 }
+      { threshold: 0.5 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(el);
 
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [phase]);
 
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
-      }
-      if (bloomTimeoutRef.current) {
-        clearTimeout(bloomTimeoutRef.current);
-      }
+      clearTimeout(animationTimeoutRef.current);
+      clearTimeout(bloomTimeoutRef.current);
+      clearTimeout(inViewTimeoutRef.current);
     };
   }, []);
 
@@ -326,7 +331,7 @@ export default function CardSlider(props) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[608px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white"
+      className="relative w-auto h-[608px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white -mx-4"
     >
       <Image
         src="/uploads/img/card-slider-bg.png"
