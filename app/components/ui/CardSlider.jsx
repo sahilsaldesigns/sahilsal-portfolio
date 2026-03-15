@@ -92,7 +92,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
             delay: bloom ? 0.3 : 0,
           }}
         >
-          <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-gray-800">
+          <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-black!">
             {card.title}
           </p>
         </motion.div>

@@ -227,7 +227,8 @@ h6 {
   font-size: 44px;
   line-height: 52px;
   font-weight: 400;
-  max-width: 620px;
+  max-width: 605px;
+  letter-spacing: -2%;
   margin: 0 auto;
   text-transform: capitalize;
   margin-bottom: 24px;
@@ -235,8 +236,8 @@ h6 {
 }
 
 .home-hero-section p {
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 18px;
+  line-height: 30px;
   text-align: center;
   text-transform: capitalize;
   color: #757575;
