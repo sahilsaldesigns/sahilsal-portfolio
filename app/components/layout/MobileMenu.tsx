@@ -16,7 +16,7 @@ export default function MobileMenu({ nav }: { nav: {
     const last = lastPathRef.current;
     if (last && last !== pathname && open) setOpen(false);
     lastPathRef.current = pathname;
-  }, [pathname]);
+  }, [pathname, open]);
 
   // Sticky header only while menu is open (mobile only)
   useEffect(() => {
