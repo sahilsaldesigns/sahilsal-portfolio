@@ -29,7 +29,7 @@ const defaultCards = [
 
 const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(true);
   const cardRef = useRef(null);
 
   const handleMouseMove = (e) => {
@@ -57,7 +57,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    setIsHovered(true);
     setMousePosition({ x: 0, y: 0 });
   };
 
@@ -111,7 +111,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
           
           {/* Parallax Button */}
           <motion.div
-            className="relative z-10 bg-black px-8 py-3 rounded-full shadow-lg"
+            className="relative z-10 bg-black px-3 py-3 rounded-2xl shadow-lg"
             animate={{
               x: mousePosition.x,
               y: mousePosition.y,
@@ -123,7 +123,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
               mass: 0.1,
             }}
           >
-            <span className="text-white font-medium tracking-wider text-sm">
+            <span className="text-white font-normal tracking-[-2%] text-base font-(family-name:--font-lustria)">
               COMING SOON
             </span>
           </motion.div>

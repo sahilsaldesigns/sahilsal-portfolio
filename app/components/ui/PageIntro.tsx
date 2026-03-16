@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 export default function PageIntro({
@@ -11,18 +11,25 @@ export default function PageIntro({
   onExitEnd: () => void;
 }) {
   const [isExiting, setIsExiting] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Tune this one number ──────────────────────────────────────────────────
+  // Glare (shineSweep) + breathe both start at 2.9s CSS delay.
+  //   4900ms = one full cycle   (2.9s delay + 2s animation)
+  //   4000ms = visible midpoint (glare sweep is at ~65% through)
+  //   3300ms = just started     (glare barely visible)
+  const INTRO_DURATION_MS = 4900;
+  // ─────────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    const minTimer = new Promise<void>(resolve => setTimeout(resolve, 3100));
-    const fontReady = Promise.race([
-      document.fonts.ready,
-      new Promise<void>(resolve => setTimeout(resolve, 5000)),
-    ]);
-
-    Promise.all([minTimer, fontReady]).then(() => {
+    timerRef.current = setTimeout(() => {
       setIsExiting(true);
       onExitStart();
-    });
+    }, INTRO_DURATION_MS);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, [onExitStart]);
 
   const handleAnimationEnd = (e: React.AnimationEvent<HTMLDivElement>) => {
