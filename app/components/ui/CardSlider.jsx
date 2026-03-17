@@ -334,11 +334,20 @@ export default function CardSlider(props) {
       className="relative w-auto h-[608px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white -mx-4"
     >
       <Image
+        src="/uploads/img/card-slider-bg-mob.png"
+        alt="Card slider background"
+        width={500}
+        height={608}
+        sizes="(max-width: 499px) 100vw, 0px"
+        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:500px)]:hidden"
+      />
+      <Image
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
         width={1920}
         height={608}
-        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:1330px)]:object-fill"
+        sizes="(max-width: 499px) 0px, 100vw"
+        className="absolute inset-0 w-full h-full z-1 object-cover hidden [@media(min-width:500px)]:block [@media(min-width:1330px)]:object-fill"
       />
 
       {/* Content Layer */}

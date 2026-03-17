@@ -45,7 +45,7 @@ export default function MobileMenu({ nav }: { nav: {
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((s) => !s)}
-        className="relative flex items-center justify-center w-12 h-12 focus:outline-none"
+        className="relative flex items-center justify-center w-6 h-6 focus:outline-none"
       >
         <div className="flex flex-col items-end gap-[6px]">
           {/* Top bar — longest */}
@@ -89,7 +89,7 @@ export default function MobileMenu({ nav }: { nav: {
 
       {/* Compact dropdown card */}
       <div
-        className={`fixed left-0 right-0 top-20 pt-[12px] z-999 bg-white shadow-md overflow-hidden transition-all duration-300 ease-[cubic-bezier(.2,.9,.2,1)] origin-top ${
+        className={`fixed left-0 right-0 top-[62px] pt-[4px] z-999 bg-white shadow-md overflow-hidden transition-all duration-300 ease-[cubic-bezier(.2,.9,.2,1)] origin-top ${
           open
             ? "opacity-100 scale-y-100 pointer-events-auto"
             : "opacity-0 scale-y-90 pointer-events-none"
@@ -109,11 +109,10 @@ export default function MobileMenu({ nav }: { nav: {
                 transform: open ? "translateY(0)" : "translateY(10px)",
               }}
             >
-              {i > 0 && <div className="h-px bg-gray-100" />}
               <Link
                 href={item.href}
                 target={item.target || "_self"}
-                className={`block px-5 py-4 text-base font-medium transition-colors ${
+                className={`block px-4 py-3 text-base font-medium transition-colors ${
                   isActive ? "text-gray-900" : "text-gray-400"
                 }`}
                 onClick={() => setOpen(false)}

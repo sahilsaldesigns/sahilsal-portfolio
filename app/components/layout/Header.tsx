@@ -37,7 +37,7 @@ export default async function Header() {
   const logo = globalData?.header?.logo || "";
 
   return (
-      <header className="flex justify-between items-center pt-8 z-50">
+      <header className="flex justify-between items-center py-4 md:pt-8 md:pb-0 z-50">
         {logo ? (
           <Link href={"/"}>
             <Image
@@ -45,7 +45,7 @@ export default async function Header() {
               alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"}
               width={48}
               height={48}
-              style={{ width: 48, height: 48 }}
+              className="w-8 h-8 md:w-12 md:h-12"
               priority
             />
           </Link>
@@ -55,7 +55,7 @@ export default async function Header() {
           <ActiveNav nav={nav} />
         </div>
 
-        <div className="md:hidden absolute right-6 top-8">
+        <div className="md:hidden absolute right-[18px] top-[18px]">
           <MobileMenu nav={nav} />
         </div>
 
