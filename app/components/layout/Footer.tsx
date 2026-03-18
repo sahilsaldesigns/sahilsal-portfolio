@@ -33,7 +33,7 @@ export default async function Footer() {
   return (
     <footer className="text-center pb-8">
       <FooterSocialLinks />
-      <div>{copyright} {new Date().getFullYear()} - Designed without AI</div>
+      <p className="text-sm text-[#757575]">{copyright} {new Date().getFullYear()} - Designed without AI</p>
     </footer>
   );
 }

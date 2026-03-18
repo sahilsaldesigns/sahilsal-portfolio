@@ -98,20 +98,29 @@ h6 {
   animation-play-state: paused;
 }
 
-/* Logo starts at bottom */
+/* Logo starts at bottom, throws to exact page center */
 .logo-wrapper {
   position: absolute;
-  bottom: 0;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%) translateY(50vh) scale(0.9);
+  transform: translateX(-50%) translateY(calc(50vh + 50%)) scale(0.9);
   animation:
     logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s,
     logoBreathe 2s ease-in-out infinite 2.9s;
 }
 
 .intro-logo {
+  width: 62px;
+  height: 62px;
   opacity: 1;
   animation: logoShine 2s ease-in-out infinite 2.9s;
+}
+
+@media (max-width: 768px) {
+  .intro-logo {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* Shine mask wrapper */
@@ -143,11 +152,11 @@ h6 {
 
 @keyframes logoThrow {
   0% {
-    transform: translateX(-50%) translateY(50vh) scale(0.85);
+    transform: translateX(-50%) translateY(calc(50vh + 50%)) scale(0.85);
     filter: blur(2px);
   }
   100% {
-    transform: translateX(-50%) translateY(-50vh) scale(1);
+    transform: translateX(-50%) translateY(-50%) scale(1);
   }
 }
 
@@ -185,8 +194,8 @@ h6 {
 }
 
 @keyframes logoBreathe {
-  0%, 100% { transform: translateX(-50%) translateY(-50vh) scale(1); }
-  50%       { transform: translateX(-50%) translateY(-50vh) scale(1.08); }
+  0%, 100% { transform: translateX(-50%) translateY(-50%) scale(1); }
+  50%       { transform: translateX(-50%) translateY(-50%) scale(1.08); }
 }
 
 @keyframes screenSlideUp {
@@ -220,26 +229,51 @@ h6 {
 
 .hero-section-container .block-wrapper {
   height: 608px;
+  margin-top: 55px;
 }
 
 .home-hero-section h1 {
-  font-size: 44px;
-  line-height: 52px;
+  font-size: 24px;
+  line-height: 30px;
   font-weight: 400;
   max-width: 605px;
   letter-spacing: -2%;
   margin: 0 auto;
   text-transform: capitalize;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   color: #111011;
 }
 
+/* Mobile: sibling <p> tags flow as one paragraph */
 .home-hero-section p {
-  font-size: 18px;
-  line-height: 30px;
+  display: inline;
+  font-size: 14px;
+  line-height: 23px;
   text-align: center;
   text-transform: capitalize;
   color: #757575;
+}
+
+.home-hero-section p + p::before {
+  content: " ";
+}
+
+@media (min-width: 768px) {
+  .hero-section-container .block-wrapper {
+    margin-top: 0;
+  }
+
+  .home-hero-section h1 {
+    font-size: 44px;
+    line-height: 52px;
+    margin-bottom: 24px;
+  }
+
+  .home-hero-section p {
+    display: block;
+    font-size: 18px;
+    line-height: 30px;
+  }
 }
 
 

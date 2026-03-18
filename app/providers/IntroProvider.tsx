@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 export type Phase = 'waiting' | 'content' | 'lines';
 
@@ -25,14 +25,14 @@ export function IntroProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const startIntroExit = () => {
+  const startIntroExit = useCallback(() => {
     setPhase('content');
     phaseTimerRef.current = setTimeout(() => setPhase('lines'), 1200);
-  };
+  }, []);
 
-  const markAsNavigated = () => {
+  const markAsNavigated = useCallback(() => {
     setHasNavigated(true);
-  };
+  }, []);
 
   return (
     <IntroContext.Provider value={{ hasNavigated, phase, startIntroExit, markAsNavigated }}>

@@ -70,19 +70,20 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4">
+      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4 md:p-6">
         <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
           <Image
             src={card.image}
             alt={card.title}
             width={322}
             height={230}
-            className="w-full h-full object-cover"
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none select-none"
           />
         </div>
 
         <motion.div
-          className="bg-white px-4 py-4 sm:px-3 sm:py-3"
+          className="bg-white  pt-4  sm:pt-3 md:pt-6"
           initial={{ opacity: 0 }}
           animate={{
             opacity: bloom ? (isActive ? 1 : 0.4) : 0,
@@ -111,7 +112,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
           
           {/* Parallax Button */}
           <motion.div
-            className="relative z-10 bg-black px-8 py-3 rounded-full shadow-lg"
+            className="relative z-10 bg-black px-3 py-3 rounded-2xl shadow-lg"
             animate={{
               x: mousePosition.x,
               y: mousePosition.y,
@@ -123,7 +124,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
               mass: 0.1,
             }}
           >
-            <span className="text-white font-medium tracking-wider text-sm">
+            <span className="text-white font-normal tracking-[-2%] text-base font-(family-name:--font-lustria)">
               COMING SOON
             </span>
           </motion.div>
@@ -149,8 +150,9 @@ export default function CardSlider(props) {
   const animationTimeoutRef = useRef(null);
   const bloomTimeoutRef = useRef(null);
   const inViewTimeoutRef = useRef(null);
+  const isAnimatingRef = useRef(false);
   const cards = props && props.cards ? props.cards : defaultCards;
-  const mobileThreshold = 1020;
+  const mobileThreshold = 1060;
 
   useEffect(() => {
     const detect = () => {
@@ -204,11 +206,15 @@ export default function CardSlider(props) {
   }, []);
 
   const handleDragStart = useCallback((event, info) => {
+    if (isAnimatingRef.current) return;
+    event.preventDefault?.();
     setIsDragging(true);
     setDragStartX(info.point.x);
   }, []);
 
   const handleDragEnd = useCallback((event, info) => {
+    if (isAnimatingRef.current) return;
+
     const offset = info.offset.x;
     const velocity = info.velocity.x;
     const threshold = 80;
@@ -220,6 +226,7 @@ export default function CardSlider(props) {
       return;
     }
 
+    isAnimatingRef.current = true;
     setIsAnimating(true);
 
     if (offset < -threshold || velocity < -300) {
@@ -228,21 +235,20 @@ export default function CardSlider(props) {
       setCurrent((c) => Math.max(c - 1, 0));
     }
 
-    // Clear any existing timeout before setting new one
     if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
     }
 
-    // Small delay to prevent click event from firing and release animation lock
     animationTimeoutRef.current = setTimeout(() => {
+      isAnimatingRef.current = false;
       setIsDragging(false);
       setIsAnimating(false);
-    }, 400);
+    }, 700);
   }, [dragStartX, cards.length]);
 
   const handleCardClick = useCallback((card, index) => {
-    // Prevent navigation if we were dragging
-    if (isDragging) {
+    // Prevent interaction while dragging or slide animation is in progress
+    if (isDragging || isAnimating) {
       return;
     }
 
@@ -275,23 +281,24 @@ export default function CardSlider(props) {
         router.push(`/case-studies/${card.caseStudySlug}`);
       }
     }
-  }, [isDragging, isMobile, current, router]);
+  }, [isDragging, isAnimating, isMobile, current, router]);
 
   const handleDotClick = useCallback((index) => {
-    if (!isAnimating && index !== current) {
+    if (!isAnimatingRef.current && index !== current) {
+      isAnimatingRef.current = true;
       setIsAnimating(true);
       setCurrent(index);
-      
-      // Clear any existing timeout before setting new one
+
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current);
       }
-      
+
       animationTimeoutRef.current = setTimeout(() => {
+        isAnimatingRef.current = false;
         setIsAnimating(false);
-      }, 400);
+      }, 700);
     }
-  }, [isAnimating, current]);
+  }, [current]);
 
   // Get responsive card dimensions
   const getCardDimensions = useCallback(() => {
@@ -334,11 +341,20 @@ export default function CardSlider(props) {
       className="relative w-auto h-[608px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white -mx-4"
     >
       <Image
+        src="/uploads/img/card-slider-bg-mob.png"
+        alt="Card slider background"
+        width={500}
+        height={608}
+        sizes="(max-width: 499px) 100vw, 0px"
+        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:500px)]:hidden"
+      />
+      <Image
         src="/uploads/img/card-slider-bg.png"
         alt="Card slider background"
         width={1920}
         height={608}
-        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:1330px)]:object-fill"
+        sizes="(max-width: 499px) 0px, 100vw"
+        className="absolute inset-0 w-full h-full z-1 object-cover hidden [@media(min-width:500px)]:block [@media(min-width:1330px)]:object-fill"
       />
 
       {/* Content Layer */}
@@ -365,7 +381,7 @@ export default function CardSlider(props) {
           return (
             <motion.div
               key={card.id || index}
-              drag={isMobile && isActive ? "x" : false}
+              drag={isMobile && isActive && !isAnimating ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.1}
               dragMomentum={false}
@@ -373,14 +389,14 @@ export default function CardSlider(props) {
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
               onHoverStart={() => !isMobile && setCurrent(index)}
               onClick={() => handleCardClick(card, index)}
-              className="absolute flex flex-col items-center cursor-pointer"
+              className="absolute flex flex-col items-center cursor-pointer select-none"
               style={{ touchAction: isMobile && isActive ? "pan-y" : "auto" }}
               initial={{ x: 0, rotate: (index - 1) * 3, opacity: 0 }}
               animate={{
                 x: xOffset,
                 rotate: bloom ? 0 : (index - 1) * 3,
                 opacity: 1,
-                scale: isActive ? 1 : 0.95,
+                scale: isMobile ? 1 : (isActive ? 1 : 0.95),
                 zIndex: isActive ? 40 : 20,
               }}
               transition={{
@@ -403,7 +419,7 @@ export default function CardSlider(props) {
 
       {/* Mobile Pagination Dots */}
       {isMobile && bloom && (
-        <div className="absolute bottom-42 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-[24%] left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
           {cards.map((_, index) => (
             <button
               key={index}
