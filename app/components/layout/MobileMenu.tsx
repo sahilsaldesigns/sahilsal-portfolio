@@ -135,7 +135,7 @@ export default function MobileMenu({ nav }: { nav: {
             <Link
               href={resumeItem.href}
               target={resumeItem.target || "_blank"}
-              className="block w-full text-center py-3.5 bg-gray-900 text-white text-sm font-semibold rounded-full"
+              className="block w-full text-center py-3.5 bg-black text-white text-sm font-semibold rounded-full"
               onClick={() => setOpen(false)}
             >
               {resumeItem.label || "Resume"}
