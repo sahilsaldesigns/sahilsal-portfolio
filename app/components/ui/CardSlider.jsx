@@ -70,19 +70,20 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4">
+      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4 md:p-6">
         <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
           <Image
             src={card.image}
             alt={card.title}
             width={322}
             height={230}
-            className="w-full h-full object-cover"
+            draggable={false}
+            className="w-full h-full object-cover pointer-events-none select-none"
           />
         </div>
 
         <motion.div
-          className="bg-white px-4 py-4 sm:px-3 sm:py-3"
+          className="bg-white  pt-4  sm:pt-3 md:pt-6"
           initial={{ opacity: 0 }}
           animate={{
             opacity: bloom ? (isActive ? 1 : 0.4) : 0,
@@ -150,7 +151,7 @@ export default function CardSlider(props) {
   const bloomTimeoutRef = useRef(null);
   const inViewTimeoutRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
-  const mobileThreshold = 1020;
+  const mobileThreshold = 1060;
 
   useEffect(() => {
     const detect = () => {
@@ -204,6 +205,7 @@ export default function CardSlider(props) {
   }, []);
 
   const handleDragStart = useCallback((event, info) => {
+    event.preventDefault?.();
     setIsDragging(true);
     setDragStartX(info.point.x);
   }, []);
@@ -241,8 +243,8 @@ export default function CardSlider(props) {
   }, [dragStartX, cards.length]);
 
   const handleCardClick = useCallback((card, index) => {
-    // Prevent navigation if we were dragging
-    if (isDragging) {
+    // Prevent interaction while dragging or slide animation is in progress
+    if (isDragging || isAnimating) {
       return;
     }
 
@@ -275,7 +277,7 @@ export default function CardSlider(props) {
         router.push(`/case-studies/${card.caseStudySlug}`);
       }
     }
-  }, [isDragging, isMobile, current, router]);
+  }, [isDragging, isAnimating, isMobile, current, router]);
 
   const handleDotClick = useCallback((index) => {
     if (!isAnimating && index !== current) {
@@ -374,22 +376,22 @@ export default function CardSlider(props) {
           return (
             <motion.div
               key={card.id || index}
-              drag={isMobile && isActive ? "x" : false}
+              drag={isMobile && isActive && !isAnimating ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.1}
               dragMomentum={false}
-              onDragStart={isMobile && isActive ? handleDragStart : undefined}
-              onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
+              onDragStart={isMobile && isActive && !isAnimating ? handleDragStart : undefined}
+              onDragEnd={isMobile && isActive && !isAnimating ? handleDragEnd : undefined}
               onHoverStart={() => !isMobile && setCurrent(index)}
               onClick={() => handleCardClick(card, index)}
-              className="absolute flex flex-col items-center cursor-pointer"
+              className="absolute flex flex-col items-center cursor-pointer select-none"
               style={{ touchAction: isMobile && isActive ? "pan-y" : "auto" }}
               initial={{ x: 0, rotate: (index - 1) * 3, opacity: 0 }}
               animate={{
                 x: xOffset,
                 rotate: bloom ? 0 : (index - 1) * 3,
                 opacity: 1,
-                scale: isActive ? 1 : 0.95,
+                scale: isMobile ? 1 : (isActive ? 1 : 0.95),
                 zIndex: isActive ? 40 : 20,
               }}
               transition={{
@@ -412,7 +414,7 @@ export default function CardSlider(props) {
 
       {/* Mobile Pagination Dots */}
       {isMobile && bloom && (
-        <div className="absolute bottom-42 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-[24%] left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
           {cards.map((_, index) => (
             <button
               key={index}

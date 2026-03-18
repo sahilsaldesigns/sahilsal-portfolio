@@ -23,7 +23,7 @@ const lines = [
   },
   {
     key: "mob-left",
-    wrapperClass: "block md:hidden absolute -left-5 top-[182px] max-w-[164px] w-1/2 overflow-hidden",
+    wrapperClass: "block md:hidden absolute -left-5 top-[182px] min-[556px]:top-[120px] max-w-[164px] w-1/2 overflow-hidden",
     edgeClass: "bg-reveal-edge bg-reveal-left",
     src: "uploads/img/home-mob-left-line.svg",
     width: 400,

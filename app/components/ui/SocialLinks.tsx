@@ -9,36 +9,36 @@ import Dribble from "./../icons/Dribble"
 import Medium from "./../icons/Medium"
 
 const ICONS: any = {
-  linkedin: {component : <FaLinkedinIn className="text-white text-sm w-5 h-5" />, hoverBg : "hover:bg-[#0077b7]", bgColor: "bg-black" ,},
-  medium: {component: <Medium className="text-white text-sm w-7 h-7" />, hoverBg : "hover:bg-black", bgColor: "bg-black" ,className: "justify-end" },
-  behance: {component: <FaBehance className="text-white text-sm w-5 h-5 " />, hoverBg : "hover:bg-[#1769ff]", bgColor: "bg-black" },
-  dribbble: {component: <Dribble className="text-black fill-black text-sm w-8 h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white" },
+  linkedin: {component : <FaLinkedinIn className="text-white w-[21px] h-[21px] md:w-5 md:h-5" />, hoverBg : "hover:bg-[#0077b7]", bgColor: "bg-black" ,},
+  medium: {component: <Medium className="text-white w-[21px] h-[21px] md:w-5 md:h-5" />, hoverBg : "hover:bg-black", bgColor: "bg-black" ,className: "justify-end" },
+  behance: {component: <FaBehance className="text-white w-[21px] h-[21px] md:w-5 md:h-5" />, hoverBg : "hover:bg-[#1769ff]", bgColor: "bg-black" },
+  dribbble: {component: <Dribble className="text-black fill-black w-[21px] h-[21px] md:w-8 md:h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white" },
 };
 
 export default function SocialLinks({ links = [], className }: { links: any[]; className?: string }) {
   if (!links || links.length === 0) return null;
 
   return (
-    <div className={className ?? "w-full flex justify-center relative top-[-110px] z-1"}>
+    <div className={className ?? "w-full flex justify-center relative top-[-85px] min-[500px]:top-[-108px] md:top-[-116px] z-1"}>
       <div className="
-        px-8 py-4 
-        bg-white border border-[#e5e5e5]
-        rounded-[40px]
+        px-[25px] py-[16px] md:p-6
+        bg-white border-[3px] border-[#E7E7E7]
+        rounded-[30px]
         shadow-md
-        flex items-center gap-6
+        flex items-center gap-[25px] md:gap-8
       ">
         {links.map((item, index) => (
-          <div key={index} className="flex items-center gap-6">
-            
+          <div key={index} className="flex items-center gap-[25px] md:gap-6">
+
             {/* Social Link */}
             <Link
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
               className={`
-                h-8 w-8 
+                h-6 w-6 md:h-7 md:w-7
                 ${ICONS[item.icon].hoverBg} ${ICONS[item.icon].bgColor}
-                rounded-lg 
+                rounded-lg
                 flex items-center justify-center
                 hover:scale-105  transition-all duration-300
                 ${
