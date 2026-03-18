@@ -48,8 +48,8 @@ export default function PageIntro({
           <Image
             src="/uploads/img/base-logo.svg"
             alt="Logo"
-            width={80}
-            height={80}
+            width={62}
+            height={62}
             className="intro-logo"
           />
         </div>
