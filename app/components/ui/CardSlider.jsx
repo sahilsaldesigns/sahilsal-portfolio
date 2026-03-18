@@ -150,6 +150,7 @@ export default function CardSlider(props) {
   const animationTimeoutRef = useRef(null);
   const bloomTimeoutRef = useRef(null);
   const inViewTimeoutRef = useRef(null);
+  const isAnimatingRef = useRef(false);
   const cards = props && props.cards ? props.cards : defaultCards;
   const mobileThreshold = 1060;
 
@@ -205,12 +206,15 @@ export default function CardSlider(props) {
   }, []);
 
   const handleDragStart = useCallback((event, info) => {
+    if (isAnimatingRef.current) return;
     event.preventDefault?.();
     setIsDragging(true);
     setDragStartX(info.point.x);
   }, []);
 
   const handleDragEnd = useCallback((event, info) => {
+    if (isAnimatingRef.current) return;
+
     const offset = info.offset.x;
     const velocity = info.velocity.x;
     const threshold = 80;
@@ -222,6 +226,7 @@ export default function CardSlider(props) {
       return;
     }
 
+    isAnimatingRef.current = true;
     setIsAnimating(true);
 
     if (offset < -threshold || velocity < -300) {
@@ -230,16 +235,15 @@ export default function CardSlider(props) {
       setCurrent((c) => Math.max(c - 1, 0));
     }
 
-    // Clear any existing timeout before setting new one
     if (animationTimeoutRef.current) {
       clearTimeout(animationTimeoutRef.current);
     }
 
-    // Small delay to prevent click event from firing and release animation lock
     animationTimeoutRef.current = setTimeout(() => {
+      isAnimatingRef.current = false;
       setIsDragging(false);
       setIsAnimating(false);
-    }, 400);
+    }, 700);
   }, [dragStartX, cards.length]);
 
   const handleCardClick = useCallback((card, index) => {
@@ -280,20 +284,21 @@ export default function CardSlider(props) {
   }, [isDragging, isAnimating, isMobile, current, router]);
 
   const handleDotClick = useCallback((index) => {
-    if (!isAnimating && index !== current) {
+    if (!isAnimatingRef.current && index !== current) {
+      isAnimatingRef.current = true;
       setIsAnimating(true);
       setCurrent(index);
-      
-      // Clear any existing timeout before setting new one
+
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current);
       }
-      
+
       animationTimeoutRef.current = setTimeout(() => {
+        isAnimatingRef.current = false;
         setIsAnimating(false);
-      }, 400);
+      }, 700);
     }
-  }, [isAnimating, current]);
+  }, [current]);
 
   // Get responsive card dimensions
   const getCardDimensions = useCallback(() => {
@@ -380,8 +385,8 @@ export default function CardSlider(props) {
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.1}
               dragMomentum={false}
-              onDragStart={isMobile && isActive && !isAnimating ? handleDragStart : undefined}
-              onDragEnd={isMobile && isActive && !isAnimating ? handleDragEnd : undefined}
+              onDragStart={isMobile && isActive ? handleDragStart : undefined}
+              onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
               onHoverStart={() => !isMobile && setCurrent(index)}
               onClick={() => handleCardClick(card, index)}
               className="absolute flex flex-col items-center cursor-pointer select-none"
