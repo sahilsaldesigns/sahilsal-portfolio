@@ -11,6 +11,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "320px",
+        mob: "351px",
+      },
       keyframes: {
         riseUp: {
           "0%": { transform: "translateY(150px)", opacity: "0" },

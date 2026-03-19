@@ -7,8 +7,8 @@ export default async function AboutPage() {
   return <section className="relative">
     <ClientPage {...data} className="relative z-2" />
     <div className="bg-container pointer-events-none h-full">
-              {/* LEFT LINE */}
-              <div className="absolute left-0 top-8 max-w-[245px]  w-1/2 overflow-hidden">
+              {/* LEFT LINE — desktop only */}
+              <div className="hidden md:block absolute left-0 top-[156px] max-w-[245px] w-1/2 overflow-hidden">
                 <div className="bg-reveal-edge bg-reveal-left"></div>
                 <Image
                   src="uploads/img/about-desk-left-line.svg"
@@ -18,12 +18,24 @@ export default async function AboutPage() {
                   className="w-full"
                 />
               </div>
-    
-              {/* RIGHT LINE */}
-              <div className="absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto">
+
+              {/* RIGHT LINE — desktop only */}
+              <div className="hidden md:block absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto">
                 <div className="bg-reveal-edge bg-reveal-right"></div>
                 <Image
                   src="uploads/img/about-desk-right-line.svg"
+                  alt="right background line"
+                  width={800}
+                  height={500}
+                  className="w-full"
+                />
+              </div>
+
+              {/* RIGHT LINE — mobile only */}
+              <div className="block md:hidden absolute right-0 top-[50px] max-w-[245px] w-1/2 overflow-hidden">
+                <div className="bg-reveal-edge bg-reveal-right"></div>
+                <Image
+                  src="uploads/img/about-mob-right-line.svg"
                   alt="right background line"
                   width={800}
                   height={500}
