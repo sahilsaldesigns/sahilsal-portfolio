@@ -71,9 +71,9 @@ export default function MobileMenu({ nav }: { nav: {
           <span
             className="h-[2px] rounded-2xl bg-current transition-all duration-300 ease-in-out"
             style={{
-              width: "26px",
+              width: open ? "26px" : "13px",
               transformOrigin: "center",
-              transform: open ? "translateY(-8.5px) rotate(-45deg)" : "scaleX(0.5) translateX(13px)",
+              transform: open ? "translateY(-8.5px) rotate(-45deg)" : "none",
             }}
           />
         </div>

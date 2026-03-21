@@ -11,11 +11,11 @@ interface LinkData {
 const LINK_DATA_MAP: Record<string, LinkData> = {
   shailendrasalekar: {
     title: "Associate Director- Visual Design @Titan",
-    image: "/uploads/img/sahil-sal.png", // placeholder — swap when ready
+    image: "/uploads/img/shailendra-salekar.png",
   },
   akshaysalekar17: {
     title: "Founder @Magnetize Studio",
-    image: "/uploads/img/sahil-sal.png", // placeholder — swap when ready
+    image: "/uploads/img/akshay-salekar.png",
   },
 };
 
@@ -28,7 +28,7 @@ function getLinkData(href: string): LinkData | null {
   return null;
 }
 
-const CARD_WIDTH = 320;
+const CARD_MAX_WIDTH = 350;
 
 interface LinkPreviewProps {
   href: string;
@@ -37,9 +37,14 @@ interface LinkPreviewProps {
 }
 
 export default function LinkPreview({ href, children, className }: LinkPreviewProps) {
+  // Desktop hover state
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState<"top" | "bottom">("top");
   const [offsetX, setOffsetX] = useState(0);
+
+  // Mobile tap state
+  const [tapped, setTapped] = useState(false);
+  const [isTouch, setIsTouch] = useState(false);
 
   const containerRef = useRef<HTMLSpanElement>(null);
   const hoverCountRef = useRef(0);
@@ -47,6 +52,24 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
 
   const linkData = getLinkData(href);
 
+  // Mobile = touch device AND small screen (≤768px)
+  useEffect(() => {
+    setIsTouch(window.matchMedia("(hover: none) and (max-width: 768px)").matches);
+  }, []);
+
+  // Dismiss inline card on outside tap
+  useEffect(() => {
+    if (!tapped) return;
+    const handler = (e: TouchEvent | MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setTapped(false);
+      }
+    };
+    document.addEventListener("touchstart", handler);
+    return () => document.removeEventListener("touchstart", handler);
+  }, [tapped]);
+
+  // ── Desktop hover handlers ──────────────────────────────────────────────────
   const scheduleHide = () => {
     hideTimerRef.current = setTimeout(() => {
       if (hoverCountRef.current === 0) setVisible(false);
@@ -58,6 +81,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
   };
 
   const handleAnchorEnter = () => {
+    if (isTouch) return;
     hoverCountRef.current++;
     cancelHide();
 
@@ -65,10 +89,11 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
       const rect = containerRef.current.getBoundingClientRect();
       setPosition(rect.top > 280 ? "top" : "bottom");
 
-      const cardHalf = CARD_WIDTH / 2;
-      const anchorCentre = rect.left + rect.width / 2;
       const vw = window.innerWidth;
       const margin = 12;
+      const cardWidth = Math.min(CARD_MAX_WIDTH, vw - margin * 2);
+      const cardHalf = cardWidth / 2;
+      const anchorCentre = rect.left + rect.width / 2;
       let shift = 0;
       if (anchorCentre - cardHalf < margin) shift = margin - (anchorCentre - cardHalf);
       else if (anchorCentre + cardHalf > vw - margin) shift = vw - margin - (anchorCentre + cardHalf);
@@ -79,6 +104,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
   };
 
   const handleAnchorLeave = () => {
+    if (isTouch) return;
     hoverCountRef.current = Math.max(0, hoverCountRef.current - 1);
     scheduleHide();
   };
@@ -93,6 +119,16 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
     scheduleHide();
   };
 
+  // ── Mobile tap handler ──────────────────────────────────────────────────────
+  const handleLinkClick = (e: React.MouseEvent) => {
+    if (!isTouch || !linkData) return;
+    if (!tapped) {
+      e.preventDefault();
+      setTapped(true);
+    }
+    // second tap: let href navigate normally
+  };
+
   useEffect(() => () => { if (hideTimerRef.current) clearTimeout(hideTimerRef.current); }, []);
 
   return (
@@ -104,16 +140,17 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
         rel="noopener noreferrer"
         onMouseEnter={handleAnchorEnter}
         onMouseLeave={handleAnchorLeave}
+        onClick={handleLinkClick}
         className={
           className ??
-          "underline underline-offset-2 decoration-blue-400/60 text-blue-600 hover:text-blue-700 transition-colors duration-150"
+          "relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-[width] after:duration-300 after:ease-in-out hover:after:w-full"
         }
       >
         {children}
       </a>
 
-      {/* Hover card — only rendered if we have data for this link */}
-      {linkData && (
+      {/* ── Desktop hover card ─────────────────────────────────────────────── */}
+      {linkData && !isTouch && (
         <a
           href={href}
           target="_blank"
@@ -131,55 +168,93 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
             }`,
             pointerEvents: visible ? "auto" : "none",
             textDecoration: "none",
-            width: CARD_WIDTH,
+            width: "max-content",
+            maxWidth: `min(${CARD_MAX_WIDTH}px, calc(100vw - 24px))`,
           }}
           className={`absolute z-50 cursor-pointer ${
             position === "top" ? "bottom-full mb-3" : "top-full mt-3"
           } transition-all duration-200 ease-out ${visible ? "opacity-100" : "opacity-0"}`}
         >
-          {/* Dark card shell with bounce animation */}
-          <span
-            className={`flex items-center gap-3 px-4 rounded-2xl${visible ? " link-preview-bounce" : ""}`}
-            style={{ background: "#141414", height: 55 }}
-          >
-            {/* Profile image */}
-            <span className="flex-shrink-0 w-9 h-9 rounded-full overflow-hidden bg-neutral-700">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={linkData.image}
-                alt=""
-                className="w-full h-full object-cover"
-              />
+          <span className={`relative block${visible ? " link-preview-bounce" : ""}`}>
+            <span
+              className="flex items-center gap-2 xs:gap-3 px-3 xs:px-4 py-2.5 xs:py-3 rounded-2xl"
+              style={{ background: "#141414" }}
+            >
+              <span className="flex-shrink-0 w-7 h-7 xs:w-9 xs:h-9 rounded-full overflow-hidden bg-neutral-700">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={linkData.image} alt="" className="w-full h-full object-cover" />
+              </span>
+              <span className="text-white text-xs xs:text-sm font-medium leading-snug min-w-0 break-words mob:whitespace-nowrap">
+                {linkData.title}
+              </span>
             </span>
 
-            {/* Role / title */}
-            <span className="text-white text-sm font-medium leading-tight truncate">
-              {linkData.title}
-            </span>
+            {/* Triangle arrow */}
+            <span
+              className="absolute w-0 h-0"
+              style={{
+                left: `calc(50% - ${offsetX}px)`,
+                transform: "translateX(-50%)",
+                ...(position === "top"
+                  ? {
+                      bottom: -8,
+                      borderLeft: "8px solid transparent",
+                      borderRight: "8px solid transparent",
+                      borderTop: "8px solid #141414",
+                    }
+                  : {
+                      top: -8,
+                      borderLeft: "8px solid transparent",
+                      borderRight: "8px solid transparent",
+                      borderBottom: "8px solid #141414",
+                    }),
+              }}
+            />
           </span>
+        </a>
+      )}
 
-          {/* Triangle arrow */}
+      {/* ── Mobile inline tap card ─────────────────────────────────────────── */}
+      {linkData && isTouch && (
+        <span
+          aria-hidden={!tapped}
+          style={{
+            pointerEvents: tapped ? "auto" : "none",
+            transform: tapped ? "translateY(0) scale(1)" : "translateY(-4px) scale(0.97)",
+            width: "max-content",
+          }}
+          className={`absolute left-1/2 -translate-x-1/2 top-full mt-2 z-50 transition-all duration-200 ease-out max-w-[225px] mob:max-w-[calc(100vw-24px)] ${
+            tapped ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {/* Triangle arrow pointing up to the link */}
           <span
-            className="absolute w-0 h-0"
+            className="absolute w-0 h-0 left-1/2 -translate-x-1/2"
             style={{
-              left: `calc(50% - ${offsetX}px)`,
-              transform: "translateX(-50%)",
-              ...(position === "top"
-                ? {
-                    bottom: -8,
-                    borderLeft: "8px solid transparent",
-                    borderRight: "8px solid transparent",
-                    borderTop: "8px solid #141414",
-                  }
-                : {
-                    top: -8,
-                    borderLeft: "8px solid transparent",
-                    borderRight: "8px solid transparent",
-                    borderBottom: "8px solid #141414",
-                  }),
+              top: -8,
+              borderLeft: "8px solid transparent",
+              borderRight: "8px solid transparent",
+              borderBottom: "8px solid #141414",
             }}
           />
-        </a>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2.5 px-3 py-2.5 rounded-2xl no-underline"
+            style={{ background: "#141414" }}
+          >
+            <span className="flex-shrink-0 w-7 h-7 rounded-full overflow-hidden bg-neutral-700">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={linkData.image} alt="" className="w-full h-full object-cover" />
+            </span>
+            <span className="text-white text-xs font-medium leading-snug break-words mob:whitespace-nowrap min-w-[126px] mob:min-w-0">
+              {linkData.title}
+            </span>
+            {/* "Open" hint */}
+            <span className="text-neutral-400 text-base ml-1">↗</span>
+          </a>
+        </span>
       )}
     </span>
   );

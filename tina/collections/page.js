@@ -76,7 +76,21 @@ export default {
           fields: [
             { type: "string", name: "name", label: "Name" },
             { type: "rich-text", name: "description", label: "Description" },
-            { type: "image", name: "image", label: "Image" },
+            { type: "image", name: "image", label: "Image (Desktop)" },
+            {
+              type: "boolean",
+              name: "useSameImageMobile",
+              label: "Use same image for mobile",
+              ui: { defaultValue: true },
+            },
+            {
+              type: "image",
+              name: "imageMobile",
+              label: "Image (Mobile)",
+              ui: {
+                condition: { field: "useSameImageMobile", value: false },
+              },
+            },
           ],
         },
       ],
