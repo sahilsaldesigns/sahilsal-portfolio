@@ -19,7 +19,7 @@ const tinaComponents = {
     <LinkPreview href={url}>{children}</LinkPreview>
   ),
   p: ({ children }: { children: React.ReactNode }) => (
-    <p style={{ marginBottom: "16px" }}>{children}</p>
+    <p className="mb-4">{children}</p>
   ),
 };
 
@@ -42,17 +42,17 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full py-16">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <section ref={sectionRef} className="w-full py-[26px] md:py-16">
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
         {/* Left: Text Content */}
         <div
           className={`order-2 md:order-1 space-y-6 transition-all duration-1000 ease-out ${
             isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
           }`}
         >
-          {name && <h2 className="text-4xl md:text-5xl font-lustria">{name}</h2>}
+          {name && <h2 className="text-[24px] md:text-5xl font-lustria mb-4 md:mb-6">{name}</h2>}
           {description && (
-            <div className="text-[18px] leading-8 tracking-normal capitalize text-gray-700">
+            <div className="text-[16px] leading-[26px] md:text-[18px] md:leading-8 tracking-normal capitalize text-gray-700">
               {/* Pass tinaComponents to override how links are rendered */}
               <TinaMarkdown content={description} components={tinaComponents} />
             </div>
@@ -72,7 +72,7 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
               alt={name || "About Hero"}
               width={343}
               height={250}
-              className="block w-full md:hidden  shadow-lg object-cover rounded-4xl"
+              className="block w-full md:hidden  shadow-lg object-cover rounded-[30px] md:rounded-4xl"
               priority
             />
             {/* Desktop image */}

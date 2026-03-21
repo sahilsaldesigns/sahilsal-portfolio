@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default async function AboutPage() {
   const data = await client.queries.page({ relativePath: "about.mdx" });
-  return <section className="relative">
+  return <section className="relative overflow-hidden">
     <ClientPage {...data} className="relative z-2" />
     <div className="bg-container pointer-events-none h-full">
               {/* LEFT LINE — desktop only */}
