@@ -77,18 +77,6 @@ interface CaseStudyData {
 export default function CaseStudyPage(props: CaseStudyData) {
   const { caseStudy } = props.data;
 
-  const heroContainerRef = useRef<HTMLDivElement>(null);
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
-
-  useLenis(() => {
-    if (!heroContainerRef.current || !heroVideoRef.current) return;
-    const rect = heroContainerRef.current.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-    // Video drifts slower than the page — classic depth parallax
-    const offset = Math.max(-30, Math.min(-rect.top * 0.06, 30));
-    heroVideoRef.current.style.transform = `translateY(${offset}px) scale(1.08)`;
-  });
-
   const lenis = useLenis();
 
   // Lenis's built-in ResizeObserver only tracks the element's rendered size, not scrollHeight.
@@ -198,17 +186,14 @@ export default function CaseStudyPage(props: CaseStudyData) {
             {caseStudy.heroMedia.mediaType === "video" &&
               caseStudy.heroMedia.videoUrl && (
                 <div
-                  ref={heroContainerRef}
                   className="relative w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white"
                 >
                   <video
-                    ref={heroVideoRef}
                     src={caseStudy.heroMedia.videoUrl}
                     autoPlay
                     muted
                     loop
-                    style={{ willChange: "transform" }}
-                    className="w-full h-full bg-white border-2 border-white scale-[1.15]"
+                    className="w-full h-full bg-white border-2 border-white"
                   >
                     Your browser does not support the video tag.
                   </video>
