@@ -5,10 +5,11 @@ import CaseStudyPage from "./client-page";
 export default async function CaseStudyDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const res = await client.queries.caseStudy({
-    relativePath: `${params.slug}.mdx`,
+    relativePath: `${slug}.mdx`,
   });
 
   return <CaseStudyPage {...res} />;
