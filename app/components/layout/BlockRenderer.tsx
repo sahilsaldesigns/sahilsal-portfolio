@@ -34,7 +34,7 @@ export default function BlockRenderer({ block }: BlockRendererProps) {
       // block.links is expected to be an array of { icon, url }
       return <SocialLinks links={block.links || []} />;
     case "about_hero":
-      return <AboutHero name={block.name} description={block.description} image={block.image} />;
+      return <AboutHero name={block.name} description={block.description} image={block.image} imageMobile={block.imageMobile} useSameImageMobile={block.useSameImageMobile} />;
     default:
       return null;
   }
