@@ -19,12 +19,13 @@ export async function generateStaticParams() {
 export default async function Page({
   params,
 }: {
-  params: { filename: string[] };
+  params: Promise<{ filename: string[] }>;
 }) {
+  const { filename } = await params;
   // Build a relativePath from the catch-all params (supports nested paths)
-  const relPath = Array.isArray(params.filename)
-    ? params.filename.join("/")
-    : params.filename;
+  const relPath = Array.isArray(filename)
+    ? filename.join("/")
+    : filename;
   const relativePath = `${relPath}.mdx`;
 
   let result;
