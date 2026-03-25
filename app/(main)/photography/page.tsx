@@ -2,11 +2,16 @@ import ClientPage from "../[...filename]/client-page";
 import client from "../../../tina/__generated__/client";
 
 export default async function PhotographyPage() {
-  // Expecting a Tina page at content/page/photography.mdx - create it if you
-  // want editable content. For now, attempt to load it and fall back to an
-  // empty body.
-  const data = await client.queries.page({ relativePath: "photography.mdx" });
+  let data: any = null;
+  try {
+    data = await client.queries.page({ relativePath: "photography.mdx" });
+  } catch (error) {
+    console.warn("Failed to fetch photography page data from Tina:", error);
+  }
+
+  if (!data?.data?.page) return null;
+
   return <>
-  <ClientPage {...data} />;
-  </>
+    <ClientPage {...data} />
+  </>;
 }

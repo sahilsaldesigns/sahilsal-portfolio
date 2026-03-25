@@ -3,7 +3,15 @@ import client from "../../../tina/__generated__/client";
 import Image from "next/image";
 
 export default async function AboutPage() {
-  const data = await client.queries.page({ relativePath: "about.mdx" });
+  let data: any = null;
+  try {
+    data = await client.queries.page({ relativePath: "about.mdx" });
+  } catch (error) {
+    console.warn("Failed to fetch about page data from Tina:", error);
+  }
+
+  if (!data?.data?.page) return null;
+
   return <section className="relative">
     <ClientPage {...data} className="relative z-2" />
     <div className="bg-container pointer-events-none h-full">
