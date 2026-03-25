@@ -118,7 +118,7 @@ export default function ScrollStackGallery(props) {
         <motion.h1
           style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
           className="fixed top-10 left-1/2 -translate-x-1/2 z-30
-            text-center text-lg md:text-2xl lg:text-3xl font-semibold pointer-events-none"
+            text-center text-lg md:text-2xl lg:text-3xl  pointer-events-none"
         >
           {"Photograph's and Memories"}
         </motion.h1>
@@ -131,7 +131,7 @@ export default function ScrollStackGallery(props) {
           <motion.h1
             style={{ opacity: headingOpacity, y: headingY }}
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-              z-[999] text-center text-xl md:text-3xl lg:text-4xl font-semibold pointer-events-none"
+              z-999 text-center text-[24px] md:text-[44px]  pointer-events-none"
           >
             {"Photograph's and Memories"}
           </motion.h1>
@@ -145,7 +145,7 @@ export default function ScrollStackGallery(props) {
           <motion.div
             style={{ opacity: headingOpacity }}
             className="fixed left-1/2 top-[60%] -translate-x-1/2
-              z-[999] flex flex-col items-center text-gray-500 pointer-events-none"
+              z-999 flex flex-col items-center text-gray-500 pointer-events-none"
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           >
@@ -171,9 +171,9 @@ export default function ScrollStackGallery(props) {
 
       <motion.div
         style={{ opacity: ctaOpacity, y: ctaY }}
-        className="flex flex-col items-center justify-center text-center py-16"
+        className="flex flex-col items-center justify-center text-center pt-16 pb-6 px-4"
       >
-        <p className="text-gray-500 mb-6 max-w-md">
+        <p className="text-[18px] leading-[30px] md:text-base md:leading-normal text-[#757575] mb-6 max-w-md">
           {"Spotted something you liked? Let's take it to the 'gram"}
         </p>
         <button className="group flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm hover:shadow-lg hover:bg-white hover:text-black hover:cursor-pointer transform hover:-translate-y-1 transition-all duration-300 ease-out">
@@ -188,6 +188,7 @@ export default function ScrollStackGallery(props) {
           </span>
           Saahil.sal
         </button>
+        <hr className="w-full max-w-[962px] mx-auto mt-12" style={{ borderColor: "#D8D8D8" }}/>
       </motion.div>
     </>
   );
