@@ -20,7 +20,7 @@ function ParallaxVideo({ src }: { src: string }) {
   });
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-hidden rounded-xl bg-gray-100">
+    <div ref={containerRef} className="relative w-full overflow-hidden rounded-[16px] lg:rounded-xl bg-gray-100">
       <video
         ref={videoRef}
         src={src}
@@ -50,14 +50,14 @@ function ParallaxImage({ src, alt }: { src: string; alt: string }) {
   });
 
   return (
-    <div ref={containerRef} className="w-full rounded-xl bg-gray-100 overflow-hidden">
+    <div ref={containerRef} className="w-full lg:w-[766px] rounded-[16px] lg:rounded-xl bg-gray-100 overflow-hidden">
       <div ref={innerRef} style={{ willChange: "transform" }}>
         <Image
           src={src}
           alt={alt}
-          width={1920}
-          height={1080}
-          className="w-full h-auto block"
+          width={766}
+          height={600}
+          className="w-full h-auto lg:h-[600px] lg:object-cover block"
         />
       </div>
     </div>
@@ -121,11 +121,11 @@ export default function CaseStudyPage(props: CaseStudyData) {
       <ReactLenis root />
       <div className="min-h-screen">
         <Container>
-          <div className="py-12 md:py-16">
+          <div className="pt-7 md:pt-16">
             {/* Title */}
             <h1
               data-cs-animate
-              className="cs-animate text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+              className="cs-animate text-gray-900 mb-4 text-[24px] leading-[30px] tracking-[-0.02em] lg:text-[44px] lg:leading-[55px]"
             >
               {caseStudy.title}
             </h1>
@@ -135,7 +135,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
               <p
                 data-cs-animate
                 style={{ transitionDelay: "80ms" }}
-                className="cs-animate text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-4xl"
+                className="cs-animate text-gray-600 mb-[16px] text-[16px] leading-[28px] tracking-normal lg:text-[17px]"
               >
                 {caseStudy.description}
               </p>
@@ -146,7 +146,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
               <div
                 data-cs-animate
                 style={{ transitionDelay: "160ms" }}
-                className="cs-animate flex flex-wrap"
+                className="cs-animate flex flex-wrap mb-[32px]"
               >
                 {caseStudy.tags.map((tag: string, index: number) => (
                   <span
@@ -172,7 +172,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
           >
             {caseStudy.heroMedia.mediaType === "image" &&
               caseStudy.heroMedia.image && (
-                <div className="relative w-full h-[400px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-2xl bg-gray-100">
+                <div className="relative w-full h-[400px] md:h-[500px] lg:w-[960px] lg:h-[590px] lg:mx-auto overflow-hidden rounded-[16px] lg:rounded-2xl bg-gray-100">
                   <Image
                     src={caseStudy.heroMedia.image}
                     alt={caseStudy.title}
@@ -186,7 +186,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
             {caseStudy.heroMedia.mediaType === "video" &&
               caseStudy.heroMedia.videoUrl && (
                 <div
-                  className="relative w-[85vw] mx-auto overflow-hidden rounded-[55px] bg-white border-2 border-white"
+                  className="relative w-full lg:w-[960px] lg:max-h-[590px] mx-auto overflow-hidden rounded-[16px] lg:rounded-[55px] bg-white border-2 border-white"
                 >
                   <video
                     src={caseStudy.heroMedia.videoUrl}
@@ -203,14 +203,14 @@ export default function CaseStudyPage(props: CaseStudyData) {
         )}
 
         <Container>
-          <div className="py-16 md:py-20">
+          <div className="pt-11 md:pt-20">
             {/* Content Blocks */}
             {caseStudy.contentBlocks && caseStudy.contentBlocks.length > 0 && (
               <div>
                 {caseStudy.contentBlocks.map((block: any, index: number) => (
                   <div key={index}>
-                    {/* Divider above each block except the first */}
-                    {index > 0 && (
+                    {/* Divider above block (controlled per-block) */}
+                    {block.showDivider && (
                       <hr
                         data-cs-animate
                         className="cs-animate border-gray-200 mb-10"
@@ -221,10 +221,10 @@ export default function CaseStudyPage(props: CaseStudyData) {
                     {(block.icon || block.title) && (
                       <div
                         data-cs-animate
-                        className="cs-animate flex items-center gap-4 mb-6"
+                        className="cs-animate flex items-center gap-4 mb-[24px]"
                       >
                         {block.icon && (
-                          <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
+                          <div className="shrink-0 w-12 h-12 flex items-center justify-center">
                             <Image
                               src={block.icon}
                               alt="Section icon"
@@ -235,7 +235,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                           </div>
                         )}
                         {block.title && (
-                          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                          <h2 className="text-gray-900 text-[20px] leading-[100%] tracking-normal lg:text-[32px]">
                             {block.title}
                           </h2>
                         )}
@@ -247,10 +247,11 @@ export default function CaseStudyPage(props: CaseStudyData) {
                       <div
                         data-cs-animate
                         style={{ transitionDelay: "80ms" }}
-                        className="cs-animate cs-prose prose prose-lg max-w-none mb-10
+                        className="cs-animate cs-prose prose max-w-none mb-10
                         prose-headings:font-bold prose-headings:text-gray-900
-                        prose-h3:text-2xl prose-h4:text-xl
-                        prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
+                        prose-h2:text-[20px] prose-h2:leading-[100%] prose-h2:tracking-normal prose-h2:mb-[24px] lg:prose-h2:text-[32px]
+                        prose-h3:text-xl lg:prose-h3:text-2xl prose-h4:text-lg lg:prose-h4:text-xl
+                        prose-p:text-[16px] prose-p:leading-[28px] prose-p:tracking-normal prose-p:text-gray-700 prose-p:mb-[24px] lg:prose-p:text-[17px]
                         prose-strong:text-gray-900 prose-strong:font-semibold
                         prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
                         prose-ul:list-disc prose-ol:list-decimal
@@ -262,7 +263,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
 
                     {/* Block Media */}
                     {block.media && block.media.length > 0 && (
-                      <div className="flex flex-col gap-6 mb-10">
+                      <div className="flex flex-col">
                         {block.media.map((mediaItem: any, mediaIndex: number) => {
                           const isImage = mediaItem.type === "image" && mediaItem.image;
                           const isVideo = mediaItem.type === "video" && mediaItem.videoUrl;
@@ -274,6 +275,11 @@ export default function CaseStudyPage(props: CaseStudyData) {
                               style={{ transitionDelay: `${mediaIndex * 80}ms` }}
                               className="cs-animate w-full"
                             >
+                              {mediaItem.caption && (
+                                <p className="text-base text-gray-900 bg-gray-100 rounded-xl px-5 py-4 mb-6 leading-relaxed">
+                                  {mediaItem.caption}
+                                </p>
+                              )}
                               {isImage && (
                                 <ParallaxImage
                                   src={mediaItem.image}
@@ -283,6 +289,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                               {isVideo && (
                                 <ParallaxVideo src={mediaItem.videoUrl} />
                               )}
+                              <hr className="border-gray-200 mt-[25px] mb-[32px] lg:mt-12 lg:mb-12" />
                             </div>
                           );
                         })}
@@ -292,6 +299,13 @@ export default function CaseStudyPage(props: CaseStudyData) {
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Connect CTA */}
+          <div data-cs-animate className="cs-animate ">
+            <p className="text-center text-gray-400 text-[14px] leading-[28px] mb-10">
+              Spotted Something You Liked? Let&apos;s Connect Over
+            </p>
           </div>
         </Container>
       </div>

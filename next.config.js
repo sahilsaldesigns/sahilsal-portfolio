@@ -21,19 +21,24 @@ module.exports = {
     ],
   },
   async headers() {
+    const isDev = process.env.NODE_ENV === "development";
     const csp = [
       "default-src 'self'",
-      // Next.js requires unsafe-inline for hydration scripts; inline styles needed for Tailwind + Framer Motion
-      "script-src 'self' 'unsafe-inline'",
-      "style-src 'self' 'unsafe-inline'",
-      // Self-hosted via next/font; data: for icon fonts
-      "font-src 'self' data:",
+      // unsafe-eval needed in dev for React Fast Refresh (HMR)
+      // localhost:4001 needed in dev for TinaCMS admin panel scripts
+      // Both are omitted in production
+      `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval' http://localhost:4001 https://us-assets.i.posthog.com" : ""}`,
+      // fonts.googleapis.com needed in dev for TinaCMS admin Google Fonts
+      `style-src 'self' 'unsafe-inline'${isDev ? " https://fonts.googleapis.com" : ""}`,
+      // fonts.gstatic.com needed in dev for TinaCMS admin Google Fonts files
+      `font-src 'self' data:${isDev ? " https://fonts.gstatic.com" : ""}`,
       // Local assets + TinaCloud image CDN
       "img-src 'self' data: blob: https://assets.tina.io https://raw.githubusercontent.com https://content.tinajs.io",
       // Videos served from local /public
       "media-src 'self' blob:",
-      // API calls to TinaCloud only
-      "connect-src 'self' https://*.tina.io",
+      // ws://localhost:4001 for Vite WebSocket HMR in dev
+      // identity-v2.tinajs.io for TinaCMS auth/analytics in dev
+      `connect-src 'self' https://*.tina.io${isDev ? " http://localhost:4001 ws://localhost:4001 https://identity-v2.tinajs.io https://us.i.posthog.com https://us-assets.i.posthog.com" : ""}`,
       // Block all plugin content (Flash, etc.)
       "object-src 'none'",
       // Prevent base tag hijacking
