@@ -144,15 +144,22 @@ export default function ScrollStackGallery(props) {
           */}
           <motion.div
             style={{ opacity: headingOpacity }}
-            className="fixed left-1/2 top-[60%] -translate-x-1/2
-              z-999 flex flex-col items-center text-gray-500 pointer-events-none"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="fixed left-1/2 top-[60%] -translate-x-1/2 z-999 pointer-events-none"
           >
-            <span className="text-sm md:text-base">Scroll Down</span>
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" className="mt-1">
-              <path d="M12 5v14m0 0l-6-6m6 6l6-6" />
-            </svg>
+            <div className="relative w-4 h-[54px]">
+              {[0, 0.533, 1.067].map((delay) => (
+                <motion.div
+                  key={delay}
+                  className="absolute left-0 top-0"
+                  animate={{ y: [0, 22], opacity: [0, 1, 1, 0] }}
+                  transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay, times: [0, 0.2, 0.8, 1] }}
+                >
+                  <svg width="16" height="10" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.75 0.75L5.75 5.75L10.75 0.75" stroke="#111011" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </motion.div>
 
@@ -176,18 +183,42 @@ export default function ScrollStackGallery(props) {
         <p className="text-[18px] leading-[30px] md:text-base md:leading-normal text-[#757575] mb-6 max-w-md">
           {"Spotted something you liked? Let's take it to the 'gram"}
         </p>
-        <button className="group flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm hover:shadow-lg hover:bg-white hover:text-black hover:cursor-pointer transform hover:-translate-y-1 transition-all duration-300 ease-out">
-          <span className="w-6 h-6 flex items-center justify-center rounded-lg bg-transparent transition-colors duration-300 ease-out group-hover:bg-linear-to-tr group-hover:from-[#F58529] group-hover:via-[#DD2A7B] group-hover:to-[#515BD4]">
+        <button className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg">
+          <span
+            className="pointer-events-none absolute inset-0 rounded-full"
+            style={{
+              background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%)",
+              backgroundSize: "200% 100%",
+              backgroundPositionX: "200%",
+              animation: "glare 4s linear infinite",
+            }}
+          />
+          <span className="relative w-6 h-6">
             <Image
               src="/uploads/img/instagram-logo.svg"
               width={24}
               height={24}
               alt="Instagram Logo"
-              className="transition-all duration-300 ease-out group-hover:invert-0"
+              className="absolute inset-0 transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+            />
+            <Image
+              src="/uploads/img/instagram-logo-hover.svg"
+              width={24}
+              height={24}
+              alt="Instagram Logo"
+              className="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
             />
           </span>
           Saahil.sal
         </button>
+        <style>{`
+          @keyframes glare {
+            0%    { background-position-x: 150%; animation-timing-function: ease-in-out; }
+            40%   { background-position-x: -50%; }
+            99.9% { background-position-x: -50%; }
+            100%  { background-position-x: 150%; }
+          }
+        `}</style>
         <hr className="w-full max-w-[962px] mx-auto mt-12" style={{ borderColor: "#D8D8D8" }}/>
       </motion.div>
     </>

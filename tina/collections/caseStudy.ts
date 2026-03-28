@@ -66,6 +66,12 @@ const caseStudy: Collection = {
       },
       fields: [
         {
+          type: "boolean",
+          name: "showDivider",
+          label: "Show Divider",
+          description: "Show a horizontal rule above this block",
+        },
+        {
           type: "image",
           name: "icon",
           label: "Icon Image",
@@ -108,8 +114,17 @@ const caseStudy: Collection = {
             },
             {
               type: "string",
+              name: "caption",
+              label: "Caption",
+              description: "Text displayed above the image",
+              ui: {
+                component: "textarea",
+              },
+            },
+            {
+              type: "string",
               name: "alt",
-              label: "Alt Text / Caption",
+              label: "Alt Text",
             },
             {
               type: "string",
