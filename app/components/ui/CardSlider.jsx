@@ -64,13 +64,13 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
   return (
     <div
       ref={cardRef}
-      className="rounded-3xl overflow-hidden relative border border-transparent hover:border-[#FBE2AC] hover:shadow-[0px_10px_60px_0px_#FAE1AB4F] transition-[border-color,box-shadow] duration-300 ease-in-out"
+      className="rounded-4xl overflow-hidden relative border border-transparent hover:border-[#FBE2AC] hover:shadow-[0px_10px_60px_0px_#FAE1AB4F] transition-[border-color,box-shadow] duration-300 ease-in-out"
       style={{ width: cardWidth, height: cardHeight }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="w-full h-full rounded-2xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4 md:p-6">
+      <div className="w-full h-full rounded-4xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4 md:p-6">
         <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
           <Image
             src={card.image}
@@ -93,7 +93,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
             delay: bloom ? 0.3 : 0,
           }}
         >
-          <p className="text-center font-medium leading-tight text-[14px] sm:text-[12px] text-black!">
+          <p className="text-center font-medium leading-tight text-[20px]!  sm:text-[12px] text-black!">
             {card.title}
           </p>
         </motion.div>
