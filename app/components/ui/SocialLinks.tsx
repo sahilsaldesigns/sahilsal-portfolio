@@ -10,7 +10,7 @@ import Medium from "./../icons/Medium"
 
 const ICONS: any = {
   linkedin: {component : <FaLinkedinIn className="text-white w-[18px] h-[18px] md:w-4 md:h-4" />, hoverBg : "hover:bg-[#0077b7]", bgColor: "bg-black" ,},
-  medium: {component: <Medium className="text-white w-[18px] h-[18px] md:w-4 md:h-4" />, hoverBg : "hover:bg-black", bgColor: "bg-black" ,className: "justify-end" },
+  medium: {component: <Medium className="text-white w-[18px] h-[18px] md:w-5.5 md:h-7" />, hoverBg : "hover:bg-black", bgColor: "bg-black" ,className: "justify-end" },
   behance: {component: <FaBehance className="text-white w-[18px] h-[18px] md:w-4 md:h-4" />, hoverBg : "hover:bg-[#1769ff]", bgColor: "bg-black" },
   dribbble: {component: <Dribble className="text-black fill-black w-6 h-6 md:w-8 md:h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white" },
 };
@@ -19,9 +19,9 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
   if (!links || links.length === 0) return null;
 
   return (
-    <div className={className ?? "w-full flex justify-center relative top-[-85px] min-[500px]:top-[-108px] md:top-[-116px] z-1"}>
+    <div className={className ?? "w-full flex justify-center relative top-[-72px] min-[500px]:top-[-108px] md:top-[-116px] z-1"}>
       <div className="
-        px-[25px] py-[16px] md:p-6
+        px-[25px] py-[16px] md:p-6 md:py-[23pxtext-center font-medium leading-tight text-[20px]!  sm:text-[12px] text-black!]
         bg-white border-[3px] border-[#E7E7E7]
         rounded-[30px]
         shadow-md

@@ -34,7 +34,7 @@ export default function ActiveNav({ nav }: {
         <Link
           href={resumeItem.href}
           target={resumeItem.target || "_blank"}
-          className="px-4 py-2 rounded-full border-3 text-[18px] leading-[30px] text-black border-gray-300 hover:shadow hover:border-black hover:text-white hover:bg-black transition-colors"
+          className="px-[15px] py-1.5 rounded-xl border-2 text-[18px] leading-[30px] text-black border-gray-300 hover:shadow hover:border-black hover:text-white hover:bg-black transition-colors"
         >
           {resumeItem.label || "Resume"}
         </Link>

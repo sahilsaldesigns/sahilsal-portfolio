@@ -23,7 +23,7 @@ const lines = [
   },
   {
     key: "mob-left",
-    wrapperClass: "block md:hidden absolute -left-5 top-[182px] min-[556px]:top-[120px] max-w-[164px] w-1/2 overflow-hidden",
+    wrapperClass: "block md:hidden absolute -left-px top-[75px] max-w-[90px] w-1/2 overflow-hidden ",
     edgeClass: "bg-reveal-edge bg-reveal-left",
     src: "uploads/img/home-mob-left-line.svg",
     width: 400,
@@ -31,7 +31,7 @@ const lines = [
   },
   {
     key: "mob-right",
-    wrapperClass: "block md:hidden absolute -right-2 top-0 max-w-[145px] w-1/2 overflow-hidden ml-auto",
+    wrapperClass: "block md:hidden absolute -right-2 top-0 max-w-[80px] w-1/2 overflow-hidden ml-auto",
     edgeClass: "bg-reveal-edge bg-reveal-right",
     src: "uploads/img/home-mob-right-line.svg",
     width: 400,

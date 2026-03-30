@@ -37,7 +37,7 @@ export default async function HomePage() {
       <HomeAnimWrapper>
         <div className={HERO_CONTAINER}>
           <section className="home-hero-section  text-center z-10 bg-[radial-gradient(circle,white_0%,rgba(255,255,255,0)_80%)]">
-            <ClientPage {...data} className={"radial-fade pt-[54px] md:pt-21 px-4 relative z-1"} />
+            <ClientPage {...data} className={"radial-fade pt-8 md:pt-21 px-4 relative z-3"} />
           </section>
 
           <HomeBgLines />

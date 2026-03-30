@@ -228,8 +228,8 @@ h6 {
 }
 
 .hero-section-container .block-wrapper {
-  height: 608px;
-  margin-top: 55px;
+  height: 580px;
+  margin-top: 28px;
 }
 
 .home-hero-section h1 {
@@ -260,6 +260,7 @@ h6 {
 
 @media (min-width: 768px) {
   .hero-section-container .block-wrapper {
+    height: 608px;
     margin-top: 0;
   }
 

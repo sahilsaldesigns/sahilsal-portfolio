@@ -93,7 +93,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
             delay: bloom ? 0.3 : 0,
           }}
         >
-          <p className="text-center font-medium leading-tight text-[20px]!  sm:text-[12px] text-black!">
+          <p className="text-center leading-6.5 md:leading-8 md:*:text-[20px]!  text-[16px]!  text-black! tracking-[-2%] font-[family-name:var(--font-lustria)]">
             {card.title}
           </p>
         </motion.div>
@@ -338,10 +338,10 @@ export default function CardSlider(props) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-auto h-[608px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white -mx-4"
+      className="relative w-auto h-[550px] md:h-[608px] sm:h-[608px] flex justify-center overflow-hidden bg-white -mx-4"
     >
       <Image
-        src="/uploads/img/card-slider-bg-mob.png"
+        src="/uploads/img/card-slider-bg-mob.svg"
         alt="Card slider background"
         width={500}
         height={608}
@@ -359,7 +359,7 @@ export default function CardSlider(props) {
 
       {/* Content Layer */}
       <motion.div
-        className="relative flex h-[400px] md:h-[400px] sm:h-[320px] w-full max-w-[1200px] items-center justify-center z-2 mt-15 px-4"
+        className="relative flex h-[400px] md:h-[400px] sm:h-80 w-full max-w-[1200px] items-center justify-center z-2 md:mt-15 mt-7 px-4"
         initial={{ y: 150, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
@@ -419,7 +419,7 @@ export default function CardSlider(props) {
 
       {/* Mobile Pagination Dots */}
       {isMobile && bloom && (
-        <div className="absolute bottom-[24%] left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+        <div className="absolute bottom-[100px] left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
           {cards.map((_, index) => (
             <button
               key={index}
