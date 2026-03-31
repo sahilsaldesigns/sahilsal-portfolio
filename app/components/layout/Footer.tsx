@@ -31,7 +31,7 @@ export default async function Footer() {
   const copyright = globalData?.footer?.copyright || "";
 
   return (
-    <footer className="text-center pb-8">
+    <footer className="relative text-center pb-8">
       <FooterSocialLinks />
       <p className="text-sm text-[#757575]">{copyright} {new Date().getFullYear()} - Designed without AI</p>
     </footer>

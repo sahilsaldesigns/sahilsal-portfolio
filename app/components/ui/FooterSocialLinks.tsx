@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import SocialLinks from "./SocialLinks";
 
 const LINKS = [
@@ -15,9 +16,21 @@ export default function FooterSocialLinks() {
   if (pathname === "/" || pathname === "/photography") return null;
 
   return (
-    <SocialLinks
-      links={LINKS}
-      className="w-full flex justify-center mb-6"
-    />
+    <>
+      {pathname === "/about" && (
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-screen max-h-[140px] h-full pointer-events-none -z-10">
+          <Image
+            src="/uploads/img/about-footer-bg.svg"
+            alt=""
+            fill
+            className="object-cover object-top"
+          />
+        </div>
+      )}
+      <SocialLinks
+        links={LINKS}
+        className="w-full flex justify-center mb-6"
+      />
+    </>
   );
 }

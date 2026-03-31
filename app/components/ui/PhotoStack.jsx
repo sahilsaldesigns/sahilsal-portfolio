@@ -120,7 +120,7 @@ export default function ScrollStackGallery(props) {
           className="fixed top-10 left-1/2 -translate-x-1/2 z-30
             text-center text-lg md:text-2xl lg:text-3xl  pointer-events-none"
         >
-          {"Photograph's and Memories"}
+          {"Photograph's & Memories"}
         </motion.h1>
 
         <motion.div
@@ -133,7 +133,7 @@ export default function ScrollStackGallery(props) {
             className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
               z-999 text-center text-[24px] md:text-[44px]  pointer-events-none"
           >
-            {"Photograph's and Memories"}
+            {"Photograph's & Memories"}
           </motion.h1>
 
           {/*
