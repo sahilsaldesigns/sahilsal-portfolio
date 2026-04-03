@@ -83,7 +83,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
         </div>
 
         <motion.div
-          className="bg-white  pt-4  sm:pt-3 md:pt-6"
+          className="bg-white pt-4 sm:pt-3 md:pt-6"
           initial={{ opacity: 0 }}
           animate={{
             opacity: bloom ? (isActive ? 1 : 0.4) : 0,
@@ -93,7 +93,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
             delay: bloom ? 0.3 : 0,
           }}
         >
-          <p className="text-center leading-6.5 md:leading-8 md:*:text-[20px]!  text-[16px]!  text-black! tracking-[-2%] font-[family-name:var(--font-lustria)]">
+          <p className="text-center leading-6.5 md:leading-8 md:*:text-[20px]! text-[16px]! text-black! tracking-[-0.02em] font-[family-name:var(--font-lustria)]">
             {card.title}
           </p>
         </motion.div>
@@ -124,7 +124,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
               mass: 0.1,
             }}
           >
-            <span className="text-white font-normal tracking-[-2%] text-base font-(family-name:--font-lustria)">
+            <span className="text-white font-normal tracking-[-0.02em] text-base font-[family-name:var(--font-lustria)]">
               COMING SOON
             </span>
           </motion.div>
@@ -338,7 +338,7 @@ export default function CardSlider(props) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-auto h-[580px] md:h-[608px] sm:h-[580px] [@media(max-width:364px)]:h-[480px] flex justify-center overflow-hidden bg-white -mx-4"
+      className="relative w-auto h-[580px] md:h-[608px] [@media(max-width:364px)]:h-[480px] flex justify-center overflow-hidden bg-white -mx-4"
     >
       <Image
         src="/uploads/img/card-slider-bg-mob.svg"
@@ -359,7 +359,7 @@ export default function CardSlider(props) {
 
       {/* Content Layer */}
       <motion.div
-        className="relative flex h-[400px] md:h-[400px] [@media(max-width:364px)]:h-[315px] w-full max-w-[1200px] items-center justify-center z-2 md:mt-15 mt-7 px-4"
+        className="relative flex h-[400px] [@media(max-width:364px)]:h-[315px] w-full max-w-[1200px] items-center justify-center z-2 md:mt-15 mt-7 px-4"
         initial={{ y: 150, opacity: 0 }}
         animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
