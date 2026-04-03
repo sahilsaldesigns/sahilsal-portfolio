@@ -40,7 +40,7 @@ export default async function AboutPage() {
               </div>
 
               {/* LEFT LINE — mobile only */}
-              <div className="block md:hidden absolute left-0 bottom-5 max-w-[100px] w-1/2 overflow-hidden">
+              <div className="block md:hidden absolute left-0 bottom-5 max-w-[60px] w-1/2 overflow-hidden">
                 <div className="bg-reveal-edge bg-reveal-left"></div>
                 <Image
                   src="uploads/img/about-mob-left-line.svg"
@@ -52,7 +52,7 @@ export default async function AboutPage() {
               </div>
 
               {/* RIGHT LINE — mobile only */}
-              <div className="block md:hidden absolute -right-[25px] top-[38%] max-w-[110px] w-1/2 overflow-hidden">
+              <div className="block md:hidden absolute -right-[25px] top-[38%] max-w-20 w-1/2 overflow-hidden">
                 <div className="bg-reveal-edge bg-reveal-right"></div>
                 <Image
                   src="uploads/img/about-mob-right-line.svg"
