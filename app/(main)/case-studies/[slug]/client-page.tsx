@@ -43,14 +43,13 @@ function ParallaxImage({ src, alt }: { src: string; alt: string }) {
     if (!containerRef.current || !innerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-    // Subtle parallax: cap offset at 2.5% of height so scale(1.05) always covers it
-    const maxOffset = rect.height * 0.05;
-    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
-    innerRef.current.style.transform = `translateY(${offset}px) scale(1.10)`;
+    const maxOffset = rect.height * 0.04;
+    const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.07, maxOffset));
+    innerRef.current.style.transform = `translateY(${offset}px) scale(1.08)`;
   });
 
   return (
-    <div ref={containerRef} className="w-full lg:w-[766px] rounded-[16px] lg:rounded-xl bg-gray-100 overflow-hidden">
+    <div ref={containerRef} className="w-full rounded-2xl lg:rounded-xl bg-gray-100 overflow-hidden">
       <div ref={innerRef} style={{ willChange: "transform" }}>
         <Image
           src={src}
@@ -120,7 +119,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
     <>
       <ReactLenis root />
       <div className="min-h-screen">
-        <Container>
+        <Container className="max-w-[766px]">
           <div className="pt-7 md:pt-16">
             {/* Title */}
             <h1
@@ -135,7 +134,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
               <p
                 data-cs-animate
                 style={{ transitionDelay: "80ms" }}
-                className="cs-animate text-gray-600 mb-[16px] text-[16px] leading-[28px] tracking-normal lg:text-[17px]"
+                className="cs-animate text-[#757575] mb-[16px] text-[16px] leading-[28px] tracking-normal lg:text-[17px]"
               >
                 {caseStudy.description}
               </p>
@@ -151,7 +150,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                 {caseStudy.tags.map((tag: string, index: number) => (
                   <span
                     key={index}
-                    className="py-2 text-gray-700 text-sm font-medium"
+                    className="py-2 text-[#757575] text-sm font-medium"
                   >
                     {index > 0 && <span className="mx-2 text-gray-400">|</span>}{tag}
                   </span>
@@ -202,7 +201,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
           </div>
         )}
 
-        <Container>
+        <Container className="max-w-[766px]">
           <div className="pt-11 md:pt-20">
             {/* Content Blocks */}
             {caseStudy.contentBlocks && caseStudy.contentBlocks.length > 0 && (
@@ -251,7 +250,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                         prose-headings:font-bold prose-headings:text-gray-900
                         prose-h2:text-[20px] prose-h2:leading-[100%] prose-h2:tracking-normal prose-h2:mb-[24px] lg:prose-h2:text-[32px]
                         prose-h3:text-xl lg:prose-h3:text-2xl prose-h4:text-lg lg:prose-h4:text-xl
-                        prose-p:text-[16px] prose-p:leading-[28px] prose-p:tracking-normal prose-p:text-gray-700 prose-p:mb-[24px] lg:prose-p:text-[17px]
+                        prose-p:text-[16px] prose-p:leading-[28px] prose-p:tracking-normal prose-p:text-[#757575] prose-p:mb-[24px] lg:prose-p:text-[17px]
                         prose-strong:text-gray-900 prose-strong:font-semibold
                         prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
                         prose-ul:list-disc prose-ol:list-decimal
@@ -276,8 +275,10 @@ export default function CaseStudyPage(props: CaseStudyData) {
                               className="cs-animate w-full"
                             >
                               {mediaItem.caption && (
-                                <p className="text-base text-gray-900 bg-gray-100 rounded-xl px-5 py-4 mb-6 leading-relaxed">
-                                  {mediaItem.caption}
+                                <p className="text-base text-gray-900 bg-gray-100 rounded-xl px-5 py-4 mb-6 leading-relaxed font-[family-name:var(--font-lustria)] capitalize">
+                                  {mediaItem.caption.split('\n').map((line: string, i: number, arr: string[]) => (
+                                    <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                                  ))}
                                 </p>
                               )}
                               {isImage && (
