@@ -100,15 +100,12 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
       </div>
 
       {/* Coming Soon Hover Overlay with Parallax Button */}
-      {card.comingSoon && (
-        <motion.div
+      {card.comingSoon && isHovered && (
+        <div
           className="absolute inset-0 rounded-3xl flex items-center justify-center pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
         >
           {/* Backdrop Blur */}
-          <div className="absolute inset-0 backdrop-blur-md bg-black/30 rounded-3xl transition-all" />
+          <div className="absolute inset-0 backdrop-blur-md bg-white/30 rounded-3xl" />
           
           {/* Parallax Button */}
           <motion.div
@@ -128,7 +125,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
               COMING SOON
             </span>
           </motion.div>
-        </motion.div>
+        </div>
       )}
     </div>
   );
