@@ -86,7 +86,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
           className="bg-white pt-4 sm:pt-3 md:pt-6"
           initial={{ opacity: 0 }}
           animate={{
-            opacity: bloom ? (isActive ? 1 : 0.4) : 0,
+            opacity: bloom ? 1 : 0,
           }}
           transition={{
             duration: 0.6,
@@ -142,6 +142,7 @@ export default function CardSlider(props) {
   const [isMobile, setIsMobile] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHoveringSlider, setIsHoveringSlider] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -364,6 +365,7 @@ export default function CardSlider(props) {
         animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
         onAnimationComplete={isInView ? handleContainerComplete : undefined}
+        onHoverEnd={() => !isMobile && setIsHoveringSlider(false)}
       >
         {cards.map((card, index) => {
           const isActive = index === current;
@@ -387,7 +389,7 @@ export default function CardSlider(props) {
               dragMomentum={false}
               onDragStart={isMobile && isActive ? handleDragStart : undefined}
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
-              onHoverStart={() => !isMobile && setCurrent(index)}
+              onHoverStart={() => { if (!isMobile) { setIsHoveringSlider(true); setCurrent(index); } }}
               onClick={() => handleCardClick(card, index)}
               className="absolute flex flex-col items-center cursor-pointer select-none"
               style={{ touchAction: isMobile && isActive ? "pan-y" : "auto" }}
@@ -396,13 +398,14 @@ export default function CardSlider(props) {
                 x: xOffset,
                 rotate: bloom ? 0 : (index - 1) * 3,
                 opacity: 1,
-                scale: isMobile ? 1 : (isActive ? 1 : 0.95),
+                scale: isMobile ? 1 : (isActive && isHoveringSlider ? 1 : 0.95),
                 zIndex: isActive ? 40 : 20,
               }}
               transition={{
                 type: "spring",
                 stiffness: 80,
                 damping: 20,
+                scale: { type: "tween", duration: 0.3, ease: "easeOut" },
               }}
             >
               <CardContent
