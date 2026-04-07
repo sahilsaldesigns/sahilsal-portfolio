@@ -209,7 +209,7 @@ export default function ScrollStackGallery(props) {
               className="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
             />
           </span>
-          Saahil.sal
+          saahil.sal
         </button>
         <style>{`
           @keyframes glare {

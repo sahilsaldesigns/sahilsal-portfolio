@@ -27,7 +27,7 @@ const defaultCards = [
   },
 ];
 
-const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
+const CardContent = ({ card, cardWidth, cardHeight, bloom }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
@@ -86,7 +86,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
           className="bg-white pt-4 sm:pt-3 md:pt-6"
           initial={{ opacity: 0 }}
           animate={{
-            opacity: bloom ? (isActive ? 1 : 0.4) : 0,
+            opacity: bloom ? 1 : 0,
           }}
           transition={{
             duration: 0.6,
@@ -100,15 +100,12 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
       </div>
 
       {/* Coming Soon Hover Overlay with Parallax Button */}
-      {card.comingSoon && (
-        <motion.div
+      {card.comingSoon && isHovered && (
+        <div
           className="absolute inset-0 rounded-3xl flex items-center justify-center pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
         >
           {/* Backdrop Blur */}
-          <div className="absolute inset-0 backdrop-blur-md bg-black/30 rounded-3xl transition-all" />
+          <div className="absolute inset-0 backdrop-blur-md bg-white/30 rounded-3xl" />
           
           {/* Parallax Button */}
           <motion.div
@@ -128,7 +125,7 @@ const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
               COMING SOON
             </span>
           </motion.div>
-        </motion.div>
+        </div>
       )}
     </div>
   );
@@ -142,6 +139,7 @@ export default function CardSlider(props) {
   const [isMobile, setIsMobile] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isHoveringSlider, setIsHoveringSlider] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -364,6 +362,7 @@ export default function CardSlider(props) {
         animate={isInView ? { y: 0, opacity: 1 } : { y: 150, opacity: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
         onAnimationComplete={isInView ? handleContainerComplete : undefined}
+        onHoverEnd={() => !isMobile && setIsHoveringSlider(false)}
       >
         {cards.map((card, index) => {
           const isActive = index === current;
@@ -387,7 +386,7 @@ export default function CardSlider(props) {
               dragMomentum={false}
               onDragStart={isMobile && isActive ? handleDragStart : undefined}
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
-              onHoverStart={() => !isMobile && setCurrent(index)}
+              onHoverStart={() => { if (!isMobile) { setIsHoveringSlider(true); setCurrent(index); } }}
               onClick={() => handleCardClick(card, index)}
               className="absolute flex flex-col items-center cursor-pointer select-none"
               style={{ touchAction: isMobile && isActive ? "pan-y" : "auto" }}
@@ -396,13 +395,14 @@ export default function CardSlider(props) {
                 x: xOffset,
                 rotate: bloom ? 0 : (index - 1) * 3,
                 opacity: 1,
-                scale: isMobile ? 1 : (isActive ? 1 : 0.95),
+                scale: isMobile ? 1 : (isActive && isHoveringSlider ? 1 : 0.95),
                 zIndex: isActive ? 40 : 20,
               }}
               transition={{
                 type: "spring",
                 stiffness: 80,
                 damping: 20,
+                scale: { type: "tween", duration: 0.3, ease: "easeOut" },
               }}
             >
               <CardContent
@@ -426,8 +426,8 @@ export default function CardSlider(props) {
               onClick={() => handleDotClick(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === current
-                  ? "bg-[#FBE2AC] w-6"
-                  : "bg-gray-400/50 w-2 hover:bg-gray-400"
+                  ? "bg-[#111011] w-6"
+                  : "bg-[#DDDDDD] w-2 hover:bg-gray-400"
               }`}
               aria-label={`Go to card ${index + 1}`}
             />

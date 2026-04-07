@@ -192,6 +192,8 @@ export default function CaseStudyPage(props: CaseStudyData) {
                     autoPlay
                     muted
                     loop
+                    playsInline
+                    controls={false}
                     className="w-full h-full bg-white border-2 border-white"
                   >
                     Your browser does not support the video tag.
