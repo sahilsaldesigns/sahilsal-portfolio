@@ -19,7 +19,7 @@ export default async function AboutPage() {
               <div className="hidden md:block absolute left-0 top-[156px] max-w-[245px] w-1/2 overflow-hidden">
                 <div className="bg-reveal-edge bg-reveal-left"></div>
                 <Image
-                  src="uploads/img/about-desk-left-line.svg"
+                  src="/uploads/img/about-desk-left-line.svg"
                   alt="left background line"
                   width={800}
                   height={500}
@@ -31,7 +31,7 @@ export default async function AboutPage() {
               <div className="hidden md:block absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto">
                 <div className="bg-reveal-edge bg-reveal-right"></div>
                 <Image
-                  src="uploads/img/about-desk-right-line.svg"
+                  src="/uploads/img/about-desk-right-line.svg"
                   alt="right background line"
                   width={800}
                   height={500}
@@ -43,7 +43,7 @@ export default async function AboutPage() {
               <div className="block md:hidden absolute left-0 bottom-5 max-w-[60px] w-1/2 overflow-hidden">
                 <div className="bg-reveal-edge bg-reveal-left"></div>
                 <Image
-                  src="uploads/img/about-mob-left-line.svg"
+                  src="/uploads/img/about-mob-left-line.svg"
                   alt="left background line"
                   width={800}
                   height={500}
@@ -55,7 +55,7 @@ export default async function AboutPage() {
               <div className="block md:hidden absolute -right-[25px] top-[38%] max-w-20 w-1/2 overflow-hidden">
                 <div className="bg-reveal-edge bg-reveal-right"></div>
                 <Image
-                  src="uploads/img/about-mob-right-line.svg"
+                  src="/uploads/img/about-mob-right-line.svg"
                   alt="right background line"
                   width={800}
                   height={500}
