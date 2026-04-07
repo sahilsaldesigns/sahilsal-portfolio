@@ -14,9 +14,8 @@ export default async function AboutPage() {
 
   return <section className="relative overflow-hidden">
     <ClientPage {...data} className="relative z-2" />
-    <div className="bg-container pointer-events-none h-full">
               {/* LEFT LINE — desktop only */}
-              <div className="hidden md:block absolute left-0 top-[156px] max-w-[245px] w-1/2 overflow-hidden">
+              <div className="hidden md:block absolute left-0 top-[156px] max-w-[245px] w-1/2 overflow-hidden pointer-events-none">
                 <div className="bg-reveal-edge bg-reveal-left"></div>
                 <Image
                   src="/uploads/img/about-desk-left-line.svg"
@@ -28,7 +27,7 @@ export default async function AboutPage() {
               </div>
 
               {/* RIGHT LINE — desktop only */}
-              <div className="hidden md:block absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto">
+              <div className="hidden md:block absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto pointer-events-none">
                 <div className="bg-reveal-edge bg-reveal-right"></div>
                 <Image
                   src="/uploads/img/about-desk-right-line.svg"
@@ -40,7 +39,7 @@ export default async function AboutPage() {
               </div>
 
               {/* LEFT LINE — mobile only */}
-              <div className="block md:hidden absolute left-0 bottom-5 max-w-[60px] w-1/2 overflow-hidden">
+              <div className="block md:hidden absolute left-0 bottom-5 max-w-[60px] w-1/2 overflow-hidden pointer-events-none">
                 <div className="bg-reveal-edge bg-reveal-left"></div>
                 <Image
                   src="/uploads/img/about-mob-left-line.svg"
@@ -52,7 +51,7 @@ export default async function AboutPage() {
               </div>
 
               {/* RIGHT LINE — mobile only */}
-              <div className="block md:hidden absolute -right-[25px] top-[38%] max-w-20 w-1/2 overflow-hidden">
+              <div className="block md:hidden absolute -right-[25px] top-[38%] max-w-20 w-1/2 overflow-hidden pointer-events-none">
                 <div className="bg-reveal-edge bg-reveal-right"></div>
                 <Image
                   src="/uploads/img/about-mob-right-line.svg"
@@ -62,7 +61,6 @@ export default async function AboutPage() {
                   className="w-full"
                 />
               </div>
-            </div>
   </section>
   
   ;

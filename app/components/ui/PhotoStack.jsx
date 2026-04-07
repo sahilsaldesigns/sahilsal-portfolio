@@ -183,7 +183,7 @@ export default function ScrollStackGallery(props) {
         <p className="text-[18px] leading-[30px] md:text-base md:leading-normal text-[#757575] mb-6 max-w-md">
           {"Spotted something you liked? Let's take it to the 'gram"}
         </p>
-        <button className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg">
+        <a href="https://www.instagram.com/saahil.sal/?hl=en" target="_blank" rel="noopener noreferrer" className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg">
           <span
             className="pointer-events-none absolute inset-0 rounded-full"
             style={{
@@ -210,7 +210,7 @@ export default function ScrollStackGallery(props) {
             />
           </span>
           saahil.sal
-        </button>
+        </a>
         <style>{`
           @keyframes glare {
             0%    { background-position-x: 150%; animation-timing-function: ease-in-out; }
