@@ -426,8 +426,8 @@ export default function CardSlider(props) {
               onClick={() => handleDotClick(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === current
-                  ? "bg-[#FBE2AC] w-6"
-                  : "bg-gray-400/50 w-2 hover:bg-gray-400"
+                  ? "bg-[#111011] w-6"
+                  : "bg-[#DDDDDD] w-2 hover:bg-gray-400"
               }`}
               aria-label={`Go to card ${index + 1}`}
             />
