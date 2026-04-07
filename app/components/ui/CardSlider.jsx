@@ -27,7 +27,7 @@ const defaultCards = [
   },
 ];
 
-const CardContent = ({ card, cardWidth, cardHeight, isActive, bloom }) => {
+const CardContent = ({ card, cardWidth, cardHeight, bloom }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
