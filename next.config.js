@@ -45,8 +45,8 @@ module.exports = {
       "base-uri 'self'",
       // Restrict form submissions to same origin
       "form-action 'self'",
-      // Allow same-origin framing in dev (TinaCMS admin iframes site pages for preview)
-      `frame-ancestors ${isDev ? "'self'" : "'none'"}`,
+      // Allow same-origin framing so TinaCMS admin can iframe site pages for visual editor
+      "frame-ancestors 'self'",
     ].join("; ");
 
     return [
@@ -62,7 +62,7 @@ module.exports = {
         source: "/((?!admin).*)",
         headers: [
           { key: "Content-Security-Policy", value: csp },
-          { key: "X-Frame-Options", value: isDev ? "SAMEORIGIN" : "DENY" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
