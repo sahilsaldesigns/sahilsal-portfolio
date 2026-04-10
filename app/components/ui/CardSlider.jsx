@@ -338,12 +338,14 @@ export default function CardSlider(props) {
       ref={sectionRef}
       className="relative w-auto h-[580px] md:h-[608px] [@media(max-width:364px)]:h-[480px] flex justify-center overflow-hidden bg-white -mx-4"
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/uploads/img/card-slider-bg-mob.svg"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:416px)]:hidden"
       />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/uploads/img/card-slider-bg.png"
         alt=""
