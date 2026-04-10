@@ -34,6 +34,7 @@ export default function ActiveNav({ nav }: {
         <Link
           href={resumeItem.href}
           target={resumeItem.target || "_blank"}
+          prefetch={false}
           aria-label="Resume (PDF, opens in new tab)"
           className="px-[15px] py-1.5 rounded-xl border-2 text-[18px] leading-[30px] text-black border-gray-300 hover:shadow hover:border-black hover:text-white hover:bg-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
         >
