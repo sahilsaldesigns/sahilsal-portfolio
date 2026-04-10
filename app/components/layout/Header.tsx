@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 import ActiveNav from "./ActiveNav";
 import MobileMenu from "./MobileMenu";
+import globalJsonFallback from "../../../content/global/global.json";
 
 type NavItem = { href: string; label?: string; target: string };
 function readGlobalFile() {
