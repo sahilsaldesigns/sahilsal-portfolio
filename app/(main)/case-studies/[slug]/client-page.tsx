@@ -28,6 +28,7 @@ function ParallaxVideo({ src }: { src: string }) {
         muted
         loop
         playsInline
+        aria-label="Case study video"
         style={{ willChange: "transform" }}
         className="w-full h-full"
       />
@@ -194,6 +195,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                     loop
                     playsInline
                     controls={false}
+                    aria-label={`${caseStudy.title} hero video`}
                     className="w-full h-full bg-white border-2 border-white"
                   >
                     Your browser does not support the video tag.

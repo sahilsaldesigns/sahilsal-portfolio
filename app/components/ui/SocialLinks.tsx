@@ -9,10 +9,10 @@ import Dribble from "./../icons/Dribble"
 import Medium from "./../icons/Medium"
 
 const ICONS: any = {
-  linkedin: {component : <FaLinkedinIn className="text-white w-[18px] h-[18px] md:w-4 md:h-4" />, hoverBg : "hover:bg-[#0077b7]", bgColor: "bg-black" ,},
-  medium: {component: <Medium className="text-white w-[18px] h-[18px] md:w-5.5 md:h-7" />, hoverBg : "hover:bg-black", bgColor: "bg-black" ,className: "justify-end" },
-  behance: {component: <FaBehance className="text-white w-[18px] h-[18px] md:w-4 md:h-4" />, hoverBg : "hover:bg-[#1769ff]", bgColor: "bg-black" },
-  dribbble: {component: <Dribble className="text-black fill-black w-6 h-6 md:w-8 md:h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white" },
+  linkedin: {component : <FaLinkedinIn className="text-white w-[18px] h-[18px] md:w-4 md:h-4" aria-hidden="true" />, hoverBg : "hover:bg-[#0077b7]", bgColor: "bg-black", label: "LinkedIn" },
+  medium: {component: <Medium className="text-white w-[18px] h-[18px] md:w-5.5 md:h-7" />, hoverBg : "hover:bg-black", bgColor: "bg-black", className: "justify-end", label: "Medium" },
+  behance: {component: <FaBehance className="text-white w-[18px] h-[18px] md:w-4 md:h-4" aria-hidden="true" />, hoverBg : "hover:bg-[#1769ff]", bgColor: "bg-black", label: "Behance" },
+  dribbble: {component: <Dribble className="text-black fill-black w-6 h-6 md:w-8 md:h-8" hoverColor="#EA4C89" />, hoverBg : "hover:bg-white", bgColor: "bg-white", label: "Dribbble" },
 };
 
 export default function SocialLinks({ links = [], className }: { links: any[]; className?: string }) {
@@ -35,15 +35,15 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
               href={item.url}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`${ICONS[item.icon].label} (opens in new tab)`}
               className={`
                 h-6 w-6 md:h-7 md:w-7
                 ${ICONS[item.icon].hoverBg} ${ICONS[item.icon].bgColor}
                 rounded-lg
                 flex items-center justify-center
-                hover:scale-105  transition-all duration-300
-                ${
-                 ICONS[item.icon].className || ""
-                }
+                hover:scale-105 transition-all duration-300
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black
+                ${ICONS[item.icon].className || ""}
               `}
             >
               {ICONS[item.icon].component}

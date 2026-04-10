@@ -45,7 +45,7 @@ export default function MobileMenu({ nav }: { nav: {
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
         onClick={() => setOpen((s) => !s)}
-        className="relative flex items-center justify-center w-6 h-6 focus:outline-none"
+        className="relative flex items-center justify-center w-6 h-6 focus:outline-none focus-visible:ring-2 focus-visible:ring-black rounded"
       >
         <div className="flex flex-col items-end gap-[6px]">
           {/* Top bar — longest */}
@@ -79,8 +79,9 @@ export default function MobileMenu({ nav }: { nav: {
         </div>
       </button>
 
-      {/* Transparent backdrop to dismiss */}
+      {/* Transparent backdrop to dismiss — aria-hidden as close action is on hamburger button */}
       <div
+        aria-hidden="true"
         className={`fixed inset-0 z-998 transition-opacity duration-300 ${
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
@@ -112,8 +113,8 @@ export default function MobileMenu({ nav }: { nav: {
               <Link
                 href={item.href}
                 target={item.target || "_self"}
-                className={`block px-4 py-3 text-base font-medium transition-colors ${
-                  isActive ? "text-gray-900" : "text-gray-400"
+                className={`block px-4 py-3 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black ${
+                  isActive ? "text-gray-900" : "text-gray-500"
                 }`}
                 onClick={() => setOpen(false)}
               >

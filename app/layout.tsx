@@ -18,54 +18,52 @@ const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
 });
 
-const siteUrl = "https://www.sahilsal.com";
-const personName = "Sahil Salekar";
-const personDescription =
-  "Sahil Salekar is a UI designer based in Mumbai, India, currently designing at Media.net. Driven by a passion for crafting purposeful designs, his journey from aspiring automobile photographer to UI designer is a testament to embracing change and discovering one's true calling.";
-const personImage = `${siteUrl}/uploads/img/sahil-sal.png`;
+const siteUrl = "https://sahilsal.com";
+const pageTitle = "Sahil Salekar — UI/UX Designer";
+const pageDescription =
+  "Designing UI for ad tech and digital products. Currently at Media.net, Mumbai.";
+const ogImage = `${siteUrl}/uploads/img/og-image.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: personName,
-    template: `%s | ${personName}`,
+    default: pageTitle,
+    template: `%s | Sahil Salekar`,
   },
-  description: personDescription,
+  description: pageDescription,
   alternates: {
     canonical: siteUrl,
   },
   openGraph: {
-    type: "profile",
+    type: "website",
     url: siteUrl,
-    siteName: personName,
-    title: personName,
-    description: personDescription,
+    siteName: "Sahil Salekar",
+    title: pageTitle,
+    description: pageDescription,
     images: [
       {
-        url: personImage,
-        width: 800,
-        height: 800,
-        alt: personName,
+        url: ogImage,
+        width: 1200,
+        height: 630,
+        alt: pageTitle,
       },
     ],
-    firstName: "Sahil",
-    lastName: "Salekar",
   },
   twitter: {
-    card: "summary",
-    title: personName,
-    description: personDescription,
-    images: [personImage],
+    card: "summary_large_image",
+    title: pageTitle,
+    description: pageDescription,
+    images: [ogImage],
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: personName,
+  name: "Sahil Salekar",
   url: siteUrl,
-  image: personImage,
-  description: personDescription,
+  image: ogImage,
+  description: pageDescription,
   jobTitle: "UI Designer",
   worksFor: {
     "@type": "Organization",

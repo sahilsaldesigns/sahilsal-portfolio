@@ -116,6 +116,7 @@ export default function ScrollStackGallery(props) {
 
       <section ref={ref} style={{ height: sectionHeight }} className="relative">
         <motion.h1
+          aria-hidden="true"
           style={{ opacity: fixedHeadingOpacity, y: fixedHeadingY }}
           className="fixed top-10 left-1/2 -translate-x-1/2 z-30
             text-center text-lg md:text-2xl lg:text-3xl  pointer-events-none"
@@ -154,7 +155,7 @@ export default function ScrollStackGallery(props) {
                   animate={{ y: [0, 22], opacity: [0, 1, 1, 0] }}
                   transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay, times: [0, 0.2, 0.8, 1] }}
                 >
-                  <svg width="16" height="10" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg aria-hidden="true" focusable="false" width="16" height="10" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0.75 0.75L5.75 5.75L10.75 0.75" stroke="#111011" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </motion.div>
@@ -183,7 +184,7 @@ export default function ScrollStackGallery(props) {
         <p className="text-[18px] leading-[30px] md:text-base md:leading-normal text-[#757575] mb-6 max-w-md">
           {"Spotted something you liked? Let's take it to the 'gram"}
         </p>
-        <a href="https://www.instagram.com/saahil.sal/?hl=en" target="_blank" rel="noopener noreferrer" className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg">
+        <a href="https://www.instagram.com/saahil.sal/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Visit saahil.sal on Instagram (opens in new tab)" className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black">
           <span
             className="pointer-events-none absolute inset-0 rounded-full"
             style={{
@@ -205,7 +206,8 @@ export default function ScrollStackGallery(props) {
               src="/uploads/img/instagram-logo-hover.svg"
               width={24}
               height={24}
-              alt="Instagram Logo"
+              alt=""
+              aria-hidden="true"
               className="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
             />
           </span>
