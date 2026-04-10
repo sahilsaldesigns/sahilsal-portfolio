@@ -29,8 +29,8 @@ export default async function Header() {
     // fallback
   }
 
-  if (!globalData) {
-    globalData = readGlobalFile();
+  if (!globalData?.header?.nav?.length) {
+    globalData = globalJsonFallback;
   }
 
   const nav: NavItem[] = (globalData?.header?.nav as NavItem[]) || [];
