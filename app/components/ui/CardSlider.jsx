@@ -388,7 +388,11 @@ export default function CardSlider(props) {
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
               onHoverStart={() => { if (!isMobile) { setIsHoveringSlider(true); setCurrent(index); } }}
               onClick={() => handleCardClick(card, index)}
-              className="absolute flex flex-col items-center cursor-pointer select-none"
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleCardClick(card, index); } }}
+              role="button"
+              tabIndex={isActive ? 0 : -1}
+              aria-label={card.title || `View project ${index + 1}`}
+              className="absolute flex flex-col items-center cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 rounded-4xl"
               style={{ touchAction: isMobile && isActive ? "pan-y" : "auto" }}
               initial={{ x: 0, rotate: (index - 1) * 3, opacity: 0 }}
               animate={{
