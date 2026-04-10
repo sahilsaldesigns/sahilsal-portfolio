@@ -19,7 +19,7 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
   if (!links || links.length === 0) return null;
 
   return (
-    <div className={className ?? "w-full flex justify-center relative top-[-72px] min-[365px]:top-[-108px] md:top-[-116px] z-1"}>
+    <div className={className ?? "w-full flex justify-center relative top-[-72px] min-[416px]:top-[-108px] md:top-[-116px] z-1"}>
       <div className="
         px-[25px] py-4 md:p-6 md:py-[23pxtext-center font-medium leading-tight text-[20px]!  sm:text-[12px] text-black!]
         bg-white border-[3px] border-[#E7E7E7]

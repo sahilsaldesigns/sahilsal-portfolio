@@ -338,23 +338,17 @@ export default function CardSlider(props) {
       ref={sectionRef}
       className="relative w-auto h-[580px] md:h-[608px] [@media(max-width:364px)]:h-[480px] flex justify-center overflow-hidden bg-white -mx-4"
     >
-      <Image
+      <img
         src="/uploads/img/card-slider-bg-mob.svg"
         alt=""
         aria-hidden="true"
-        width={500}
-        height={608}
-        sizes="(max-width: 429px) 100vw, 0px"
-        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:365px)]:hidden"
+        className="absolute inset-0 w-full h-full z-1 object-cover [@media(min-width:416px)]:hidden"
       />
-      <Image
+      <img
         src="/uploads/img/card-slider-bg.png"
         alt=""
         aria-hidden="true"
-        width={1920}
-        height={608}
-        sizes="(max-width: 429px) 0px, 100vw"
-        className="absolute inset-0 w-full h-full z-1 object-cover hidden [@media(min-width:365px)]:block [@media(min-width:1330px)]:object-fill"
+        className="absolute inset-0 w-full h-full z-1 object-cover hidden [@media(min-width:416px)]:block [@media(min-width:1330px)]:object-fill"
       />
 
       {/* Content Layer */}
