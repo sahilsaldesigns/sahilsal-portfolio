@@ -5,6 +5,13 @@ import { useEffect, useRef } from "react";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ReactLenis, useLenis } from 'lenis/react';
+import LinkPreview from "../../../components/utils/LinkPreview";
+
+const tinaComponents = {
+  a: ({ url, children }: { url: string; children: React.ReactNode }) => (
+    <LinkPreview href={url}>{children}</LinkPreview>
+  ),
+};
 
 function ParallaxVideo({ src }: { src: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -260,7 +267,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                         prose-ul:list-disc prose-ol:list-decimal
                         prose-li:text-gray-700"
                       >
-                        <TinaMarkdown content={block.content} />
+                        <TinaMarkdown content={block.content} components={tinaComponents} />
                       </div>
                     )}
 

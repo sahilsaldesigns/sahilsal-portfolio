@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import MediumIcon from "../icons/Medium";
 
 interface LinkData {
   title: string;
-  image: string;
+  image?: string;
+  iconNode?: React.ReactNode;
 }
 
 // Hardcoded mapping keyed by LinkedIn profile slug
@@ -20,10 +22,18 @@ const LINK_DATA_MAP: Record<string, LinkData> = {
 };
 
 function getLinkData(href: string): LinkData | null {
-  const match = href.match(/linkedin\.com\/in\/([^/?#]+)/);
-  if (match) {
-    const slug = match[1].replace(/\/$/, "");
+  // LinkedIn
+  const linkedInMatch = href.match(/linkedin\.com\/in\/([^/?#]+)/);
+  if (linkedInMatch) {
+    const slug = linkedInMatch[1].replace(/\/$/, "");
     return LINK_DATA_MAP[slug] ?? null;
+  }
+  // Medium
+  if (/medium\.com/.test(href)) {
+    return {
+      title: "",
+      iconNode: <MediumIcon className="w-5 h-4 shrink-0" />,
+    };
   }
   return null;
 }
@@ -171,7 +181,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
             width: "max-content",
             maxWidth: `min(${CARD_MAX_WIDTH}px, calc(100vw - 24px))`,
           }}
-          className={`absolute z-50 cursor-pointer ${
+          className={`absolute z-[9999] cursor-pointer ${
             position === "top" ? "bottom-full mb-3" : "top-full mt-3"
           } transition-all duration-200 ease-out ${visible ? "opacity-100" : "opacity-0"}`}
         >
@@ -180,13 +190,16 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
               className="flex items-center gap-2 xs:gap-3 px-3 xs:px-4 py-2.5 xs:py-3 rounded-2xl"
               style={{ background: "#141414" }}
             >
-              <span className="flex-shrink-0 w-7 h-7 xs:w-9 xs:h-9 rounded-full overflow-hidden bg-neutral-700">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={linkData.image} alt="" className="w-full h-full object-cover" />
-              </span>
-              <span className="text-white text-xs xs:text-sm font-medium leading-snug min-w-0 break-words mob:whitespace-nowrap">
-                {linkData.title}
-              </span>
+              <span className={`flex-shrink-0 w-7 h-7 xs:w-9 xs:h-9 rounded-xl overflow-hidden flex items-center justify-center ${linkData.image ? "bg-neutral-700" : "bg-black"}`}>
+                {linkData.image ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img src={linkData.image} alt="" className="w-full h-full object-cover" />
+                ) : linkData.iconNode}</span>
+              {linkData.title && (
+                <span className="text-white text-xs xs:text-sm font-medium leading-snug min-w-0 break-words mob:whitespace-nowrap">
+                  {linkData.title}
+                </span>
+              )}
             </span>
 
             {/* Triangle arrow */}
@@ -244,13 +257,17 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
             className="flex items-center gap-2.5 px-3 py-2.5 rounded-2xl no-underline"
             style={{ background: "#141414" }}
           >
-            <span className="flex-shrink-0 w-7 h-7 rounded-full overflow-hidden bg-neutral-700">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={linkData.image} alt="" className="w-full h-full object-cover" />
+            <span className={`flex-shrink-0 w-7 h-7 rounded-xl overflow-hidden flex items-center justify-center ${linkData.image ? "bg-neutral-700" : "bg-black"}`}>
+              {linkData.image ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={linkData.image} alt="" className="w-full h-full object-cover" />
+              ) : linkData.iconNode}
             </span>
-            <span className="text-white text-xs font-medium leading-snug break-words mob:whitespace-nowrap min-w-[126px] mob:min-w-0">
-              {linkData.title}
-            </span>
+            {linkData.title && (
+              <span className="text-white text-xs font-medium leading-snug break-words mob:whitespace-nowrap min-w-[126px] mob:min-w-0">
+                {linkData.title}
+              </span>
+            )}
             {/* "Open" hint */}
             <span className="text-neutral-400 text-base ml-1">↗</span>
           </a>

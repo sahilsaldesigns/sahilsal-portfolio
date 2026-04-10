@@ -336,6 +336,11 @@ h6 {
   transform: translateY(0);
 }
 
+.cs-prose.cs-animate {
+  position: relative;
+  z-index: 1;
+}
+
 
 /* =============================================
    UTILITIES
