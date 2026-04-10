@@ -47,7 +47,7 @@ export default function PageIntro({
         <div className="logo-shine-mask">
           <Image
             src="/uploads/img/base-logo.svg"
-            alt="Logo"
+            alt="Sahil Salekar"
             width={62}
             height={62}
             className="intro-logo"

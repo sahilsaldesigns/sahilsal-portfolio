@@ -69,7 +69,8 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
             {/* Mobile image */}
             <Image
               src={mobileImage!}
-              alt={name || "About Hero"}
+              alt=""
+              aria-hidden="true"
               width={343}
               height={250}
               className="block w-full md:hidden  shadow-lg object-cover rounded-[30px] md:rounded-4xl"

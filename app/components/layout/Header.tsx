@@ -39,7 +39,7 @@ export default async function Header() {
   return (
       <header className="flex justify-between items-center py-4 md:pt-8 md:pb-0 z-50">
         {logo ? (
-          <Link href={"/"}>
+          <Link href={"/"} aria-label="Go to homepage">
             <Image
               src={logo}
               alt={globalData?.header?.logo_alt || "Sahil Salekar Logo"}

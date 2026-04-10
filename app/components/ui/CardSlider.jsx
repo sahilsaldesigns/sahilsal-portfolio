@@ -340,7 +340,8 @@ export default function CardSlider(props) {
     >
       <Image
         src="/uploads/img/card-slider-bg-mob.svg"
-        alt="Card slider background"
+        alt=""
+        aria-hidden="true"
         width={500}
         height={608}
         sizes="(max-width: 429px) 100vw, 0px"
@@ -348,7 +349,8 @@ export default function CardSlider(props) {
       />
       <Image
         src="/uploads/img/card-slider-bg.png"
-        alt="Card slider background"
+        alt=""
+        aria-hidden="true"
         width={1920}
         height={608}
         sizes="(max-width: 429px) 0px, 100vw"
