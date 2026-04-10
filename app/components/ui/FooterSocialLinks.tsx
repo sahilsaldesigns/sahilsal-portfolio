@@ -29,7 +29,7 @@ export default function FooterSocialLinks() {
       )}
       <SocialLinks
         links={LINKS}
-        className="w-full flex justify-center mb-6"
+        className="w-full flex justify-center mb-[34px]"
       />
     </>
   );
