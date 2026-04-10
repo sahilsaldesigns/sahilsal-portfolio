@@ -2,7 +2,6 @@
 
 import React from "react";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
 
 export type Phase = 'waiting' | 'content' | 'lines';
 
@@ -16,10 +15,8 @@ type IntroContextType = {
 const IntroContext = createContext<IntroContextType | undefined>(undefined);
 
 export function IntroProvider({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isHome = pathname === '/';
-  const [hasNavigated, setHasNavigated] = useState(!isHome);
-  const [phase, setPhase] = useState<Phase>(isHome ? 'waiting' : 'lines');
+  const [hasNavigated, setHasNavigated] = useState(false);
+  const [phase, setPhase] = useState<Phase>('waiting');
   const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {

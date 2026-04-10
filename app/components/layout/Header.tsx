@@ -1,22 +1,12 @@
 import Link from "next/link";
-import fs from "fs";
-import path from "path";
 import React from "react";
 import Image from "next/image";
 import { ExperimentalGetTinaClient } from "../../../tina/__generated__/types";
 import ActiveNav from "./ActiveNav";
 import MobileMenu from "./MobileMenu";
+import globalJsonFallback from "../../../content/global/global.json";
 
 type NavItem = { href: string; label?: string; target: string };
-function readGlobalFile() {
-  try {
-    const file = path.join(process.cwd(), "content", "global", "global.json");
-    const raw = fs.readFileSync(file, "utf8");
-    return JSON.parse(raw);
-  } catch (e) {
-    return { header: { nav: [] } };
-  }
-}
 
 export default async function Header() {
   let globalData: any = null;
@@ -30,7 +20,7 @@ export default async function Header() {
   }
 
   if (!globalData) {
-    globalData = readGlobalFile();
+    globalData = globalJsonFallback;
   }
 
   const nav: NavItem[] = (globalData?.header?.nav as NavItem[]) || [];
