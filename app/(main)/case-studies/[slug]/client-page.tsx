@@ -8,9 +8,10 @@ import { ReactLenis, useLenis } from 'lenis/react';
 import LinkPreview from "../../../components/utils/LinkPreview";
 
 const tinaComponents = {
-  a: ({ url, children }: { url: string; children: React.ReactNode }) => (
-    <LinkPreview href={url}>{children}</LinkPreview>
-  ),
+  a: (props: { url: string; children: import("react").ReactNode } | undefined) => {
+    if (!props?.url) return <></>;
+    return <LinkPreview href={props.url}>{props.children}</LinkPreview>;
+  },
 };
 
 function ParallaxVideo({ src }: { src: string }) {
