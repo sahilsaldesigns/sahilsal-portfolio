@@ -71,8 +71,9 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
               src={mobileImage!}
               alt=""
               aria-hidden="true"
-              width={343}
-              height={250}
+              width={750}
+              height={550}
+              quality={100}
               className="block w-full md:hidden  shadow-lg object-cover rounded-[30px] md:rounded-4xl"
               priority
             />

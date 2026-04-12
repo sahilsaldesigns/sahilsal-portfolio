@@ -31,9 +31,6 @@ export const metadata: Metadata = {
     template: `%s | Sahil Salekar`,
   },
   description: pageDescription,
-  alternates: {
-    canonical: siteUrl,
-  },
   openGraph: {
     type: "website",
     url: siteUrl,

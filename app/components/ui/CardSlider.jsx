@@ -9,20 +9,20 @@ const defaultCards = [
   {
     id: 1,
     title: "Designing wait-time visibility experience for busy brewpubs",
-    image: "/uploads/img/1.png",
+    image: "/uploads/img/case-study-banner-1.webp",
     caseStudySlug: "designing-wait-time-visibility-for-busy-brewpubs",
     comingSoon: false,
   },
   {
     id: 2,
     title: "AI that runs your work in the background",
-    image: "/uploads/img/2.jpg",
+    image: "/uploads/img/case-study-banner-2.webp",
     comingSoon: true,
   },
   {
     id: 3,
     title: "Management app for owners of homes & hostels",
-    image: "/uploads/img/3.png",
+    image: "/uploads/img/case-study-banner-3.webp",
     comingSoon: true,
   },
 ];

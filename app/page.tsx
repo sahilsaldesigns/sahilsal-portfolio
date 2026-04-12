@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import ClientPage from "./(main)/[...filename]/client-page";
 import client from "../tina/__generated__/client";
 import PageWithIntro from "./components/ui/PageWithIntro";
 import HomeBgLines from "./components/ui/HomeBgLines";
 import HomeAnimWrapper from "./components/ui/HomeAnimWrapper";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://sahilsal.com",
+  },
+};
 
 const HERO_CONTAINER = "hero-section-container relative overflow-hidden";
 
