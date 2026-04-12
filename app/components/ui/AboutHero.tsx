@@ -4,6 +4,7 @@ import Image from "next/image";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import React, { useEffect, useRef, useState } from "react";
 import LinkPreview from "../utils/LinkPreview";
+import { Container } from "../layout/Container";
 
 interface AboutHeroProps {
   name?: string;
@@ -43,17 +44,16 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
 
   return (
     <section ref={sectionRef} className="w-full py-[26px] md:py-16">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+      <Container className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-12">
         {/* Left: Text Content */}
         <div
-          className={`order-2 md:order-1 space-y-6 transition-all duration-1000 ease-out ${
+          className={`order-2 md:order-1 w-full md:max-w-[550px] space-y-6 transition-all duration-1000 ease-out ${
             isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
           }`}
         >
           {name && <h2 className="text-[24px] md:text-5xl font-lustria mb-4 md:mb-6">{name}</h2>}
           {description && (
             <div className="text-[16px] leading-[26px] md:text-[18px] md:leading-8 tracking-normal capitalize text-gray-700">
-              {/* Pass tinaComponents to override how links are rendered */}
               <TinaMarkdown content={description} components={tinaComponents} />
             </div>
           )}
@@ -62,7 +62,7 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
         {/* Right: Image */}
         {image && (
           <div
-            className={`order-1 md:order-2 flex items-center justify-center transition-all duration-1000 ease-out ${
+            className={`order-1 md:order-2 w-full md:max-w-[415px] flex items-center md:justify-end transition-all duration-1000 ease-out ${
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
             }`}
           >
@@ -74,21 +74,21 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
               width={750}
               height={550}
               quality={100}
-              className="block w-full md:hidden  shadow-lg object-cover rounded-[30px] md:rounded-4xl"
+              className="block w-full md:hidden shadow-lg object-cover rounded-[12px]"
               priority
             />
             {/* Desktop image */}
             <Image
               src={image}
               alt={name || "About Hero"}
-              width={400}
-              height={400}
-              className="hidden md:block w-full h-auto rounded-3xl shadow-lg object-contain max-w-sm"
+              width={415}
+              height={415}
+              className="hidden md:block w-full h-auto rounded-[30px] shadow-lg object-contain"
               priority
             />
           </div>
         )}
-      </div>
+      </Container>
     </section>
   );
 }

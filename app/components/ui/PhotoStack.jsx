@@ -68,7 +68,7 @@ const StackCard = memo(function StackCard({ src, index, total, scrollYProgress }
         className="
           w-[70vw] max-w-[500px]
           h-[93vw] max-h-[80vh]
-          object-cover rounded-3xl
+          object-cover rounded-xl md:rounded-[30px]
           md:w-[40vw] md:max-w-[500px] md:h-[53vw] md:max-h-[80vh]
         "
       />
