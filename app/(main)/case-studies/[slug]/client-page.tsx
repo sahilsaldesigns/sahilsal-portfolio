@@ -24,7 +24,7 @@ function ParallaxVideo({ src }: { src: string }) {
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
     const maxOffset = rect.height * 0.05;
     const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
-    videoRef.current.style.transform = `translateY(${offset}px) scale(1.10)`;
+    videoRef.current.style.transform = `translateY(${offset}px) scale(1.05)`;
   });
 
   return (
@@ -54,7 +54,7 @@ function ParallaxImage({ src, alt }: { src: string; alt: string }) {
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
     const maxOffset = rect.height * 0.04;
     const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.07, maxOffset));
-    innerRef.current.style.transform = `translateY(${offset}px) scale(1.08)`;
+    innerRef.current.style.transform = `translateY(${offset}px) scale(1.04)`;
   });
 
   return (
