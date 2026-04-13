@@ -204,7 +204,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                     playsInline
                     controls={false}
                     aria-label={`${caseStudy.title} hero video`}
-                    className="w-full h-full bg-white border-2 border-white"
+                    className="w-full h-full bg-white border-2 border-white scale-110"
                   >
                     Your browser does not support the video tag.
                   </video>
