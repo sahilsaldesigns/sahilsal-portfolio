@@ -24,7 +24,6 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
         px-[25px] py-4 md:p-6 md:py-[23pxtext-center font-medium leading-tight text-[20px]!  sm:text-[12px] text-black!]
         bg-white border-[3px] border-[#E7E7E7]
         rounded-[30px]
-        shadow-md
         flex items-center gap-[25px] md:gap-8
       ">
         {links.map((item, index) => (
