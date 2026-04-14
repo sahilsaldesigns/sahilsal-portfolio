@@ -8,7 +8,7 @@ const LINKS = [
   { icon: "linkedin", url: "https://www.linkedin.com/in/sahilsal/" },
   { icon: "medium", url: "https://medium.com/@sahil.saldesigns" },
   { icon: "behance", url: "https://www.behance.net/sahilsal" },
-  { icon: "dribbble", url: "https://dribbble.com/sahilsal" },
+  { icon: "dribbble", url: "#" },
 ];
 
 export default function FooterSocialLinks() {
