@@ -47,7 +47,7 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
       <Container className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 md:gap-12">
         {/* Left: Text Content */}
         <div
-          className={`order-2 md:order-1 w-full md:max-w-[550px] space-y-6 transition-all duration-1000 ease-out ${
+          className={`order-2 md:order-1 w-full md:max-w-[550px] space-y-6 transition-[opacity,transform] duration-1000 ease-out ${
             isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
           }`}
         >
@@ -62,7 +62,7 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
         {/* Right: Image */}
         {image && (
           <div
-            className={`order-1 md:order-2 w-full md:max-w-[415px] flex items-center md:justify-end transition-all duration-1000 ease-out ${
+            className={`order-1 md:order-2 w-full md:max-w-[415px] flex items-center md:justify-end transition-[opacity,transform] duration-1000 ease-out ${
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
             }`}
           >

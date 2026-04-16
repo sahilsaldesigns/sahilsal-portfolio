@@ -41,7 +41,7 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
                 ${ICONS[item.icon].hoverBg} ${ICONS[item.icon].bgColor}
                 rounded-lg
                 flex items-center justify-center
-                hover:scale-105 transition-all duration-300
+                hover:scale-105 transition-transform duration-300
                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black
                 ${ICONS[item.icon].className || ""}
               `}

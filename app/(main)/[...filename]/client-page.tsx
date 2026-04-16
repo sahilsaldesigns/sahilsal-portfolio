@@ -27,7 +27,7 @@ export default function ClientPage(props: ClientPageProps) {
   const content = data.page.body;
   return (
     <>
-     <ReactLenis root />
+     <ReactLenis root options={{ lerp: 0.08, duration: 1.4, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) }} />
     <div data-tina-field={tinaField(data.page, "body")} className={props.className}>
       <TinaMarkdown content={content} />
       <div className="block-wrapper" data-tina-field={tinaField(data.page, "blocks")}>

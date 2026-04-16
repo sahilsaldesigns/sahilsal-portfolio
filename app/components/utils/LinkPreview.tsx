@@ -153,7 +153,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
         onClick={handleLinkClick}
         className={
           className ??
-          "relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-current after:transition-[width] after:duration-300 after:ease-in-out hover:after:w-full"
+          "relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:scale-x-0 after:origin-left after:bg-current after:transition-transform after:duration-300 after:ease-in-out hover:after:scale-x-100"
         }
       >
         {children}

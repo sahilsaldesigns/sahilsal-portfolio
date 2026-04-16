@@ -50,6 +50,7 @@ h6 {
   inset: 0;
   background: white;
   animation: reveal-edge 5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  will-change: transform;
 }
 
 /* Left image: reveal from center → left */
@@ -87,26 +88,12 @@ h6 {
   overflow: hidden;
 }
 
-.page-intro.is-exiting {
-  animation: screenSlideUp 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
-}
-
-/* Stop looping animations once the loader starts sliding away */
-.page-intro.is-exiting .logo-wrapper,
-.page-intro.is-exiting .intro-logo,
-.page-intro.is-exiting .logo-shine-mask::after {
-  animation-play-state: paused;
-}
-
-/* Logo starts at bottom, throws to exact page center */
+/* Logo wrapper — transform/animation handled by GSAP */
 .logo-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateX(-50%) translateY(calc(50vh + 50%)) scale(0.9);
-  animation:
-    logoThrow 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.6s,
-    logoBreathe 2s ease-in-out infinite 2.9s;
+  opacity: 0;
 }
 
 .intro-logo {
@@ -114,6 +101,7 @@ h6 {
   height: 62px;
   opacity: 1;
   animation: logoShine 2s ease-in-out infinite 2.9s;
+  will-change: transform, filter;
 }
 
 @media (max-width: 768px) {
@@ -150,15 +138,6 @@ h6 {
   pointer-events: none;
 }
 
-@keyframes logoThrow {
-  0% {
-    transform: translateX(-50%) translateY(calc(50vh + 50%)) scale(0.85);
-    filter: blur(2px);
-  }
-  100% {
-    transform: translateX(-50%) translateY(-50%) scale(1);
-  }
-}
 
 @keyframes logoShine {
   0% {
@@ -193,16 +172,6 @@ h6 {
   }
 }
 
-@keyframes logoBreathe {
-  0%, 100% { transform: translateX(-50%) translateY(-50%) scale(1); }
-  50%       { transform: translateX(-50%) translateY(-50%) scale(1.08); }
-}
-
-@keyframes screenSlideUp {
-  to {
-    transform: translateY(-100%);
-  }
-}
 
 
 /* =============================================
@@ -212,6 +181,7 @@ h6 {
 /* Transition always present — fires when phase changes away from 'waiting' */
 .hero-section-container {
   transition: opacity 1.2s ease, transform 1.2s ease;
+  will-change: opacity, transform;
 }
 
 /* waiting: hide silently behind loader */
@@ -328,6 +298,7 @@ h6 {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.55s ease, transform 0.55s ease;
+  will-change: opacity, transform;
 }
 
 .cs-animate.cs-visible {
@@ -340,6 +311,20 @@ h6 {
   z-index: 1;
 }
 
+
+/* =============================================
+   PHOTO STACK — scroll arrow bounce
+   ============================================= */
+@keyframes photo-scroll-arrow {
+  0%   { transform: translateY(0px);   opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(34px);  opacity: 0; }
+}
+
+.photo-scroll-arrow {
+  animation: photo-scroll-arrow 1.5s linear infinite;
+}
 
 /* =============================================
    UTILITIES
@@ -359,4 +344,54 @@ svg:hover .dribble-path {
 
 .link-preview-bounce {
   animation: linkPreviewBounce 2.8s ease-in-out infinite;
+}
+
+
+/* =============================================
+   PHOTO PAGE — CONTROLLED SCROLL
+   ============================================= */
+/* Hide scrollbar while PhotoStack is mounted (controlled/snap scroll feel) */
+.photo-page-active {
+  scrollbar-width: none;       /* Firefox */
+}
+.photo-page-active::-webkit-scrollbar {
+  display: none;               /* Chrome / Safari */
+}
+
+
+/* =============================================
+   PHOTO STACK LOADER
+   ============================================= */
+.photo-loader {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.photo-loader-count {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #999;
+}
+
+.photo-loader-bar {
+  width: 120px;
+  height: 2px;
+  background: #e5e5e5;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.photo-loader-bar > div {
+  height: 100%;
+  background: #111;
+  border-radius: 2px;
+  transition: width 0.2s ease;
 }
