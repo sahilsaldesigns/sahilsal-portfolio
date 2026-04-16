@@ -66,10 +66,12 @@ const StackCard = memo(function StackCard({ src, index, total, scrollYProgress }
         draggable={false}
         style={{ filter: dropShadow }}
         className="
-          w-[70vw] max-w-[500px]
-          h-[93vw] max-h-[80vh]
+          w-[82vw] h-[109vw] max-h-[72vh]
+          md:w-[42vw] md:h-[56vw] md:max-h-[78vh]
+          lg:w-[36vw] lg:h-[48vw] lg:max-h-[none]
+          xl:w-[30vw] xl:h-[40vw]
+          2xl:w-[26vw] 2xl:h-[35vw]
           object-cover rounded-xl md:rounded-[30px]
-          md:w-[40vw] md:max-w-[500px] md:h-[53vw] md:max-h-[80vh]
         "
       />
     </motion.div>
