@@ -30,6 +30,7 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
           <div key={index} className="flex items-center gap-[25px] md:gap-6">
 
             {/* Social Link */}
+            {item.url && item.url !== "#" ? (
             <Link
               href={item.url}
               target="_blank"
@@ -47,6 +48,21 @@ export default function SocialLinks({ links = [], className }: { links: any[]; c
             >
               {ICONS[item.icon].component}
             </Link>
+            ) : (
+            <span
+              aria-label={ICONS[item.icon].label}
+              className={`
+                h-6 w-6 md:h-7 md:w-7
+                ${ICONS[item.icon].bgColor}
+                rounded-lg
+                flex items-center justify-center
+                cursor-default
+                ${ICONS[item.icon].className || ""}
+              `}
+            >
+              {ICONS[item.icon].component}
+            </span>
+            )}
 
             {/* Vertical Divider (except last item) */}
             {index < links.length - 1 && (
