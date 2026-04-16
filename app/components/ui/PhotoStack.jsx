@@ -110,11 +110,9 @@ export default function ScrollStackGallery({ images }) {
       gsap.set(card, { y: "100%", opacity: 0, scale: 1, force3D: true, rotation: CARD_ROTATIONS[i % CARD_ROTATIONS.length] });
     });
     gsap.set(fixedHeadingRef.current,  { opacity: 0, y: -10 });
-    gsap.set(ctaRef.current,           { opacity: 0, y: 20, willChange: "opacity, transform" });
 
     const firstMid  = 0.5 / n;
     const lastStart = (n - 1) / n;
-    const lastMid   = lastStart + 0.5 / n;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -131,7 +129,7 @@ export default function ScrollStackGallery({ images }) {
     tl.to(arrowsRef.current,         { opacity: 0,            duration: 0.05, ease: "none" }, 0);
     tl.to(fixedHeadingRef.current,   { opacity: 1, y: 0,      duration: 0.04, ease: "none" }, firstMid);
     tl.to(fixedHeadingRef.current,   { opacity: 0,            duration: 0.04, ease: "none" }, lastStart);
-    tl.to(ctaRef.current,            { opacity: 1, y: 0,      duration: 0.04, ease: "none" }, lastMid);
+
 
     cards.forEach((card, i) => {
       const segStart = i / n;
@@ -148,7 +146,7 @@ export default function ScrollStackGallery({ images }) {
         tl.to(cards[i - 1], { filter: "blur(3px)", duration: blurDuration, ease: "none" }, blurStart);
       }
 
-      // Hide cards buried 3+ levels deep — avoids stacking up GPU compositing layers
+      // Hide cards buried 3+ levels deep and release their GPU layer
       if (i > 2) {
         tl.set(cards[i - 3], { visibility: "hidden" }, segStart);
       }
