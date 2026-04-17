@@ -18,7 +18,7 @@ export default function FooterSocialLinks() {
   return (
     <>
       {(pathname === "/about" || pathname.startsWith("/case-studies/")) && (
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-screen max-h-[140px] h-full pointer-events-none -z-10">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-screen max-h-[158px] h-full pointer-events-none -z-10">
           <Image
             src="/uploads/img/about-footer-bg.svg"
             alt=""
