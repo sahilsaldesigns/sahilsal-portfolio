@@ -27,37 +27,30 @@ const defaultCards = [
   },
 ];
 
-const CardContent = ({ card, cardWidth, cardHeight, bloom }) => {
+const CardContent = ({ card, cardWidth, cardHeight, bloom, isMobile, isHovered, onHoverChange }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
   const cardRef = useRef(null);
 
   const handleMouseMove = (e) => {
-    if (!card.comingSoon || !cardRef.current) return;
-    
+    if (isMobile || !card.comingSoon || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
-    // Calculate position relative to card center
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    
-    // Parallax offset - INVERTED (button moves away from cursor)
     const offsetX = -((x - centerX) / centerX) * 20;
     const offsetY = -((y - centerY) / centerY) * 20;
-    
     setMousePosition({ x: offsetX, y: offsetY });
   };
 
   const handleMouseEnter = () => {
-    if (card.comingSoon) {
-      setIsHovered(true);
-    }
+    if (isMobile) return;
+    if (card.comingSoon) onHoverChange(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    if (isMobile) return;
+    onHoverChange(false);
     setMousePosition({ x: 0, y: 0 });
   };
 
@@ -136,6 +129,7 @@ export default function CardSlider(props) {
   const { phase } = useIntro();
   const [bloom, setBloom] = useState(false);
   const [current, setCurrent] = useState(0);
+  const [hoveredCard, setHoveredCard] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -198,6 +192,8 @@ export default function CardSlider(props) {
       clearTimeout(inViewTimeoutRef.current);
     };
   }, []);
+
+  useEffect(() => { setHoveredCard(null); }, [current]);
 
   const handleContainerComplete = useCallback(() => {
     bloomTimeoutRef.current = setTimeout(() => setBloom(true), 1200);
@@ -262,17 +258,15 @@ export default function CardSlider(props) {
     lastClickTime.current = now;
 
     if (isMobile) {
-      // On mobile, only allow clicks on the active card
-      if (index !== current) {
-        // Clicking non-active cards does nothing
+      if (index !== current) return;
+      if (card.comingSoon) {
+        // First tap shows overlay, second tap dismisses
+        setHoveredCard(hoveredCard === index ? null : index);
         return;
       }
-      
-      // If already active and has link (not coming soon), navigate
-      if (card.caseStudySlug && !card.comingSoon) {
+      if (card.caseStudySlug) {
         router.push(`/case-studies/${card.caseStudySlug}`);
       }
-      // If coming soon, do nothing (no navigation attempt)
     } else {
       // Desktop behavior - navigate immediately if has link
       if (card.caseStudySlug && !card.comingSoon) {
@@ -385,7 +379,8 @@ export default function CardSlider(props) {
               onDragStart={isMobile && isActive ? handleDragStart : undefined}
               onDragEnd={isMobile && isActive ? handleDragEnd : undefined}
               onHoverStart={() => { if (!isMobile) { setIsHoveringSlider(true); setCurrent(index); } }}
-              onClick={() => handleCardClick(card, index)}
+              onTap={() => handleCardClick(card, index)}
+              onClick={() => !isMobile && handleCardClick(card, index)}
               onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleCardClick(card, index); } }}
               role="button"
               tabIndex={isActive ? 0 : -1}
@@ -412,7 +407,10 @@ export default function CardSlider(props) {
                 cardWidth={cardWidth}
                 cardHeight={cardHeight}
                 isActive={isActive}
+                isMobile={isMobile}
                 bloom={bloom}
+                isHovered={hoveredCard === index}
+                onHoverChange={(val) => setHoveredCard(val ? index : null)}
               />
             </motion.div>
           );
