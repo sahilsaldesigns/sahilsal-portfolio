@@ -53,7 +53,7 @@ export default function AboutHero({ name, description, image, imageMobile, useSa
         >
           {name && <h2 className="text-[24px] md:text-5xl font-lustria mb-4 md:mb-6">{name}</h2>}
           {description && (
-            <div className="text-[16px] leading-[26px] md:text-[18px] md:leading-8 tracking-normal text-gray-700">
+            <div className="text-[16px] leading-[26px] md:text-[18px] md:leading-8 tracking-normal text-[#757575]">
               <TinaMarkdown content={description} components={tinaComponents} />
             </div>
           )}

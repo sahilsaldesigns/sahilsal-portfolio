@@ -266,7 +266,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                         prose-strong:text-gray-900 prose-strong:font-semibold
                         prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
                         prose-ul:list-disc prose-ol:list-decimal
-                        prose-li:text-gray-700"
+                        prose-li:text-[#757575]"
                       >
                         <TinaMarkdown content={block.content} components={tinaComponents} />
                       </div>

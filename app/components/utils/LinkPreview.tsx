@@ -268,8 +268,6 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
                 {linkData.title}
               </span>
             )}
-            {/* "Open" hint */}
-            <span className="text-neutral-400 text-base ml-1">↗</span>
           </a>
         </span>
       )}
