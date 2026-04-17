@@ -64,7 +64,7 @@ const CardContent = ({ card, cardWidth, cardHeight, bloom, isMobile, isHovered, 
       onMouseLeave={handleMouseLeave}
     >
       <div className="w-full h-full rounded-4xl overflow-hidden bg-white shadow-inner flex flex-col relative p-6 sm:p-4 md:p-6">
-        <div className="flex-1 overflow-hidden relative border border-gray-200 rounded-xl">
+        <div className="flex-1 overflow-hidden relative  rounded-xl">
           <Image
             src={card.image}
             alt={card.title}
@@ -193,7 +193,7 @@ export default function CardSlider(props) {
     };
   }, []);
 
-  useEffect(() => { setHoveredCard(null); }, [current]);
+  useEffect(() => { if (isMobile) setHoveredCard(null); }, [current, isMobile]);
 
   const handleContainerComplete = useCallback(() => {
     bloomTimeoutRef.current = setTimeout(() => setBloom(true), 1200);
