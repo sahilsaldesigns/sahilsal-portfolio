@@ -52,6 +52,12 @@ const caseStudy: Collection = {
           name: "videoUrl",
           label: "Video URL",
         },
+        {
+          type: "image",
+          name: "videoPoster",
+          label: "Video Poster Image",
+          description: "Thumbnail shown while the video loads",
+        },
       ],
     },
     {
@@ -111,6 +117,12 @@ const caseStudy: Collection = {
               type: "string",
               name: "videoUrl",
               label: "Video URL",
+            },
+            {
+              type: "image",
+              name: "videoPoster",
+              label: "Video Poster Image",
+              description: "Thumbnail shown while the video loads",
             },
             {
               type: "string",

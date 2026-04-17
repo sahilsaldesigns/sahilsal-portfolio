@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "../../../components/layout/Container";
 import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { ReactLenis, useLenis } from 'lenis/react';
@@ -14,9 +14,10 @@ const tinaComponents = {
   },
 };
 
-function ParallaxVideo({ src }: { src: string }) {
+function ParallaxVideo({ src, poster }: { src: string; poster?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [ready, setReady] = useState(false);
 
   useLenis(() => {
     if (!containerRef.current || !videoRef.current) return;
@@ -29,6 +30,20 @@ function ParallaxVideo({ src }: { src: string }) {
 
   return (
     <div ref={containerRef} className="relative w-full overflow-hidden rounded-[16px] lg:rounded-xl bg-gray-100">
+      {poster && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-700"
+          style={{
+            opacity: ready ? 0 : 1,
+            backgroundImage: `url(${poster})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(24px)",
+            transform: "scale(1.08)",
+          }}
+        />
+      )}
       <video
         ref={videoRef}
         src={src}
@@ -36,10 +51,48 @@ function ParallaxVideo({ src }: { src: string }) {
         muted
         loop
         playsInline
+        preload="metadata"
         aria-label="Case study video"
         style={{ willChange: "transform" }}
         className="w-full h-full"
+        onCanPlay={() => setReady(true)}
       />
+    </div>
+  );
+}
+
+function HeroVideo({ src, poster, label }: { src: string; poster?: string; label: string }) {
+  const [ready, setReady] = useState(false);
+  return (
+    <div className="relative w-full lg:w-[960px] lg:max-h-[590px] mx-auto overflow-hidden rounded-[16px] lg:rounded-[55px] bg-white border-2 border-white">
+      {poster && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 z-10 pointer-events-none transition-opacity duration-700"
+          style={{
+            opacity: ready ? 0 : 1,
+            backgroundImage: `url(${poster})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(24px)",
+            transform: "scale(1.08)",
+          }}
+        />
+      )}
+      <video
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        controls={false}
+        preload="metadata"
+        aria-label={label}
+        className="w-full h-full bg-white border-2 border-white scale-110"
+        onCanPlay={() => setReady(true)}
+      >
+        Your browser does not support the video tag.
+      </video>
     </div>
   );
 }
@@ -193,22 +246,11 @@ export default function CaseStudyPage(props: CaseStudyData) {
 
             {caseStudy.heroMedia.mediaType === "video" &&
               caseStudy.heroMedia.videoUrl && (
-                <div
-                  className="relative w-full lg:w-[960px] lg:max-h-[590px] mx-auto overflow-hidden rounded-[16px] lg:rounded-[55px] bg-white border-2 border-white"
-                >
-                  <video
-                    src={caseStudy.heroMedia.videoUrl}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    controls={false}
-                    aria-label={`${caseStudy.title} hero video`}
-                    className="w-full h-full bg-white border-2 border-white scale-110"
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
+                <HeroVideo
+                  src={caseStudy.heroMedia.videoUrl!}
+                  poster={caseStudy.heroMedia.videoPoster || undefined}
+                  label={`${caseStudy.title} hero video`}
+                />
               )}
           </div>
         )}
@@ -266,7 +308,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                         prose-strong:text-gray-900 prose-strong:font-semibold
                         prose-a:text-blue-600 prose-a:no-underline hover:prose-a:text-blue-700 hover:prose-a:underline
                         prose-ul:list-disc prose-ol:list-decimal
-                        prose-li:text-gray-700"
+                        prose-li:text-[#757575]"
                       >
                         <TinaMarkdown content={block.content} components={tinaComponents} />
                       </div>
@@ -300,7 +342,7 @@ export default function CaseStudyPage(props: CaseStudyData) {
                                 />
                               )}
                               {isVideo && (
-                                <ParallaxVideo src={mediaItem.videoUrl} />
+                                <ParallaxVideo src={mediaItem.videoUrl} poster={mediaItem.videoPoster || undefined} />
                               )}
                               <hr className="border-gray-200 mt-[25px] mb-[32px] lg:mt-12 lg:mb-12" />
                             </div>

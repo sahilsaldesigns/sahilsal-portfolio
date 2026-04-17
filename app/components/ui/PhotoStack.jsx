@@ -203,7 +203,7 @@ export default function ScrollStackGallery({ images }) {
             onClick={handleArrowClick}
             className="fixed left-1/2 top-[60%] -translate-x-1/2 z-[999] cursor-pointer"
           >
-            <div className="relative w-4 h-[54px]">
+            <div className="relative w-4 h-[54px]" style={{ maskImage: "linear-gradient(to bottom, transparent, black 45%, black 50%, transparent)" }}>
               {[0, 0.5, 1.0].map((delay) => (
                 <div key={delay} className="absolute left-0 top-0 photo-scroll-arrow" style={{ animationDelay: `${delay}s` }}>
                   <svg aria-hidden="true" focusable="false" width="16" height="10" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
