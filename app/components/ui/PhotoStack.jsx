@@ -238,7 +238,9 @@ export default function ScrollStackGallery({ images }) {
 
         <div ref={ctaRef} className="flex flex-col items-center justify-center text-center pb-6 px-4">
           <p className="text-[18px] leading-[30px] md:text-base md:leading-normal text-[#757575] mb-6 max-w-md">
-            {"Spotted something you liked? Let's take it to the 'gram"}
+            {"Spotted something you liked?"}
+            <br className="md:hidden" />
+            {" Let's take it to the 'gram"}
           </p>
           <a
             href="https://www.instagram.com/saahil.sal/?hl=en"
