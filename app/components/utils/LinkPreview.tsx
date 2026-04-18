@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import MediumIcon from "../icons/Medium";
+import Image from "next/image";
 
 interface LinkData {
   title: string;
   image?: string;
   iconNode?: React.ReactNode;
+  cardRadius?: string;
+  cardPadding?: string;
 }
 
 // Hardcoded mapping keyed by LinkedIn profile slug
@@ -32,7 +34,9 @@ function getLinkData(href: string): LinkData | null {
   if (/medium\.com/.test(href)) {
     return {
       title: "",
-      iconNode: <MediumIcon className="w-5 h-4 shrink-0" />,
+      iconNode: <Image src="/uploads/img/medium-logo.svg" width={28} height={28} alt="Medium" className="rounded-[2px]" />,
+      cardRadius: "rounded-[4px]",
+      cardPadding: "px-[9px] py-[11px]",
     };
   }
   return null;
@@ -187,10 +191,10 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
         >
           <span className={`relative block${visible ? " link-preview-bounce" : ""}`}>
             <span
-              className="flex items-center gap-2 xs:gap-3 px-3 xs:px-4 py-2.5 xs:py-3 rounded-2xl"
+              className={`flex items-center gap-2 xs:gap-3 ${linkData.cardPadding ?? "px-3 xs:px-4 py-2.5 xs:py-3"} ${linkData.cardRadius ?? "rounded-2xl"}`}
               style={{ background: "#141414" }}
             >
-              <span className={`flex-shrink-0 w-7 h-7 xs:w-9 xs:h-9 rounded-xl overflow-hidden flex items-center justify-center ${linkData.image ? "bg-neutral-700" : "bg-black"}`}>
+              <span className={`flex-shrink-0 flex items-center justify-center overflow-hidden ${linkData.image ? "w-7 h-7 xs:w-9 xs:h-9 rounded-xl bg-neutral-700" : "w-[28px] h-[28px]"}`}>
                 {linkData.image ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img src={linkData.image} alt="" className="w-full h-full object-cover" />
@@ -254,10 +258,10 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-3 py-2.5 rounded-2xl no-underline"
+            className={`flex items-center gap-2.5 ${linkData.cardPadding ?? "px-3 py-2.5"} no-underline ${linkData.cardRadius ?? "rounded-2xl"}`}
             style={{ background: "#141414" }}
           >
-            <span className={`flex-shrink-0 w-7 h-7 rounded-xl overflow-hidden flex items-center justify-center ${linkData.image ? "bg-neutral-700" : "bg-black"}`}>
+            <span className={`flex-shrink-0 flex items-center justify-center overflow-hidden ${linkData.image ? "w-7 h-7 rounded-xl bg-neutral-700" : "w-[28px] h-[28px]"}`}>
               {linkData.image ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={linkData.image} alt="" className="w-full h-full object-cover" />
