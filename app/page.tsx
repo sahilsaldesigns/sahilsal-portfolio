@@ -7,7 +7,7 @@ import HomeAnimWrapper from "./components/ui/HomeAnimWrapper";
 
 export const metadata: Metadata = {
   alternates: {
-    canonical: "https://sahilsal.com",
+    canonical: "https://www.sahilsal.com",
   },
 };
 

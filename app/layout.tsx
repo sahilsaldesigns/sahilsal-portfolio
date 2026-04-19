@@ -18,7 +18,7 @@ const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
 });
 
-const siteUrl = "https://sahilsal.com";
+const siteUrl = "https://www.sahilsal.com";
 const pageTitle = "Sahil Salekar — UI/UX Designer";
 const pageDescription =
   "Designing UI for ad tech and digital products. Currently at Media.net, Mumbai.";
