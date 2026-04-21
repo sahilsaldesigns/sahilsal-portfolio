@@ -19,7 +19,7 @@ This site serves as Sahil's design portfolio — showcasing selected case studie
 | Framework | [Next.js 15](https://nextjs.org) (App Router) |
 | Language | TypeScript + JavaScript (JSX) |
 | Styling | [Tailwind CSS v4](https://tailwindcss.com) |
-| Animation | [Framer Motion](https://www.framer-motion.com) |
+| Animation | [Framer Motion](https://www.framer-motion.com) + [GSAP](https://gsap.com) (with ScrollTrigger) |
 | Smooth scroll | [Lenis](https://lenis.darkroom.engineering) |
 | CMS | [TinaCMS](https://tina.io) (Git-backed, TinaCloud) |
 | Icons | [react-icons](https://react-icons.github.io/react-icons) |
@@ -119,7 +119,8 @@ sahilsal-portfolio/
 ### Key concepts
 
 - **TinaCMS catch-all route** — `app/(main)/[...filename]/page.tsx` handles all CMS-managed pages (like `/about`). At build time, `generateStaticParams` pre-renders these as static HTML. This takes priority over any same-path `page.tsx` in production.
-- **IntroProvider** — manages the splash screen animation phases (`intro → lines → done`). Child components use `useIntro()` to delay their own entrance until the intro finishes.
+- **IntroProvider** — manages the splash screen animation phases (`intro → lines → done`). Child components use `useIntro()` to delay their own entrance until the intro finishes. The splash screen logo animation itself (`PageIntro.tsx`) is driven by GSAP — throw-in, breathing loop, and exit slide.
+- **Animation split** — Framer Motion handles component-level and state-driven animations (CardSlider, AboutHero). GSAP handles cases that need scroll-linked or precisely sequenced timelines: the photo stack scroll animation (ScrollTrigger + scrub) and the intro splash. Lenis is synced to ScrollTrigger via `useLenis(ScrollTrigger.update)`.
 - **Tina Blocks** — the CMS exposes UI components as "blocks" so editors can compose pages from the admin UI without touching code. Available blocks: `card_slider` and `photo_stack`. New blocks must be registered in `tina/collections/page.js` and mapped in `app/components/layout/BlockRenderer.tsx`.
 - **Content is Git-backed** — all page and case study content lives in the `content/` directory as MDX files. TinaCloud provides the visual editing UI on top of these files.
 
