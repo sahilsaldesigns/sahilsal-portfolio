@@ -8,8 +8,27 @@ export default function MobileMenu({ nav }: { nav: {
   target: string; href: string; label?: string
 }[] }) {
   const [open, setOpen] = useState(false);
+
+  // Notify StickyHeaderWrapper when menu opens/closes
+  useEffect(() => {
+    document.dispatchEvent(new Event(open ? "mobilemenu:open" : "mobilemenu:close"));
+  }, [open]);
+  const [isSticky, setIsSticky] = useState(false);
   const pathname = usePathname();
   const lastPathRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setIsSticky((prev) => {
+        if (!prev && y > 250) return true;
+        if (prev && y < 80) return false;
+        return prev;
+      });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close on route change
   useEffect(() => {
@@ -90,7 +109,7 @@ export default function MobileMenu({ nav }: { nav: {
 
       {/* Compact dropdown card */}
       <div
-        className={`fixed left-0 right-0 top-[62px] pt-[4px] z-999 bg-white shadow-md overflow-hidden transition-all duration-300 ease-[cubic-bezier(.2,.9,.2,1)] origin-top ${
+        className={`fixed left-0 right-0 top-[62px] pt-[4px] z-999 overflow-hidden transition-all duration-300 ease-[cubic-bezier(.2,.9,.2,1)] origin-top ${isSticky && !open ? "bg-white/80 backdrop-blur-lg" : "bg-white"} ${
           open
             ? "opacity-100 scale-y-100 pointer-events-auto"
             : "opacity-0 scale-y-90 pointer-events-none"

@@ -143,6 +143,8 @@ export default function CardSlider(props) {
   const bloomTimeoutRef = useRef(null);
   const inViewTimeoutRef = useRef(null);
   const isAnimatingRef = useRef(false);
+  const autoScrollIntervalRef = useRef(null);
+  const autoScrollResumeTimerRef = useRef(null);
   const cards = props && props.cards ? props.cards : defaultCards;
   const mobileThreshold = 1060;
 
@@ -190,8 +192,29 @@ export default function CardSlider(props) {
       clearTimeout(animationTimeoutRef.current);
       clearTimeout(bloomTimeoutRef.current);
       clearTimeout(inViewTimeoutRef.current);
+      clearInterval(autoScrollIntervalRef.current);
+      clearTimeout(autoScrollResumeTimerRef.current);
     };
   }, []);
+
+  const startAutoScroll = useCallback(() => {
+    clearInterval(autoScrollIntervalRef.current);
+    autoScrollIntervalRef.current = setInterval(() => {
+      if (!isAnimatingRef.current) {
+        setCurrent((c) => (c + 1) % cards.length);
+      }
+    }, 3500);
+  }, [cards.length]);
+
+  // Start autoscroll once the slider has bloomed into view
+  useEffect(() => {
+    if (!bloom) return;
+    startAutoScroll();
+    return () => {
+      clearInterval(autoScrollIntervalRef.current);
+      autoScrollIntervalRef.current = null;
+    };
+  }, [bloom, startAutoScroll]);
 
   useEffect(() => { if (isMobile) setHoveredCard(null); }, [current, isMobile]);
 
@@ -204,6 +227,11 @@ export default function CardSlider(props) {
     event.preventDefault?.();
     setIsDragging(true);
     setDragStartX(info.point.x);
+    // Pause autoscroll while user is sliding
+    clearInterval(autoScrollIntervalRef.current);
+    autoScrollIntervalRef.current = null;
+    clearTimeout(autoScrollResumeTimerRef.current);
+    autoScrollResumeTimerRef.current = null;
   }, []);
 
   const handleDragEnd = useCallback((event, info) => {
@@ -217,6 +245,8 @@ export default function CardSlider(props) {
     // If drag distance is very small (< 10px), treat as tap/click
     if (dragDistance < 10) {
       setIsDragging(false);
+      clearTimeout(autoScrollResumeTimerRef.current);
+      autoScrollResumeTimerRef.current = setTimeout(startAutoScroll, 3500);
       return;
     }
 
@@ -238,7 +268,11 @@ export default function CardSlider(props) {
       setIsDragging(false);
       setIsAnimating(false);
     }, 700);
-  }, [dragStartX, cards.length]);
+
+    // Resume autoscroll 3.5s after user stops sliding
+    clearTimeout(autoScrollResumeTimerRef.current);
+    autoScrollResumeTimerRef.current = setTimeout(startAutoScroll, 3500);
+  }, [dragStartX, cards.length, startAutoScroll]);
 
   const handleCardClick = useCallback((card, index) => {
     // Prevent interaction while dragging or slide animation is in progress
@@ -290,7 +324,10 @@ export default function CardSlider(props) {
         setIsAnimating(false);
       }, 700);
     }
-  }, [current]);
+    // Reset autoscroll timer on dot click
+    clearTimeout(autoScrollResumeTimerRef.current);
+    autoScrollResumeTimerRef.current = setTimeout(startAutoScroll, 3500);
+  }, [current, startAutoScroll]);
 
   // Get responsive card dimensions
   const getCardDimensions = useCallback(() => {
