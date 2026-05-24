@@ -38,9 +38,31 @@ export default function ScrollStackGallery({ images }) {
   const CARD_ROTATIONS = [-2.4, 1.8, -1.5, 2.6, -2.0, 1.4, -2.8, 2.2];
 
   const [contentReady, setContentReady] = useState(false);
+  const [glareKey, setGlareKey] = useState(0);
+  const [ctaHighlight, setCtaHighlight] = useState(false);
+  const ctaSeenRef = useRef(false);
 
   // Keep Lenis and ScrollTrigger on the same RAF tick
   useLenis(ScrollTrigger.update);
+
+  // First-time CTA in view: restart glare from frame 0 + pop the button
+  useEffect(() => {
+    const el = ctaRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !ctaSeenRef.current) {
+          ctaSeenRef.current = true;
+          setGlareKey((k) => k + 1); // remounts glare span → animation restarts at 0%
+          setCtaHighlight(true);
+          setTimeout(() => setCtaHighlight(false), 800);
+        }
+      },
+      { threshold: 0.6 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     document.body.classList.add("photo-page-active");
@@ -247,9 +269,10 @@ export default function ScrollStackGallery({ images }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit saahil.sal on Instagram (opens in new tab)"
-            className="group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black"
+            className={`group relative flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white border border-black shadow-sm overflow-hidden cursor-pointer transition-all duration-[400ms] ease-in-out hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black${ctaHighlight ? " cta-pop" : ""}`}
           >
             <span
+              key={glareKey}
               className="pointer-events-none absolute inset-0 rounded-full"
               style={{
                 background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%)",
@@ -275,6 +298,14 @@ export default function ScrollStackGallery({ images }) {
           40%   { background-position-x: -50%; }
           99.9% { background-position-x: -50%; }
           100%  { background-position-x: 150%; }
+        }
+        @keyframes cta-pop-anim {
+          0%   { transform: translateY(0) scale(1);    box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+          45%  { transform: translateY(-5px) scale(1.05); box-shadow: 0 12px 28px rgba(0,0,0,0.3); }
+          100% { transform: translateY(0) scale(1);    box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        }
+        .cta-pop {
+          animation: cta-pop-anim 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
         }
       `}</style>
     </>

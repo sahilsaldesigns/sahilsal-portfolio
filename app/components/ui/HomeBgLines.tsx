@@ -21,22 +21,6 @@ const lines = [
     width: 800,
     height: 500,
   },
-  {
-    key: "mob-left",
-    wrapperClass: "block md:hidden absolute -left-px top-[75px] max-w-[90px] w-1/2 overflow-hidden ",
-    edgeClass: "bg-reveal-edge bg-reveal-left",
-    src: "uploads/img/home-mob-left-line.svg",
-    width: 400,
-    height: 400,
-  },
-  {
-    key: "mob-right",
-    wrapperClass: "block md:hidden absolute -right-2 top-0 max-w-[80px] w-1/2 overflow-hidden ml-auto",
-    edgeClass: "bg-reveal-edge bg-reveal-right",
-    src: "uploads/img/home-mob-right-line.svg",
-    width: 400,
-    height: 400,
-  },
 ];
 
 export default function HomeBgLines() {

@@ -1,9 +1,13 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export default function StickyHeaderWrapper({ children }) {
-  const [isSticky] = useState(false);
+  const pathname = usePathname();
+  const isPhotography = pathname === "/photography";
+  const [isSticky, setIsSticky] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
 
@@ -12,12 +16,36 @@ export default function StickyHeaderWrapper({ children }) {
   }, []);
 
   useEffect(() => {
-    // const handleScroll = () => {
-    //   setIsSticky(window.scrollY > 200);
-    // };
-    // window.addEventListener("scroll", handleScroll);
-    // return () => window.removeEventListener("scroll", handleScroll);
+    const onOpen = () => setMenuOpen(true);
+    const onClose = () => setMenuOpen(false);
+    document.addEventListener("mobilemenu:open", onOpen);
+    document.addEventListener("mobilemenu:close", onClose);
+    return () => {
+      document.removeEventListener("mobilemenu:open", onOpen);
+      document.removeEventListener("mobilemenu:close", onClose);
+    };
   }, []);
+
+  useEffect(() => {
+    setHeaderHeight(headerRef.current?.offsetHeight || 0);
+  }, []);
+
+  useEffect(() => {
+    if (isPhotography) {
+      setIsSticky(false);
+      return;
+    }
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setIsSticky((prev) => {
+        if (!prev && y > 250) return true;
+        if (prev && y < 250) return false;
+        return prev;
+      });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isPhotography]);
 
   return (
     <>
@@ -38,9 +66,12 @@ export default function StickyHeaderWrapper({ children }) {
             ref={headerRef}
             initial={{ y: "-100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1, ease: "easeOut" }}
-            className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-lg shadow-md z-50 px-4"
+            exit={{ y: "-100%", opacity: 0, transition: { duration: 0.3, ease: "easeIn" } }}
+            transition={{
+              y: { type: "spring", stiffness: 260, damping: 30 },
+              opacity: { duration: 0.2, ease: "easeOut" },
+            }}
+            className={`fixed top-0 left-0 right-0 z-50 [&_header]:md:!py-5  shadow-[0px_1px_17px_1px_#d3d3d3] ${menuOpen ? "bg-white" : "bg-white/80 backdrop-blur-lg"}`}
           >
             {children}
           </motion.div>

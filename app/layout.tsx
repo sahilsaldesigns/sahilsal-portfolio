@@ -4,6 +4,7 @@ import { Lustria, Plus_Jakarta_Sans } from "next/font/google";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container } from "./components/layout/Container";
+import StickyHeaderWrapper from "./components/utils/StickyHeaderWrapper";
 import { IntroProvider } from "./providers/IntroProvider";
 import type { Metadata } from "next";
 
@@ -94,11 +95,11 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-screen flex-col overflow-x-hidden">
         <div className="flex-1">
-          <div id="mobile-header-wrapper">
+          <StickyHeaderWrapper>
             <Container>
               <Header />
             </Container>
-          </div>
+          </StickyHeaderWrapper>
           <main className="">
             <IntroProvider>
               {children}

@@ -16,7 +16,7 @@
         "label": "Photography"
       },
       {
-        "href": "/uploads/files/Sahil_Sal_Resume.pdf",
+        "href": "/uploads/files/Sahil_Salekar_Resume.pdf",
         "label": "Resume",
         "target": "_blank"
       }
@@ -37,7 +37,7 @@
     },
     {
       "icon": "dribbble",
-      "url": "#"
+      "url": "https://dribbble.com/sahilsal"
     }
   ],
   "footer": {

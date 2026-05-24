@@ -30,6 +30,13 @@ function getLinkData(href: string): LinkData | null {
     const slug = linkedInMatch[1].replace(/\/$/, "");
     return LINK_DATA_MAP[slug] ?? null;
   }
+  // Media.net
+  if (/media\.net/.test(href)) {
+    return {
+      title: "Media.net",
+      image: "/uploads/img/mnet-icon.png",
+    };
+  }
   // Medium
   if (/medium\.com/.test(href)) {
     return {
