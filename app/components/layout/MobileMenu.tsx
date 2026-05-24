@@ -152,12 +152,16 @@ export default function MobileMenu({ nav }: { nav: {
               transform: open ? "translateY(0)" : "translateY(10px)",
             }}
           >
-            <span
-              aria-label="Resume (coming soon)"
-              className="block w-full text-center py-3.5 bg-black text-white text-sm font-semibold rounded-full cursor-default select-none"
+            <Link
+              href={resumeItem.href}
+              target={resumeItem.target || "_blank"}
+              prefetch={false}
+              aria-label="Resume (PDF, opens in new tab)"
+              className="block w-full text-center py-3.5 bg-black text-white text-sm font-semibold rounded-full"
+              onClick={() => setOpen(false)}
             >
               {resumeItem.label || "Resume"}
-            </span>
+            </Link>
           </div>
         )}
       </div>
