@@ -30,6 +30,8 @@ export default function StickyHeaderWrapper({ children }) {
     setHeaderHeight(headerRef.current?.offsetHeight || 0);
   }, []);
 
+  const lastScrollY = useRef(0);
+
   useEffect(() => {
     if (isPhotography) {
       setIsSticky(false);
@@ -37,11 +39,14 @@ export default function StickyHeaderWrapper({ children }) {
     }
     const handleScroll = () => {
       const y = window.scrollY;
-      setIsSticky((prev) => {
-        if (!prev && y > 250) return true;
-        if (prev && y < 250) return false;
-        return prev;
-      });
+      const scrollingUp = y < lastScrollY.current;
+      lastScrollY.current = y;
+
+      if (y < 100) {
+        setIsSticky(false);
+        return;
+      }
+      setIsSticky(scrollingUp);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
