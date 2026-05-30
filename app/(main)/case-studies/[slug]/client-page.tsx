@@ -25,7 +25,7 @@ function ParallaxVideo({ src, poster }: { src: string; poster?: string }) {
     if (rect.bottom < 0 || rect.top > window.innerHeight) return;
     const maxOffset = rect.height * 0.05;
     const offset = Math.max(-maxOffset, Math.min(-rect.top * 0.08, maxOffset));
-    videoRef.current.style.transform = `translateY(${offset}px) scale(1.05)`;
+    videoRef.current.style.transform = `translateY(${offset}px) scale(1.15)`;
   });
 
   return (
