@@ -23,6 +23,10 @@ body {
   @apply antialiased text-slate-900 bg-white;
 }
 
+::selection {
+  background-color: #fae6b7;
+}
+
 h1,
 h2,
 h3,
