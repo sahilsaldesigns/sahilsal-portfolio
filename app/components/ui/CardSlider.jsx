@@ -367,7 +367,7 @@ export default function CardSlider(props) {
   return (
     <section
       ref={sectionRef}
-      className="relative w-auto h-[580px] md:h-[608px] [@media(max-width:364px)]:h-[480px] flex justify-center overflow-hidden bg-white -mx-4"
+      className="relative w-auto h-[580px] md:h-[608px] [@media(max-width:364px)]:h-[480px] flex justify-center overflow-hidden bg-white -mx-4 select-none"
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
