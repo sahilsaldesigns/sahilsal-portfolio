@@ -37,8 +37,8 @@ function getLinkData(href: string): LinkData | null {
     return {
       title: "Media.net",
       image: "/uploads/img/mnet-icon.svg",
-      iconBg: "bg-white",
-      iconRounded: "rounded-sm",
+      iconBg: "bg-white p-0.5",
+      iconRounded: "rounded-md",
     };
   }
   // Medium
