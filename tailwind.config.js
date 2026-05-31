@@ -13,7 +13,7 @@ module.exports = {
     extend: {
       screens: {
         xs: "320px",
-        mob: "351px",
+        mob: "451px",
       },
       keyframes: {
         riseUp: {
