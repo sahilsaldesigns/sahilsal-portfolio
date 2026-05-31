@@ -9,6 +9,8 @@ interface LinkData {
   iconNode?: React.ReactNode;
   cardRadius?: string;
   cardPadding?: string;
+  iconBg?: string;
+  iconRounded?: string;
 }
 
 // Hardcoded mapping keyed by LinkedIn profile slug
@@ -34,7 +36,9 @@ function getLinkData(href: string): LinkData | null {
   if (/media\.net/.test(href)) {
     return {
       title: "Media.net",
-      image: "/uploads/img/mnet-icon.png",
+      image: "/uploads/img/mnet-icon.svg",
+      iconBg: "bg-white p-0.5",
+      iconRounded: "rounded-md",
     };
   }
   // Medium
@@ -201,7 +205,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
               className={`flex items-center gap-2 xs:gap-3 ${linkData.cardPadding ?? "px-3 xs:px-4 py-2.5 xs:py-3"} ${linkData.cardRadius ?? "rounded-2xl"}`}
               style={{ background: "#141414" }}
             >
-              <span className={`flex-shrink-0 flex items-center justify-center overflow-hidden ${linkData.image ? "w-7 h-7 xs:w-9 xs:h-9 rounded-xl bg-neutral-700" : "w-[28px] h-[28px]"}`}>
+              <span className={`flex-shrink-0 flex items-center justify-center overflow-hidden ${linkData.image ? `w-7 h-7 xs:w-9 xs:h-9 ${linkData.iconRounded ?? "rounded-xl"} ${linkData.iconBg ?? "bg-neutral-700"}` : "w-[28px] h-[28px]"}`}>
                 {linkData.image ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img src={linkData.image} alt="" className="w-full h-full object-cover" />
@@ -268,7 +272,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
             className={`flex items-center gap-2.5 ${linkData.cardPadding ?? "px-3 py-2.5"} no-underline ${linkData.cardRadius ?? "rounded-2xl"}`}
             style={{ background: "#141414" }}
           >
-            <span className={`flex-shrink-0 flex items-center justify-center overflow-hidden ${linkData.image ? "w-7 h-7 rounded-xl bg-neutral-700" : "w-[28px] h-[28px]"}`}>
+            <span className={`flex-shrink-0 flex items-center justify-center overflow-hidden ${linkData.image ? `w-7 h-7 ${linkData.iconRounded ?? "rounded-xl"} ${linkData.iconBg ?? "bg-neutral-700"}` : "w-7 h-7"}`}>
               {linkData.image ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img src={linkData.image} alt="" className="w-full h-full object-cover" />
