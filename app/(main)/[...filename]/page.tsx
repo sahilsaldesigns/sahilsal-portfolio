@@ -60,13 +60,13 @@ export default async function Page({
         <ClientPage {...result} className="relative z-2" />
 
         {/* LEFT LINE — desktop only */}
-        <div className="hidden md:block absolute left-0 top-[156px] max-w-[245px] w-1/2 overflow-hidden pointer-events-none">
+        <div className="hidden md:block absolute left-0 top-[156px] max-w-[245px] w-1/2 overflow-hidden pointer-events-none select-none">
           <div className="bg-reveal-edge bg-reveal-left"></div>
           <Image src="/uploads/img/about-desk-left-line.svg" alt="left background line" width={800} height={500} className="w-full" />
         </div>
 
         {/* RIGHT LINE — desktop only */}
-        <div className="hidden md:block absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto pointer-events-none">
+        <div className="hidden md:block absolute top-1/2 right-0 max-w-[270px] w-1/2 overflow-hidden ml-auto pointer-events-none select-none">
           <div className="bg-reveal-edge bg-reveal-right"></div>
           <Image src="/uploads/img/about-desk-right-line.svg" alt="right background line" width={800} height={500} className="w-full" />
         </div>
