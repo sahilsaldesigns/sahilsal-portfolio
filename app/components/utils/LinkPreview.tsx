@@ -279,7 +279,7 @@ export default function LinkPreview({ href, children, className }: LinkPreviewPr
               ) : linkData.iconNode}
             </span>
             {linkData.title && (
-              <span className="text-white text-xs font-medium leading-snug break-words mob:whitespace-nowrap min-w-[126px] mob:min-w-0">
+              <span className="text-white text-xs font-medium leading-snug break-words mob:whitespace-nowrap mob:min-w-[0]">
                 {linkData.title}
               </span>
             )}
